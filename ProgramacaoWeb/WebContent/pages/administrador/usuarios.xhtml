@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="/template/templateGeral.xhtml">
+	
+		<ui:define name="conteudo">
+			<h:form id="formListUsuarios">
+			<br/>
+			<div align="center">
+				<p:outputLabel value="Gerenciar Usuários"/>
+			</div>
+				<p:commandButton value="Cadastrar" look="primary" onclick="PF('dlgCadUsuario').show();" ajax="true"
+					disabled="#{!usuarioController.usuarioLogado.admin}"/>
+			<br/><br/>
+
+			<p:dataTable value="#{usuarioController.retornaListaDeUsuarios()}" var="usuario" emptyMessage="Nenhum usuário encontrado"
+			 paginator="true" paginatorPosition="bottom" id="listaUsuarios">
+			 	
+			 	<p:growl id="msgUsuarios" showDetail="true"/>
+			  
+				<p:column headerText="ID">
+					<div align="center">
+						<h:outputText value="#{usuario.id}" />
+					</div>
+				</p:column>
+					
+				<p:column headerText="Nome">
+					<div align="center">
+						<h:outputText value="#{usuario.nome}" />
+					</div>
+				</p:column>
+					
+				<p:column headerText="E-mail">
+					<div align="center">
+						<h:outputText value="#{usuario.email}" />
+					</div>
+				</p:column>
+					
+				<p:column headerText="Administrador">
+					<div align="center">
+						<b:iconAwesome rendered="#{!usuario.admin}" style="color: red;" value="fa-times"/>
+						<b:iconAwesome rendered="#{usuario.admin}" style="color: green;" value="fa-check"/>
+					</div>
+				</p:column>
+				
+				<p:column headerText="Ação">
+					<div align="center">
+						<b:commandButton icon="edit" style="color: orange; border:none;" disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
+							action="#{usuarioController.selecionaUsuarioParaEditar(usuario)}" update=":formEditUsuario" title="Editar"/>
+						<b:commandButton style="color: red; border:none;" disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
+							action="#{usuarioController.selecionaUsuarioParaExcluir(usuario)}" update=":formEditUsuario" title="Excluir">
+							<b:iconAwesome name="times-circle"/>
+						</b:commandButton>
+					</div>
+				</p:column>
+			</p:dataTable>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

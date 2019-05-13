@@ -1,0 +1,126 @@
+html{
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body{
+	display: grid;
+	grid-template-rows: 120px 20px 1fr 20px;
+    margin: 0;
+    height: 100%;
+}
+
+.cabecalho{
+	height: 120px;
+	background: #0099ff;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	padding:0;
+	margin:0;
+	top: 0;
+    position: fixed;
+    width: 100%;
+    box-sizing: content-box;
+    display: grid;
+	grid-template-columns: 100px 1fr 150px;
+}
+
+.menu{
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+
+.loginLogout{
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	padding: 30px;
+	font-size: 1.3em !important;
+}
+
+.listaMenus{
+	display: inline-block;
+	vertical-align: top;
+	height: 100px;
+	padding: 45px;
+}
+
+.listaMenus ul{
+	margin: 0;
+	padding: 0;
+}
+
+.listaMenus li{
+	display: inline-block;
+}
+
+.listaMenus li a{
+	font-size: 1.3em;
+	color: white;
+	text-decoration: none;
+	padding: 18px;
+	margin: 5px;
+	
+	
+}
+
+.listaMenus li a:hover{
+	color: #0099ff;
+	background-color: white;
+	cursor: pointer;
+}
+
+.listaMenus li a:select{
+	color: white;
+	padding: 22px;
+	background-color: blue;
+}
+
+.listaMenus li a:active{
+	box-shadow: 1px 1px 2px 2px #777;
+}
+
+.conteudo{
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 3;
+	grid-row-end: 4;
+	padding: 20px;
+}
+
+.rodape{
+	background: #0099ff;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+
+.logo{
+	height: 100%;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	padding: 5px;
+}
+
+.semBorda tr, .semBorda td {
+	border: none !important;
+	background: transparent !important;
+}
+
+.nomeUsuario{
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 2;
+	grid-row-end: 3;
+}

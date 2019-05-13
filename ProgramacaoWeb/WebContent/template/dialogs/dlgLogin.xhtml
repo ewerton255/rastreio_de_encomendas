@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgLogin" modal="true" header="Entrar" closable="false" resizable="false"
+	   draggable="false" showEffect="fade" hideEffect="fade">
+	   	<h:form id="formLogin">
+	   	
+	   	<p:growl id="msg" showDetail="true"/>
+	   	
+			<p:panelGrid columns="1" styleClass="semBorda">
+				<h:outputText value="Email:" />
+				<p:inputText type="email" value="#{usuarioController.user.email}"/>
+				<h:outputText value="Senha:" />
+				<p:password value="#{usuarioController.user.senha}"/>
+			</p:panelGrid>
+			<br/>
+			<div align="center">
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<b:commandButton value="Entrar" look="primary" action="#{usuarioController.login()}" update="msg"/>
+					<b:button value="Fechar" onclick="PF('dlgLogin').hide();" look="danger"/>
+				</p:panelGrid>
+			</div>
+		</h:form>
+	</p:dialog>
+</body>
+</html>

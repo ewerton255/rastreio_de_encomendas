@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgCadUsuario" header="Cadastrar usuário" closable="false" resizable="false"
+	   draggable="false" showEffect="fade" hideEffect="fade">
+	   <div align="center">
+	   	<h:form id="formCadUsuario">
+	   		<p:growl id="msgCadUsuario"/>
+	   		<p:panelGrid columns="2">
+	   			<p:outputLabel value="Nome:"/>
+				<p:inputText value="#{usuarioController.user.nome}" required="true" requiredMessage="Insira um nome"/>
+				<p:outputLabel value="E-mail"/>
+				<p:inputText value="#{usuarioController.user.email}" required="true" requiredMessage="Insira um e-mail"/>
+				<p:outputLabel value="Senha:"/>
+				<p:password value="#{usuarioController.user.senha}" required="true" requiredMessage="Insira uma senha"/>
+				<p:outputLabel value="Administrador"/>
+				<p:selectBooleanCheckbox value="#{usuarioController.user.admin}"/>
+	   		</p:panelGrid>
+			<br/>
+			<p:panelGrid columns="2" styleClass="semBorda">
+				<b:commandButton value="Salvar" ajax="true" look="primary" action="#{usuarioController.cadastrarUsuario()}" update="msgCadUsuario"/>
+				<b:button value="Fechar" onclick="PF('dlgCadUsuario').hide();" look="danger"/>
+			</p:panelGrid>
+		</h:form>
+	   </div>
+	</p:dialog>
+</body>
+</html>

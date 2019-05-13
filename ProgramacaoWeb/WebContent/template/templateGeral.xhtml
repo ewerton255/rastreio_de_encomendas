@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet library="css" name="style.css" />
+	
+	<title>Sistema Rastreio de Encomendas</title>
+	
+	<script>
+		PrimeFaces.locales['pt_BR'] = {
+                closeText: 'Fechar',
+                prevText: 'Anterior',
+                nextText: 'Próximo',
+                currentText: 'Começo',
+                monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+                dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+                dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+                dayNamesMin: ['D','S','T','Q','Q','S','S'],
+                weekHeader: 'Semana',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Só Horas',
+                timeText: 'Tempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                currentText: 'Data Atual',
+                ampm: false,
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                allDayText : 'Todo Dia'
+            };
+	</script>
+</h:head>
+<h:body>
+	
+	<div class="cabecalho">
+			<div class="logo">
+				<p:graphicImage value="/resources/imgs/logo_1.png"/>
+			</div>
+			
+			<div class="menu">
+				<h:form>
+					<ul class="listaMenus">
+						<li>
+							<h:commandLink action="#{pageUtil.redirecionarParaPaginaPrincipal()}" value="Início" />
+						</li>
+						
+						<li>
+							<a>Rastrear</a>
+						</li>
+						
+						<li>
+							<a>Quem Somos</a>
+						</li>
+					</ul>
+				</h:form>
+			</div>
+			
+			<div class="loginLogout">
+				<div align="center">
+					<h:form>
+						<p:commandButton type="button" value="Login" style="padding: 15px; float: left; border-radius: 20px; background: white; color: #0099ff;"
+							onclick="PF('dlgLogin').show();" ajax="true" rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}" update="@this"/>
+					</h:form>
+				</div>
+			</div>
+	</div>
+	
+	<div class="nomeUsuario">
+		<div align="center" style="margin-top: 5px;">
+			<h:form>
+				<h:outputText value="Bem Vindo(a), " rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}"/>
+				<h:outputText value="Visitante" rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}" style="font-weight: bold;"/>
+				
+				<h:outputText value="Bem Vindo(a), " rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"/>
+				<h:outputText value="#{usuarioController.retornaNomeUsuarioLogado()}" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"
+					style="font-weight: bold;"/>
+				
+				
+				<p:commandButton value="Sair" ajax="true" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" 
+					action="#{usuarioController.deslogar()}" update="@this" style="float: right; margin-right: 20px;"/>			
+				
+				<p:menuButton value="Menu" style="float: right; margin-right: 5px;" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}">
+					<p:menuitem value="Usuarios" action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}" ajax="true"/>
+					<p:menuitem value="Pacotes" action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}" ajax="true"/>
+				</p:menuButton>				
+			</h:form>
+		</div>
+	</div>
+
+	<div class="conteudo">
+		<ui:insert name="conteudo">
+		</ui:insert>
+	</div>
+
+	<div class="rodape">
+		<div align="center">
+			<h:outputText value="Sistema desenvolvido por Ewerton dougllas e Talles Nogueira" />
+		</div>
+	</div>
+	
+	<p:ajaxStatus onstart="PF('dlgLoading').show();" oncomplete="PF('dlgLoading').hide();"/>
+	
+	<ui:insert name="dlgLogin">
+		<ui:include src="/template/dialogs/dlgLogin.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="dlgLoading">
+		<ui:include src="/template/dialogs/dlgLoading.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="dlgEditUsuario">
+		<ui:include src="/template/dialogs/usuario/dlgEditUsuario.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="dlgDelUsuario">
+		<ui:include src="/template/dialogs/usuario/dlgDelUsuario.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="dlgCadUsuario">
+		<ui:include src="/template/dialogs/usuario/dlgCadUsuario.xhtml" />
+	</ui:insert>
+</h:body>
+</html>
