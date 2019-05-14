@@ -14,6 +14,8 @@ import org.primefaces.mobile.component.page.Page;
 import br.com.rastreioencomendas.dao.PacoteDAO;
 import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.util.PageUtil;
+import br.com.rastreioencomendas.util.ViaCEP;
+import br.com.rastreioencomendas.util.ViaCEPException;
 
 @ViewScoped
 @ManagedBean
@@ -87,6 +89,15 @@ public class PacoteController {
 		}else {
 			PageUtil.mensagemDeErro("Erro ao cadastrar pacote!");
 		}
+	}
+	
+	public void buscarCepDestinatario() throws ViaCEPException {
+		ViaCEP viaCep = new ViaCEP();
+		viaCep.buscar(this.pacoteParaCadastrar.getEnderecoDestinatario().getCep());
+		this.pacoteParaCadastrar.getEnderecoDestinatario().setEstado(viaCep.getUf());
+		this.pacoteParaCadastrar.getEnderecoDestinatario().setBairro(viaCep.getBairro());
+		this.pacoteParaCadastrar.getEnderecoDestinatario().setLogradouro(viaCep.getLogradouro());
+		this.pacoteParaCadastrar.getEnderecoDestinatario().setCidade(viaCep.getLocalidade());
 	}
 	
 	public List<Pacote> retornaListaDePacotes(){

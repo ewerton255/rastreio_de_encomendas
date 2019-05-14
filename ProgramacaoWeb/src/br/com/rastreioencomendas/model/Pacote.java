@@ -13,6 +13,7 @@ public class Pacote {
 	private Date dataAtualizacao;
 	private Date previsaoEntrega;
 	private Frete tipoFrete = new Frete();
+	private Endereco enderecoDestinatario = new Endereco();
 	
 	public String getCodigoRastreio() {
 		return codigoRastreio;
@@ -67,5 +68,8 @@ public class Pacote {
 	}
 	public void setPrevisaoEntrega(Date previsaoEntrega) {
 		this.previsaoEntrega = previsaoEntrega;
+	}
+	public Endereco getEnderecoDestinatario() {
+		return enderecoDestinatario;
 	}
 }
