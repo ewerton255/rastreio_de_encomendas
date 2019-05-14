@@ -74,6 +74,7 @@ public class PacoteController {
 	
 	public void abrirDialogCadastroPacote() {
 		this.pacoteParaCadastrar = new Pacote();
+		this.tipoCpfCnpj = null;
 		PageUtil.abrirDialog("dlgCadPacote");
 		PageUtil.atualizarComponente("formCadPacote");
 	}
@@ -86,16 +87,6 @@ public class PacoteController {
 		}else {
 			PageUtil.mensagemDeErro("Erro ao cadastrar pacote!");
 		}
-	}
-	
-	public String retornaCpfCnpjFormatados(String cpfCnpj) throws ParseException {
-		String valor = cpfCnpj;
-		if(valor.length() == 11) {
-			valor = valor.substring(0, 3)+"."+valor.substring(3, 6)+"."+valor.substring(6, 9)+"-"+valor.substring(9);
-		}else if(valor.length() == 14) {
-			valor = valor.substring(0, 2)+"."+valor.substring(2, 5)+"."+valor.substring(5, 8)+"/"+valor.substring(8, 12)+"-"+valor.substring(12);
-		}
-		return valor;
 	}
 	
 	public List<Pacote> retornaListaDePacotes(){
