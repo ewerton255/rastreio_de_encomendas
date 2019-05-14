@@ -4,9 +4,18 @@
   <welcome-file-list>
     <welcome-file>index.faces</welcome-file>
   </welcome-file-list>
+  <session-config>
+  	<session-timeout>
+  		10
+  	</session-timeout>
+  </session-config>
   <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>delta</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>javax.faces.PROJECT_STAGE</param-name>
+  	<param-value>Development</param-value>
   </context-param>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
@@ -17,4 +26,9 @@
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.faces</url-pattern>
   </servlet-mapping>
+  
+  <context-param>
+  	<param-name>javax.faces.STAGE_SAVING_METHOD</param-name>
+  	<param-value>client</param-value>
+  </context-param>
 </web-app>

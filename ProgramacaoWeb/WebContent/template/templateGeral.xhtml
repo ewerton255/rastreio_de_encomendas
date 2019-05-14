@@ -56,11 +56,11 @@
 						</li>
 						
 						<li>
-							<a>Rastrear</a>
+							<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/rastrear')}" value="Rastrear" />
 						</li>
 						
 						<li>
-							<a>Quem Somos</a>
+							<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/sobre')}" value="Quem somos" />
 						</li>
 					</ul>
 				</h:form>
@@ -129,6 +129,10 @@
 	
 	<ui:insert name="dlgCadUsuario">
 		<ui:include src="/template/dialogs/usuario/dlgCadUsuario.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="dlgCadPacote">
+		<ui:include src="/template/dialogs/pacote/dlgCadPacote.xhtml" />
 	</ui:insert>
 </h:body>
 </html>

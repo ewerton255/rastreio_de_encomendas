@@ -9,9 +9,72 @@
       xmlns:p="http://primefaces.org/ui">
 <body>
 	<ui:composition template="/template/templateGeral.xhtml">
-	
 		<ui:define name="conteudo">
-			
+			<h:form id="formListaPacotes">
+				<br/>
+				<div align="center">
+					<p:outputLabel value="Gerenciar pacotes"/>
+				</div>
+				<p:commandButton value="Cadastrar" title="Cadastrar novo pacote" ajax="true" action="#{pacoteController.abrirDialogCadastroPacote()}"/>
+				<br/><br/>
+				<p:dataTable id="tbPacotes" value="#{pacoteController.retornaListaDePacotes()}" var="pacote" paginator="true"
+				 emptyMessage="Nenhum pacote encontrado" paginatorPosition="bottom">
+					
+					<p:column headerText="Código" filterBy="#{pacote.codigoRastreio}">
+						<div align="center">
+							<h:outputText value="#{pacote.codigoRastreio}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Descrição">
+						<div align="center">
+							<h:outputText value="#{pacote.descricao}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Peso">
+						<div align="center">
+							<h:outputText value="#{pacote.peso}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="CPF/CNPJ destinatário" filterBy="#{pacote.cpfCnpjDestinatario}">
+						<div align="center">
+							<h:outputText value="#{pacoteController.retornaCpfCnpjFormatados(pacote.cpfCnpjDestinatario)}"/>
+						</div>
+					</p:column>
+					
+					<p:column headerText="Frete">
+						<div align="center">
+							<h:outputText value="#{pacote.tipoFrete.tipo eq 'EX' ? 'Expresso' : 'Normal'}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Data postagem">
+						<div align="center">
+							<h:outputText value="#{pacote.dataPostado}">
+								<f:convertDateTime pattern="dd/MM/YYYY"/>
+							</h:outputText>
+						</div>
+					</p:column>
+					
+					<p:column headerText="Previsão entrega">
+						<div align="center">
+							<h:outputText value="#{pacote.previsaoEntrega}">
+								<f:convertDateTime pattern="dd/MM/YYYY"/>
+							</h:outputText>
+						</div>
+					</p:column>
+					
+					<p:column headerText="Histórico">
+						<div align="center">
+							<b:commandButton title="Histórico de atualizações" style="border: none;" ajax="true">
+								<b:iconAwesome name="list"/>
+							</b:commandButton>
+						</div>
+					</p:column>
+				</p:dataTable>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

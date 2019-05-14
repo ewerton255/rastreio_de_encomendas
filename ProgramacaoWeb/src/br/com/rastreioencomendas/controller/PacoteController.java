@@ -1,8 +1,31 @@
 package br.com.rastreioencomendas.controller;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.swing.text.MaskFormatter;
+
+import org.primefaces.mobile.component.page.Page;
+
+import br.com.rastreioencomendas.dao.PacoteDAO;
+import br.com.rastreioencomendas.model.Pacote;
+import br.com.rastreioencomendas.util.PageUtil;
+
+@ViewScoped
+@ManagedBean
 public class PacoteController {
+	
+	private PacoteDAO pacoteDAO = new PacoteDAO();
+	private Pacote pacoteParaCadastrar;
+	private String tipoCpfCnpj;
+	
+	public PacoteController() {
+		this.pacoteParaCadastrar = new Pacote();
+	}
 	
 	public String gerarCodigoRastreio() {
 		String codigo = "";
@@ -38,7 +61,56 @@ public class PacoteController {
 				codigo+= String.valueOf((char)(65 + random.nextInt(90 - 65)));
 			}
 		}
-		return codigo;
+		return codigo.toUpperCase();
 	}
-		
+	
+	public void retornaCodigoDeRastreio() {
+		String codigo = gerarCodigoRastreio();
+		while(pacoteDAO.verificaSeCodigoJaExiste(codigo)) {
+			codigo = gerarCodigoRastreio();
+		}
+		this.pacoteParaCadastrar.setCodigoRastreio(codigo);
+	}
+	
+	public void abrirDialogCadastroPacote() {
+		this.pacoteParaCadastrar = new Pacote();
+		PageUtil.abrirDialog("dlgCadPacote");
+		PageUtil.atualizarComponente("formCadPacote");
+	}
+	
+	public void cadastrarPacote() {
+		if(pacoteDAO.cadastrarPacote(this.pacoteParaCadastrar)) {
+			PageUtil.mensagemDeSucesso("Pacote cadastrado com sucesso!");
+			PageUtil.atualizarComponente("formListaPacotes");
+			PageUtil.fecharDialog("dlgCadPacote");
+		}else {
+			PageUtil.mensagemDeErro("Erro ao cadastrar pacote!");
+		}
+	}
+	
+	public String retornaCpfCnpjFormatados(String cpfCnpj) throws ParseException {
+		String valor = cpfCnpj;
+		if(valor.length() == 11) {
+			valor = valor.substring(0, 3)+"."+valor.substring(3, 6)+"."+valor.substring(6, 9)+"-"+valor.substring(9);
+		}else if(valor.length() == 14) {
+			valor = valor.substring(0, 2)+"."+valor.substring(2, 5)+"."+valor.substring(5, 8)+"/"+valor.substring(8, 12)+"-"+valor.substring(12);
+		}
+		return valor;
+	}
+	
+	public List<Pacote> retornaListaDePacotes(){
+		return pacoteDAO.retornaListaDePacotes();
+	}
+
+	public Pacote getPacoteParaCadastrar() {
+		return pacoteParaCadastrar;
+	}
+
+	public String getTipoCpfCnpj() {
+		return tipoCpfCnpj;
+	}
+
+	public void setTipoCpfCnpj(String tipoCpfCnpj) {
+		this.tipoCpfCnpj = tipoCpfCnpj;
+	}
 }

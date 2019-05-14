@@ -8,12 +8,12 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
 <body>
-	<p:dialog widgetVar="dlgCadUsuario" header="Cadastrar usuário" closable="false" resizable="false"
+	<p:dialog widgetVar="dlgCadUsuario" header="Cadastrar usuário" closable="false" resizable="false" modal="true"
 	   draggable="false" showEffect="fade" hideEffect="fade">
 	   <div align="center">
 	   	<h:form id="formCadUsuario">
 	   		<p:growl id="msgCadUsuario"/>
-	   		<p:panelGrid columns="2">
+	   		<p:panelGrid columns="2" styleClass="semBorda">
 	   			<p:outputLabel value="Nome:"/>
 				<p:inputText value="#{usuarioController.user.nome}" required="true" requiredMessage="Insira um nome"/>
 				<p:outputLabel value="E-mail"/>

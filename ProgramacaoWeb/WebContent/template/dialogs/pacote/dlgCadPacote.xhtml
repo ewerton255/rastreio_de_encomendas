@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgCadPacote" header="Cadastrar pacote" closable="false" resizable="false" modal="true"
+	   draggable="false" showEffect="fade" hideEffect="fade">
+	   <div align="center">
+	   	<h:form id="formCadPacote">
+	   	<div align="left">
+	   	
+	   		<p:growl id="msgCadPacote"/>
+	   		
+	   		<p:panelGrid columns="3" styleClass="semBorda">
+	   			<p:outputLabel value="Código:"/>
+	   			<p:inputText value="#{pacoteController.pacoteParaCadastrar.codigoRastreio}" required="true" 
+	   				requiredMessage="Gere um Código de rastreio" id="codigoRastreio" readonly="true"/>
+	   			<p:commandButton value="Gerar" ajax="true" actionListener="#{pacoteController.retornaCodigoDeRastreio()}" immediate="true" update="codigoRastreio"/>
+	   			<p:outputLabel value="Destinatário"/>
+	   			<p:panelGrid id="tipoDocumento" styleClass="semBorda">	   				
+	   				<p:inputMask value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}" mask="#{pacoteController.tipoCpfCnpj eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}" 
+	   					rendered="#{pacoteController.tipoCpfCnpj ne null}"/>
+	   			</p:panelGrid>
+	   			<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}">
+	   				<f:selectItem noSelectionOption="true" itemLabel="Tipo documento" itemValue="{null}"/>
+	   				<f:selectItem itemLabel="CPF" itemValue="CPF"/>
+	   				<f:selectItem itemLabel="CNPJ" itemValue="CNPJ"/>
+	   				<p:ajax update="tipoDocumento" event="change"/>
+	   			</p:selectOneMenu>
+	   			<p:outputLabel value="Descrição:"/>
+	   			<p:inputTextarea value="#{pacoteController.pacoteParaCadastrar.descricao}" required="true" requiredMessage="Insira a descrição do pacote"
+	   				style="width: 100%;"/>
+	   			<br/>
+	   			<p:outputLabel value="Peso:"/>
+	   			<p:inputNumber value="#{pacoteController.pacoteParaCadastrar.peso}" required="true" requiredMessage="Insira o peso do pacote" 
+	   				symbol=" Kg" symbolPosition="s"/>
+	   			<br/>
+	   			<p:outputLabel value="Frete:"/>
+	   			<p:selectOneMenu value="#{pacoteController.pacoteParaCadastrar.tipoFrete.id}" required="true" requiredMessage="Selecione o tipo de frete">
+	   				<f:selectItem itemLabel="Selecione" itemValue="{null]" noSelectionOption="true"/>
+	   				<f:selectItems value="#{freteController.listaDeFretes}" var="frete" itemLabel="#{frete.tipo eq 'EX' ? 'Expresso' : 'Normal'}" itemValue="#{frete.id}"/>
+	   			</p:selectOneMenu>
+	   		</p:panelGrid>
+	   		
+	   		<p:panelGrid columns="2" styleClass="semBorda">
+	   			
+	   		</p:panelGrid>
+	   		<br/>
+	   		<div align="center">
+	   			<p:panelGrid columns="2" styleClass="semBorda">
+	   				<b:commandButton value="Salvar" ajax="true" update="msgCadPacote" look="primary" action="#{pacoteController.cadastrarPacote()}"/>
+	   				<b:button value="Fechar" onclick="PF('dlgCadPacote').hide();" look="danger"/>
+	   			</p:panelGrid>
+	   		</div>
+	   	</div>
+		</h:form>
+	   </div>
+	</p:dialog>
+</body>
+</html>
