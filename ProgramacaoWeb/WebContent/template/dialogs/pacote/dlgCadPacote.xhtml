@@ -17,7 +17,7 @@
 						<div align="left">
 							<p:growl id="msgCadPacote" />
 
-							<p:panelGrid columns="3" styleClass="semBorda">
+							<p:panelGrid columns="3" styleClass="semBorda" id="dadosPacote">
 								<p:outputLabel value="Código:" />
 								<p:inputText
 									value="#{pacoteController.pacoteParaCadastrar.codigoRastreio}"
@@ -70,16 +70,20 @@
 						</div>
 					</p:fieldset>
 
-					<p:fieldset legend="Endereço de entrega" id="enderecoEntrega" style="height: 350px;">
+					<p:fieldset legend="Endereço de entrega" id="enderecoEntrega"
+						style="height: 350px;">
 						<div align="left">
-							<p:panelGrid styleClass="semBorda" columns="4" id="enderecoDestinatario">
+							<p:panelGrid styleClass="semBorda" columns="4"
+								id="enderecoDestinatario">
 								<p:outputLabel value="CEP:" />
 								<p:inputMask mask="99999-999"
 									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.cep}"
 									required="true" requiredMessage="Insira o CEP de destino"
 									size="9">
-										<p:ajax event="blur" listener="#{pacoteController.buscarCepDestinatario()}" update="enderecoDestinatario"/>
-									</p:inputMask>
+									<p:ajax event="blur"
+										listener="#{pacoteController.buscarCepDestinatario()}"
+										update="enderecoDestinatario" />
+								</p:inputMask>
 
 								<p:outputLabel value="Estado:" />
 								<p:inputText
@@ -110,27 +114,23 @@
 									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.complemento}" />
 
 								<p:outputLabel value="N°:" />
-								<p:inputNumber
+								<p:inputText
 									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.numero}"
-									inputStyle="width: 30%;" />
+									type="number" style="width: 30%;"/>
 							</p:panelGrid>
 						</div>
 					</p:fieldset>
 				</p:panelGrid>
+				<div align="right">
+					<p:panelGrid columns="2" styleClass="semBorda">
+						<b:commandButton value="Salvar" ajax="true"
+							update=":formCadPacote:msgCadPacote" look="primary"
+							action="#{pacoteController.cadastrarPacote()}" />
+						<b:button value="Fechar" onclick="PF('dlgCadPacote').hide();"
+							look="danger" />
+					</p:panelGrid>
+				</div>
 			</h:form>
-			<f:facet name="footer">
-				<h:form>
-					<div align="right">
-						<p:panelGrid columns="2" styleClass="semBorda">
-							<b:commandButton value="Salvar" ajax="true"
-								update=":formCadPacote:msgCadPacote" look="primary"
-								action="#{pacoteController.cadastrarPacote()}" />
-							<b:button value="Fechar" onclick="PF('dlgCadPacote').hide();"
-								look="danger" />
-						</p:panelGrid>
-					</div>
-				</h:form>
-			</f:facet>
 		</div>
 	</p:dialog>
 </body>

@@ -60,9 +60,6 @@ public class Pacote {
 	public Frete getTipoFrete() {
 		return tipoFrete;
 	}
-	public void setTipoFrete(Frete tipoFrete) {
-		this.tipoFrete = tipoFrete;
-	}
 	public Date getPrevisaoEntrega() {
 		return previsaoEntrega;
 	}

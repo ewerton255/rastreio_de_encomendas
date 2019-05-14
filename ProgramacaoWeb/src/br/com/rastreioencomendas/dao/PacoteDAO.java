@@ -80,17 +80,35 @@ public class PacoteDAO {
 		Boolean cadastrou = false;
 		Connection conn = ConnectionFactory.getConnection();
 		PreparedStatement ps;
-		String sql = "INSERT INTO rastreioencomendas.pacote(codigo_rastreio, descricao, peso, cpf_cnpj_destinatario, id_frete, data_postado)"
-				+ " VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP);";
+		ResultSet rs;
+		Integer idEndereco = null;
+		String sql = "INSERT INTO rastreioencomendas.endereco(cep, logradouro, cidade, bairro, numero, estado, complemento) VALUES(?, ?, ?, ?, ?, ?, ?) RETURNING id";
 		
 		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, pacote.getEnderecoDestinatario().getCep());
+			ps.setString(2, pacote.getEnderecoDestinatario().getLogradouro());
+			ps.setString(3, pacote.getEnderecoDestinatario().getCidade());
+			ps.setString(4, pacote.getEnderecoDestinatario().getBairro());
+			ps.setInt(5, pacote.getEnderecoDestinatario().getNumero());
+			ps.setString(6, pacote.getEnderecoDestinatario().getEstado());
+			ps.setString(7, pacote.getEnderecoDestinatario().getComplemento());
+			
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				idEndereco = rs.getInt("id");
+			}
+			
+			sql = "INSERT INTO rastreioencomendas.pacote(codigo_rastreio, descricao, peso, cpf_cnpj_destinatario, id_frete, data_postado, id_endereco_destino)"
+					+ " VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?);";
+			
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pacote.getCodigoRastreio());
 			ps.setString(2, pacote.getDescricao());
 			ps.setDouble(3, pacote.getPeso());
 			ps.setString(4, pacote.getCpfCnpjDestinatario());
 			ps.setInt(5, pacote.getTipoFrete().getId());
-			
+			ps.setInt(6, idEndereco);
 			ps.executeUpdate();
 			cadastrou = true;
 		}catch (SQLException e) {
