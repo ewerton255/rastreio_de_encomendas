@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.swing.text.MaskFormatter;
 
@@ -18,7 +19,7 @@ import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
 import br.com.rastreioencomendas.util.ViaCEPException;
 
-@ViewScoped
+@SessionScoped
 @ManagedBean
 public class PacoteController {
 	
@@ -31,6 +32,7 @@ public class PacoteController {
 	private List<HistoricoModel> listaHistoricoRastreio;
 	
 	public PacoteController() {
+		this.pacoteSelecionado = new Pacote();
 		this.pacoteParaCadastrar = new Pacote();
 		this.listaHistoricoRastreio = new ArrayList<>();
 		this.pacoteParaBuscar = new Pacote();
@@ -71,6 +73,11 @@ public class PacoteController {
 			}
 		}
 		return codigo.toUpperCase();
+	}
+	
+	public void carregaDadosPageRastrear() {
+		this.pacoteParaBuscar = new Pacote();
+		this.listaHistoricoRastreio = new ArrayList<>();
 	}
 	
 	public void buscarPacote() {
@@ -123,7 +130,7 @@ public class PacoteController {
 	
 	public List<HistoricoModel> retornaListaDeHistorico(){
 		List<HistoricoModel> lista = new ArrayList<>();
-		if(this.pacoteSelecionado != null) {
+		if(this.pacoteSelecionado.getCodigoRastreio() != null) {
 			lista = pacoteDAO.retornaListaDeHistorico(this.pacoteSelecionado.getId());
 		}
 		return lista;
@@ -131,6 +138,7 @@ public class PacoteController {
 	
 	public void abrirDialogCadastroAtualizacao(Pacote pacote) {
 		this.pacoteSelecionado = pacote;
+		this.novaAtualizacao = new HistoricoModel();
 		PageUtil.atualizarComponente("formCadAtualizacao");
 		PageUtil.abrirDialog("dlgCadAtualizacao");
 	}

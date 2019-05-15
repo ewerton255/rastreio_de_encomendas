@@ -7,7 +7,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
+      
 <body>
+<f:metadata>
+	<f:viewAction action="#{pacoteController.carregaDadosPageRastrear()}"/>
+</f:metadata>
 	<ui:composition template="/template/templateGeral.xhtml">
 		<ui:define name="conteudo">
 			<h:form id="formRastreio">
