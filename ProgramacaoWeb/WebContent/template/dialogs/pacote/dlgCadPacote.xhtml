@@ -60,7 +60,7 @@
 										noSelectionOption="true" />
 									<f:selectItems value="#{freteController.listaDeFretes}"
 										var="frete"
-										itemLabel="#{frete.tipo eq 'EX' ? 'Expresso' : 'Normal'}"
+										itemLabel="#{frete.tipo eq 'EX' ? 'Express' : 'Standard'}"
 										itemValue="#{frete.id}" />
 									<p:ajax event="change" />
 								</p:selectOneMenu>

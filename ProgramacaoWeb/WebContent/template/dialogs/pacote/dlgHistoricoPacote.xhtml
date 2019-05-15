@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgHistoricoPacote"
+		header="Atualizações do pacote #{pacoteController.pacoteSelecionado.codigoRastreio}"
+		closable="false" resizable="false" modal="true" draggable="false"
+		showEffect="fade" hideEffect="fade" width="650">
+		<div>
+			<h:form id="formHistoricoPacote">
+				<p:dataTable value="#{pacoteController.retornaListaDeHistorico()}" emptyMessage="Nenhuma atualização encontrada" 
+					var="atualizacao" paginator="true" paginatorPosition="bottom" >
+					
+					<p:column headerText="Data/Hora atualização">
+						<div align="center">
+							<h:outputText value="#{atualizacao.dataHoraAtualizacaoFormatados}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Status">
+						<div align="center">
+							<h:outputText value="#{atualizacao.status}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Observação">
+						<div align="center">
+							<h:outputText value="#{atualizacao.observacao}" />
+						</div>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+		<br/>
+		<div align="right">
+			<b:button look="danger" onclick="PF('dlgHistoricoPacote').hide();" value="Fechar"/>
+		</div>
+	</p:dialog>
+</body>
+</html>

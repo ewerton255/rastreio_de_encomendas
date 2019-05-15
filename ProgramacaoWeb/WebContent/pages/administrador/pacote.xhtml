@@ -34,7 +34,7 @@
 					
 					<p:column headerText="Peso">
 						<div align="center">
-							<h:outputText value="#{pacote.peso}" />
+							<h:outputText value="#{pacote.peso} Kg" />
 						</div>
 					</p:column>
 					
@@ -46,7 +46,7 @@
 					
 					<p:column headerText="Frete">
 						<div align="center">
-							<h:outputText value="#{pacote.tipoFrete.tipo eq 'EX' ? 'Expresso' : 'Normal'}" />
+							<h:outputText value="#{pacote.tipoFrete.tipo eq 'EX' ? 'Express' : 'Standard'}" />
 						</div>
 					</p:column>
 					
@@ -66,9 +66,9 @@
 						</div>
 					</p:column>
 					
-					<p:column headerText="Histórico">
+					<p:column headerText="Ações">
 						<div align="center">
-							<b:commandButton title="Histórico de atualizações" style="border: none;" ajax="true">
+							<b:commandButton title="Visualizar Histórico de atualizações" style="border: none;" ajax="true" action="#{pacoteController.abrirHistoricoDoPacote(pacote)}">
 								<b:iconAwesome name="list"/>
 							</b:commandButton>
 						</div>

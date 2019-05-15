@@ -12,6 +12,7 @@ import javax.swing.text.MaskFormatter;
 import org.primefaces.mobile.component.page.Page;
 
 import br.com.rastreioencomendas.dao.PacoteDAO;
+import br.com.rastreioencomendas.model.HistoricoModel;
 import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
@@ -24,9 +25,14 @@ public class PacoteController {
 	private PacoteDAO pacoteDAO = new PacoteDAO();
 	private Pacote pacoteParaCadastrar;
 	private String tipoCpfCnpj;
+	private Pacote pacoteSelecionado;
+	private Pacote pacoteParaBuscar;
+	private List<HistoricoModel> listaHistoricoRastreio;
 	
 	public PacoteController() {
 		this.pacoteParaCadastrar = new Pacote();
+		this.listaHistoricoRastreio = new ArrayList<>();
+		this.pacoteParaBuscar = new Pacote();
 	}
 	
 	public String gerarCodigoRastreio() {
@@ -66,6 +72,13 @@ public class PacoteController {
 		return codigo.toUpperCase();
 	}
 	
+	public void buscarPacote() {
+		this.listaHistoricoRastreio = pacoteDAO.retornalIstaParaRastreio(pacoteParaBuscar.getCodigoRastreio());
+		if(listaHistoricoRastreio.size() == 0) {
+			PageUtil.mensagemDeErro("Nenhum resultado encontrado");
+		}
+	}
+	
 	public void retornaCodigoDeRastreio() {
 		String codigo = gerarCodigoRastreio();
 		while(pacoteDAO.verificaSeCodigoJaExiste(codigo)) {
@@ -100,6 +113,21 @@ public class PacoteController {
 		this.pacoteParaCadastrar.getEnderecoDestinatario().setCidade(viaCep.getLocalidade());
 	}
 	
+	public void abrirHistoricoDoPacote(Pacote pacote) {
+		this.pacoteSelecionado = pacote;
+		retornaListaDeHistorico();
+		PageUtil.atualizarComponente("formHistoricoPacote");
+		PageUtil.abrirDialog("dlgHistoricoPacote");
+	}
+	
+	public List<HistoricoModel> retornaListaDeHistorico(){
+		List<HistoricoModel> lista = new ArrayList<>();
+		if(this.pacoteSelecionado != null) {
+			lista = pacoteDAO.retornaListaDeHistorico(this.pacoteSelecionado.getId());
+		}
+		return lista;
+	}
+	
 	public List<Pacote> retornaListaDePacotes(){
 		return pacoteDAO.retornaListaDePacotes();
 	}
@@ -114,5 +142,17 @@ public class PacoteController {
 
 	public void setTipoCpfCnpj(String tipoCpfCnpj) {
 		this.tipoCpfCnpj = tipoCpfCnpj;
+	}
+
+	public Pacote getPacoteSelecionado() {
+		return pacoteSelecionado;
+	}
+
+	public List<HistoricoModel> getListaHistoricoRastreio() {
+		return listaHistoricoRastreio;
+	}
+
+	public Pacote getPacoteParaBuscar() {
+		return pacoteParaBuscar;
 	}
 }

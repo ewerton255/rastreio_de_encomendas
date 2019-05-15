@@ -10,7 +10,45 @@
 <body>
 	<ui:composition template="/template/templateGeral.xhtml">
 		<ui:define name="conteudo">
-			
+			<h:form id="formRastreio">
+				<p:growl showDetail="true" id="msgRastreio"/>
+				<br/>
+				<div align="center">
+					<p:outputLabel value="Rastrear Pacote" style="font-size: 1.7em;"/>
+				</div>
+				<br/><br/>
+				<div align="center">
+					<p:panelGrid columns="2" styleClass="semBorda">
+						<b:inputText maxlength="13" style="margin-top: 7%;" value="#{pacoteController.pacoteParaBuscar.codigoRastreio}"/>
+						<b:commandButton title="Buscar" ajax="true" update="msgRastreio, tbResultadoRastreio"
+								action="#{pacoteController.buscarPacote()}">
+							<b:iconAwesome name="search"/>
+						</b:commandButton>
+					</p:panelGrid>
+					<span>O código é formado por 4 letras e 9 número, exemplo : </span><span style="font-weight: bold;">LB123456789SE</span>
+					<br/><br/><br/>
+					<p:dataTable emptyMessage="Nenhum resultado encontrado" style="width: 50%;" id="tbResultadoRastreio" var="historico"
+							value="#{pacoteController.listaHistoricoRastreio}">
+						<p:column headerText="Data/Hora atualização">
+							<div align="center">
+								<h:outputText value="#{historico.dataHoraAtualizacaoFormatados}" />
+							</div>
+						</p:column>
+						
+						<p:column headerText="Status">
+							<div align="center">
+								<h:outputText value="#{historico.status}" />
+							</div>
+						</p:column>
+						
+						<p:column headerText="Observação">
+							<div align="center">
+								<h:outputText value="#{historico.observacao}" />
+							</div>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

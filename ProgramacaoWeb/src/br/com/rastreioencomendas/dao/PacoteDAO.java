@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
+import br.com.rastreioencomendas.model.HistoricoModel;
 import br.com.rastreioencomendas.model.Pacote;
 
 public class PacoteDAO {
@@ -76,6 +79,44 @@ public class PacoteDAO {
 		return existe;
 	}
 	
+	public List<HistoricoModel> retornalIstaParaRastreio(String codigo){
+		List<HistoricoModel> lista = new ArrayList<>();
+		Connection conn = ConnectionFactory.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String sql = "SELECT hp.id_pacote, hp.datahora_atualizacao, hp.status, hp.observacao " + 
+				"FROM rastreioencomendas.historico_pacote hp " + 
+				"JOIN rastreioencomendas.pacote P ON p.id = hp.id_pacote " + 
+				"WHERE p.codigo_rastreio = ? ORDER BY hp.datahora_atualizacao";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, codigo.toUpperCase());
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				HistoricoModel historico = new HistoricoModel();
+				historico.setDataHoraAtualizacao(rs.getDate("datahora_atualizacao"));
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+				historico.setDataHoraAtualizacaoFormatados(sdf.format(rs.getTimestamp("datahora_atualizacao").getTime()));
+				historico.setObservacao(rs.getString("observacao"));
+				historico.setStatus(rs.getString("status"));
+				
+				lista.add(historico);
+				
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return lista;
+	}
+	
 	public Boolean cadastrarPacote(Pacote pacote) {
 		Boolean cadastrou = false;
 		Connection conn = ConnectionFactory.getConnection();
@@ -122,5 +163,39 @@ public class PacoteDAO {
 		}
 		
 		return cadastrou;
+	}
+	
+	public List<HistoricoModel> retornaListaDeHistorico(Integer idPacote){
+		List<HistoricoModel> lista = new ArrayList<>();
+		Connection conn = ConnectionFactory.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String sql = "SELECT * FROM rastreioencomendas.historico_pacote WHERE id_pacote = ?";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, idPacote);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				HistoricoModel atualizacao = new HistoricoModel();
+				atualizacao.setDataHoraAtualizacao(rs.getDate("datahora_atualizacao"));
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+				atualizacao.setDataHoraAtualizacaoFormatados(sdf.format(rs.getTimestamp("datahora_atualizacao").getTime()));
+				atualizacao.setObservacao(rs.getString("observacao"));
+				atualizacao.setStatus(rs.getString("status"));
+				
+				lista.add(atualizacao);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return lista;
 	}
 }
