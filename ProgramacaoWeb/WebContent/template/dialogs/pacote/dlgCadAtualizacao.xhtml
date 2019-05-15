@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgCadAtualizacao" header="Cadastrar atualização"
+		closable="false" resizable="false" modal="true" draggable="false"
+		showEffect="fade" hideEffect="fade">
+		<div align="center">
+			<h:form id="formCadAtualizacao">
+				<p:growl id="msgCadAtualizacao" showDetail="true"/>
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<p:outputLabel value="Pacote:"/>
+					<p:outputLabel value="#{pacoteController.pacoteSelecionado.codigoRastreio}"/>
+					<p:outputLabel value="Status:"/>
+					<p:inputTextarea value="#{pacoteController.novaAtualizacao.status}" required="true" requiredMessage="Insira o status"/>
+					<p:outputLabel value="Observação:"/>
+					<p:inputTextarea value="#{pacoteController.novaAtualizacao.observacao}"/>
+				</p:panelGrid>
+				<br/>
+				<div align="center">
+					<p:panelGrid columns="2" styleClass="semBorda">
+						<b:commandButton ajax="true" actionListener="#{pacoteController.cadastrarNovaAtualizacao()}" look="primary" value="Salvar"
+								update="msgCadAtualizacao"/>
+						<b:button onclick="PF('dlgCadAtualizacao').hide();" look="danger" value="Fechar"/>
+					</p:panelGrid>
+				</div>
+			</h:form>
+		</div>
+	</p:dialog>
+</body>
+</html>

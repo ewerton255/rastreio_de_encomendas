@@ -79,6 +79,34 @@ public class PacoteDAO {
 		return existe;
 	}
 	
+	public Boolean cadastrarAtualizacao(Pacote pacote, HistoricoModel atualizacao) {
+		Boolean cadastrou = false;
+		Connection conn = ConnectionFactory.getConnection();
+		PreparedStatement ps;
+		String sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, datahora_atualizacao, status, observacao) "
+				+ "VALUES(?, CURRENT_TIMESTAMP, ?, ?)";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, pacote.getId());
+			ps.setString(2, atualizacao.getStatus());
+			ps.setString(3, atualizacao.getObservacao());
+			
+			ps.executeUpdate();
+			cadastrou = true;
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return cadastrou;
+	}
+	
 	public List<HistoricoModel> retornalIstaParaRastreio(String codigo){
 		List<HistoricoModel> lista = new ArrayList<>();
 		Connection conn = ConnectionFactory.getConnection();

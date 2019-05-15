@@ -24,6 +24,7 @@ public class PacoteController {
 	
 	private PacoteDAO pacoteDAO = new PacoteDAO();
 	private Pacote pacoteParaCadastrar;
+	private HistoricoModel novaAtualizacao = new HistoricoModel();
 	private String tipoCpfCnpj;
 	private Pacote pacoteSelecionado;
 	private Pacote pacoteParaBuscar;
@@ -128,6 +129,22 @@ public class PacoteController {
 		return lista;
 	}
 	
+	public void abrirDialogCadastroAtualizacao(Pacote pacote) {
+		this.pacoteSelecionado = pacote;
+		PageUtil.atualizarComponente("formCadAtualizacao");
+		PageUtil.abrirDialog("dlgCadAtualizacao");
+	}
+	
+	public void cadastrarNovaAtualizacao() {
+		if(pacoteDAO.cadastrarAtualizacao(pacoteSelecionado, novaAtualizacao)) {
+			PageUtil.mensagemDeSucesso("Atualizacação cadastrada com sucesso");
+			PageUtil.fecharDialog("dlgCadAtualizacao");
+		}else {
+			PageUtil.mensagemDeErro("Erro ao cadastrar atualização");
+			PageUtil.fecharDialog("dlgCadAtualizacao");
+		}
+	}
+	
 	public List<Pacote> retornaListaDePacotes(){
 		return pacoteDAO.retornaListaDePacotes();
 	}
@@ -154,5 +171,9 @@ public class PacoteController {
 
 	public Pacote getPacoteParaBuscar() {
 		return pacoteParaBuscar;
+	}
+
+	public HistoricoModel getNovaAtualizacao() {
+		return novaAtualizacao;
 	}
 }

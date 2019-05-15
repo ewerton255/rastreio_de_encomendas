@@ -68,8 +68,12 @@
 					
 					<p:column headerText="Ações">
 						<div align="center">
+							<b:commandButton title="Adicionar atualização" style="border: none;" ajax="true" action="#{pacoteController.abrirDialogCadastroAtualizacao(pacote)}">
+								<b:iconAwesome name="plus" style="color: #0099ff;"/>
+							</b:commandButton>
+							
 							<b:commandButton title="Visualizar Histórico de atualizações" style="border: none;" ajax="true" action="#{pacoteController.abrirHistoricoDoPacote(pacote)}">
-								<b:iconAwesome name="list"/>
+								<b:iconAwesome name="list" style="color: #0099ff;"/>
 							</b:commandButton>
 						</div>
 					</p:column>
