@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="/template/templateGeral.xhtml">
+		<ui:define name="conteudo">
+			<br/>
+			<h:form id="formContato">
+				<div align="center" style="margin-left: 5%; margin-right: 5%;">
+				<h:outputText value="Contato" style="font-size: 2.4em; font-weight: bold;"/>
+				<br/><br/>
+				<div align="justify">
+					<h:outputText value="A Vrumm Express está sempre disposta a sanar todas as dúvidas dos nossos clientes." style="font-size: 1.3em;"/>
+					<br/><br/>
+					<h:outputText value="Esclarecimento ao consumidor" style="font-weight: bold; font-size: 1.8em; border-bottom: 6px solid #0099ff;"/>
+					<br/><br/>
+					<h:outputText value="É importante ressaltar que a Vrumm Express não possui um SAC – Serviço de Atendimento ao Cliente – para o consumidor final.
+					  O nosso atendimento é exclusivo para os e-commerces que contratam a Total Express para entregar as encomendas que vocês compram nas principais 
+					  lojas virtuais do país." style="font-size: 1.3em;"/>
+					<br/><br/>
+					<h:outputText value="Caso tenha acontecido algo fora do normal com o seu produto, o procedimento a ser feito e o único meio de comunicação é entrar
+					 em contato imediatamente com a loja onde você realizou a compra. A posse de todas as informações do seu pedido é da loja, e eles conseguirão te ajudar
+					  sobre as informações de sua encomenda." style="font-size: 1.3em;"/>
+					<br/><br/>
+				</div>
+				<h:outputText value="Rastreamento de Encomendas" style="font-size: 1.8em; font-weight: bold; border-bottom: 6px solid #0099ff;"/>
+				<br/>
+				<h:outputText value="Acompanhe sua encomenda clicando no botão abaixo:"/>
+				<br/><br/>
+				<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/rastrear')}" value="Clique aqui"/>
+			</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

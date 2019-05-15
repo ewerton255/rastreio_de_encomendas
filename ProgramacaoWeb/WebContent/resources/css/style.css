@@ -8,7 +8,7 @@ html{
 }
 body{
 	display: grid;
-	grid-template-rows: 120px 20px 1fr 20px;
+	grid-template-rows: 120px 35px 1fr 20px;
     margin: 0;
     height: 100%;
 }
@@ -123,4 +123,12 @@ body{
 	grid-column-end: 2;
 	grid-row-start: 2;
 	grid-row-end: 3;
+	border-bottom: 1px solid #0099ff;
+}
+
+#formContato a{
+	background-color: #0099ff;
+	color: white;
+	padding: 10px 40px 10px 40px;
+	text-decoration: none;
 }

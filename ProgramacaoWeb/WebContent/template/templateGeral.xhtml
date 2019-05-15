@@ -9,7 +9,7 @@
 <h:head>
 	<h:outputStylesheet library="css" name="style.css" />
 	
-	<title>Sistema Rastreio de Encomendas</title>
+	<title>Vrumm Express</title>
 	
 	<script>
 		PrimeFaces.locales['pt_BR'] = {
@@ -44,7 +44,7 @@
 <h:body>
 	
 	<div class="cabecalho">
-			<div class="logo">
+			<div class="logo" style="margin-left: 8px;">
 				<p:graphicImage value="/resources/imgs/logo_1.png"/>
 			</div>
 			
@@ -58,9 +58,13 @@
 						<li>
 							<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/rastrear')}" value="Rastrear" />
 						</li>
+
+						<li>
+							<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/servicos')}" value="Serviços" />
+						</li>
 						
 						<li>
-							<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/sobre')}" value="Quem somos" />
+							<h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/contato')}" value="Contato" />
 						</li>
 					</ul>
 				</h:form>
@@ -69,8 +73,18 @@
 			<div class="loginLogout">
 				<div align="center">
 					<h:form>
-						<p:commandButton type="button" value="Login" style="padding: 15px; float: left; border-radius: 20px; background: white; color: #0099ff;"
-							onclick="PF('dlgLogin').show();" ajax="true" rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}" update="@this"/>
+						<p:panelGrid columns="1" styleClass="semBorda">
+							<p:commandButton type="button" value="Login" style="padding: 15px; border-radius: 20px; background: white; color: #0099ff;"
+								onclick="PF('dlgLogin').show();" ajax="true" rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}" update="@this"/>
+							
+							<p:menuButton value="Menu" style="width: 100%; " rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}">
+								<p:menuitem value="Usuarios" action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}" ajax="true"/>
+								<p:menuitem value="Pacotes" action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}" ajax="true"/>
+							</p:menuButton>
+							
+							<p:commandButton value="Sair" ajax="true" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" 
+								action="#{usuarioController.deslogar()}" update="@this" style="width: 100%;"/>			
+						</p:panelGrid>
 					</h:form>
 				</div>
 			</div>
@@ -84,16 +98,7 @@
 				
 				<h:outputText value="Bem Vindo(a), " rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"/>
 				<h:outputText value="#{usuarioController.retornaNomeUsuarioLogado()}" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"
-					style="font-weight: bold;"/>
-				
-				
-				<p:commandButton value="Sair" ajax="true" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" 
-					action="#{usuarioController.deslogar()}" update="@this" style="float: right; margin-right: 20px;"/>			
-				
-				<p:menuButton value="Menu" style="float: right; margin-right: 5px;" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}">
-					<p:menuitem value="Usuarios" action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}" ajax="true"/>
-					<p:menuitem value="Pacotes" action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}" ajax="true"/>
-				</p:menuButton>				
+					style="font-weight: bold;"/>			
 			</h:form>
 		</div>
 	</div>
