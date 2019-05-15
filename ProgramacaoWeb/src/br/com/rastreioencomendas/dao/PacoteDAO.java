@@ -123,6 +123,7 @@ public class PacoteDAO {
 		PreparedStatement ps;
 		ResultSet rs;
 		Integer idEndereco = null;
+		Integer idPacote = null;
 		String sql = "INSERT INTO rastreioencomendas.endereco(cep, logradouro, cidade, bairro, numero, estado, complemento) VALUES(?, ?, ?, ?, ?, ?, ?) RETURNING id";
 		
 		try {
@@ -141,7 +142,7 @@ public class PacoteDAO {
 			}
 			
 			sql = "INSERT INTO rastreioencomendas.pacote(codigo_rastreio, descricao, peso, cpf_cnpj_destinatario, id_frete, data_postado, id_endereco_destino)"
-					+ " VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?);";
+					+ " VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?) RETURNING id;";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pacote.getCodigoRastreio());
@@ -150,7 +151,17 @@ public class PacoteDAO {
 			ps.setString(4, pacote.getCpfCnpjDestinatario());
 			ps.setInt(5, pacote.getTipoFrete().getId());
 			ps.setInt(6, idEndereco);
+			rs =ps.executeQuery();
+			if(rs.next()) {
+				idPacote = rs.getInt("id");
+			}
+			
+			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, status, datahora_atualizacao) VALUES(?, 'OBJETO POSTADO', CURRENT_TIMESTAMP)";
+			
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, idPacote);
 			ps.executeUpdate();
+			
 			cadastrou = true;
 		}catch (SQLException e) {
 			e.printStackTrace();
