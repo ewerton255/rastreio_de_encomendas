@@ -35,7 +35,7 @@ public class UsuarioController {
 			this.usuarioLogado = usuarioLogado;
 			PageUtil.redirecionarParaPaginaPrincipal();
 		}else {
-			PageUtil.mensagemDeErro("UsuÃ¡rio ou senha invÃ¡lido!");
+			PageUtil.mensagemDeErro("Usuário ou senha inválido!");
 		}
 	}
 	
@@ -83,9 +83,9 @@ public class UsuarioController {
 	
 	public void editarUsuario() {
 		if(usuarioDAO.editarUsuario(this.usuarioSelecionado)) {
-			PageUtil.mensagemDeSucesso("UsuÃ¡rio editado com sucesso!");
+			PageUtil.mensagemDeSucesso("Usuário editado com sucesso!");
 		}else {
-			PageUtil.mensagemDeErro("Erro ao editar usuÃ¡rio!");
+			PageUtil.mensagemDeErro("Erro ao editar usuário!");
 		}
 		PageUtil.atualizarComponente("formListUsuarios");
 		PageUtil.fecharDialog("dlgEditUsuario");
@@ -93,9 +93,9 @@ public class UsuarioController {
 	
 	public void excluirUsuario() {
 		if(usuarioDAO.excluirUsuario(this.usuarioSelecionado)) {
-			PageUtil.mensagemDeSucesso("UsuÃ¡rio excluido com sucesso!");
+			PageUtil.mensagemDeSucesso("Usuário excluido com sucesso!");
 		}else {
-			PageUtil.mensagemDeErro("Erro ao excluir usuÃ¡rio!");
+			PageUtil.mensagemDeErro("Erro ao excluir usuário!");
 		}
 		PageUtil.atualizarComponente("formListUsuarios");
 		PageUtil.fecharDialog("dlgDelUsuario");
@@ -103,9 +103,9 @@ public class UsuarioController {
 	
 	public void cadastrarUsuario() {
 		if(usuarioDAO.cadastrarUsuario(this.user)) {
-			PageUtil.mensagemDeSucesso("UsuÃ¡rio cadastrado com sucesso!");
+			PageUtil.mensagemDeSucesso("Usuário cadastrado com sucesso!");
 		}else {
-			PageUtil.mensagemDeErro("Erro ao cadastrar usuÃ¡rio!");
+			PageUtil.mensagemDeErro("Erro ao cadastrar usuário!");
 		}
 		PageUtil.atualizarComponente("formListUsuarios");
 		PageUtil.atualizarComponente("formCadUsuario");

@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.swing.text.MaskFormatter;
 
 import org.primefaces.mobile.component.page.Page;
@@ -103,13 +106,46 @@ public class PacoteController {
 	}
 	
 	public void cadastrarPacote() {
-		if(pacoteDAO.cadastrarPacote(this.pacoteParaCadastrar)) {
-			PageUtil.mensagemDeSucesso("Pacote cadastrado com sucesso!");
-			PageUtil.atualizarComponente("formListaPacotes");
-			PageUtil.fecharDialog("dlgCadPacote");
-		}else {
-			PageUtil.mensagemDeErro("Erro ao cadastrar pacote!");
+		Boolean valido = true;
+		
+		if(pacoteParaCadastrar.getCodigoRastreio() == null) {
+			PageUtil.mensagemDeErro("Gere um código de rastreio");
+			valido = false;
 		}
+		if(pacoteParaCadastrar.getPeso() <= 0) {
+			PageUtil.mensagemDeErro("Peso inválido");
+			valido = false;
+		}
+		if(pacoteParaCadastrar.getEnderecoDestinatario().getNumero() <= 0) {
+			PageUtil.mensagemDeErro("Número endereço inválido");
+			valido = false;
+		}
+		if(pacoteParaCadastrar.getEnderecoDestinatario().getBairro() == null) {
+			PageUtil.mensagemDeErro("Informe o Bairro");
+			valido = false;
+		}
+		if(pacoteParaCadastrar.getEnderecoDestinatario().getEstado() == null) {
+			PageUtil.mensagemDeErro("Informe o Estado");
+			valido = false;
+		}
+		if(pacoteParaCadastrar.getEnderecoDestinatario().getCidade() == null) {
+			PageUtil.mensagemDeErro("Informe a Cidade");
+			valido = false;
+		}
+		if(pacoteParaCadastrar.getEnderecoDestinatario().getLogradouro() == null) {
+			PageUtil.mensagemDeErro("Informe o logradouro");
+			valido = false;
+		}
+		if(valido) {
+			if(pacoteDAO.cadastrarPacote(this.pacoteParaCadastrar)) {
+				PageUtil.mensagemDeSucesso("Pacote cadastrado com sucesso!");
+				PageUtil.atualizarComponente("formListaPacotes");
+				PageUtil.fecharDialog("dlgCadPacote");
+			}else {
+				PageUtil.mensagemDeErro("Erro ao cadastrar pacote!");
+			}	
+		}
+		
 	}
 	
 	public void buscarCepDestinatario() throws ViaCEPException {

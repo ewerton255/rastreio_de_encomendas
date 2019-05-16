@@ -46,14 +46,14 @@ public class PageUtil {
 	}
 	
 	public static void mensagemDeSucesso(String mensagem) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", mensagem));
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, "Sucesso"));
     }
 	
 	public static void mensagemDeAlerta(String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "AtenÃ§Ã£o!", mensagem));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, mensagem, "Atenção!"));
 	}
 	
 	public static void mensagemDeErro(String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", mensagem));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, mensagem, "Erro"));
 	}
 }

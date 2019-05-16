@@ -28,6 +28,7 @@ body{
     box-sizing: content-box;
     display: grid;
 	grid-template-columns: 100px 1fr 150px;
+	z-index: 999;
 }
 
 .menu{

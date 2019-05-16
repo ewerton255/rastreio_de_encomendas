@@ -7,7 +7,7 @@ public class Pacote {
 	private Integer id;
 	private String codigoRastreio;
 	private String descricao;
-	private double peso;
+	private Double peso;
 	private String cpfCnpjDestinatario;
 	private Date dataPostado;
 	private Date dataAtualizacao;
@@ -26,12 +26,6 @@ public class Pacote {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-	public double getPeso() {
-		return peso;
-	}
-	public void setPeso(double peso) {
-		this.peso = peso;
 	}
 	public String getCpfCnpjDestinatario() {
 		return cpfCnpjDestinatario;
@@ -68,5 +62,11 @@ public class Pacote {
 	}
 	public Endereco getEnderecoDestinatario() {
 		return enderecoDestinatario;
+	}
+	public Double getPeso() {
+		return peso;
+	}
+	public void setPeso(Double peso) {
+		this.peso = peso;
 	}
 }
