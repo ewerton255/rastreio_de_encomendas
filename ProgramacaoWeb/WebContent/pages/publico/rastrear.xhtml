@@ -23,7 +23,8 @@
 				<br/><br/>
 				<div align="center">
 					<p:panelGrid columns="2" styleClass="semBorda">
-						<b:inputText maxlength="13" style="margin-top: 7%;" value="#{pacoteController.pacoteParaBuscar.codigoRastreio}"/>
+						<b:inputText maxlength="13" style="margin-top: 7%;" value="#{pacoteController.pacoteParaBuscar.codigoRastreio}"
+							required="true" requiredMessage="Informe o código de rastreio"/>
 						<b:commandButton title="Buscar" ajax="true" update="msgRastreio, tbResultadoRastreio"
 								action="#{pacoteController.buscarPacote()}">
 							<b:iconAwesome name="search"/>
