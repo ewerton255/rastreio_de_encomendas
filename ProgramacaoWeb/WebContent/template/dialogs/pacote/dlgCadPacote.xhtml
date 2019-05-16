@@ -28,12 +28,12 @@
 									immediate="true" update="codigoRastreio" />
 								<p:outputLabel value="Destinatário" />
 								<p:panelGrid id="tipoDocumento" styleClass="semBorda">
-									<p:inputMask
+									<p:inputMask required="true" requiredMessage="Informe o CPF/CNPJ"
 										value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}"
 										mask="#{pacoteController.tipoCpfCnpj eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
 										rendered="#{pacoteController.tipoCpfCnpj ne null}" />
 								</p:panelGrid>
-								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}">
+								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}" required="true" requiredMessage="Selecione o tipo de documento">
 									<f:selectItem noSelectionOption="true"
 										itemLabel="Tipo documento" itemValue="{null}" />
 									<f:selectItem itemLabel="CPF" itemValue="CPF" />
@@ -116,7 +116,7 @@
 								<p:outputLabel value="N°:" />
 								<p:inputText
 									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.numero}"
-									type="number" style="width: 30%;"/>
+									type="number" style="width: 30%;" required="true" requiredMessage="Insira o número do endereço"/>
 							</p:panelGrid>
 						</div>
 					</p:fieldset>
