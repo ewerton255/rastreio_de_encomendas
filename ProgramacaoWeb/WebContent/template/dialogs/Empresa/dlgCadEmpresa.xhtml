@@ -19,7 +19,7 @@
 						<p:inputMask mask="99.999.999/9999-99"
 							validator="CpfCnpjValidator"
 							value="#{empresaController.empresaCadastrar.cnpj}"
-							required="true" requiredMessage="Informe o cnpj" size="14" />
+							required="true" requiredMessage="Informe o CNPJ" size="14" />
 						<p:outputLabel value="Razão Social" />
 						<p:inputText
 							value="#{empresaController.empresaCadastrar.razaoSocial}"
@@ -35,9 +35,11 @@
 							<p:outputLabel value="CEP:" />
 							<p:inputMask mask="99999-999" size="8"
 								value="#{empresaController.empresaCadastrar.endereco.cep}"
-								required="true" requiredMessage="Informe o cep" >
-									<p:ajax event="blur" listener="#{empresaController.buscarCepDestinatario()}" update="endereco"/>
-								</p:inputMask>
+								required="true" requiredMessage="Informe o cep">
+								<p:ajax event="blur"
+									listener="#{empresaController.buscarCepDestinatario()}"
+									update="endereco" />
+							</p:inputMask>
 							<p:outputLabel value="Estado:" />
 							<p:inputText
 								value="#{empresaController.empresaCadastrar.endereco.estado}"
@@ -69,11 +71,13 @@
 					</p:fieldset>
 				</p:panelGrid>
 				<p:panelGrid columns="2" styleClass="semBorda">
-					<b:commandButton look="info" value="Salvar"
+					<b:commandButton style="background: #0099ff; color:white;" value="Salvar"
 						action="#{empresaController.cadastrarEmpresa()}"
-						update="msgCadEmpresa, formCadEmpresa" ajax="true" iconAwesome="check" />
-					
-					<b:button value="Fechar" onclick="PF('dlgCadEmpresa').hide();" look="danger"/>
+						update="msgCadEmpresa, formCadEmpresa" ajax="true"
+						iconAwesome="check" />
+
+					<b:button value="Fechar" onclick="PF('dlgCadEmpresa').hide();"
+						look="danger" />
 				</p:panelGrid>
 			</h:form>
 		</div>

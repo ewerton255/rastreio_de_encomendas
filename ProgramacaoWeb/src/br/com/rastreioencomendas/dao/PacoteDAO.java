@@ -61,7 +61,7 @@ public class PacoteDAO {
 		String sql = "SELECT id FROM rastreioencomendas.pacote WHERE codigo_rastreio = ?";
 		try {
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, codigo);
+			ps.setString(1, codigo.toUpperCase());
 			rs = ps.executeQuery();
 			if(rs.next()) {
 				existe = true;
@@ -173,7 +173,7 @@ public class PacoteDAO {
 					+ " VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?) RETURNING id;";
 			
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, pacote.getCodigoRastreio());
+			ps.setString(1, pacote.getCodigoRastreio().toUpperCase());
 			ps.setString(2, pacote.getDescricao());
 			ps.setDouble(3, pacote.getPeso());
 			ps.setString(4, pacote.getCpfCnpjDestinatario());
@@ -184,7 +184,7 @@ public class PacoteDAO {
 				idPacote = rs.getInt("id");
 			}
 			
-			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, status, datahora_atualizacao) VALUES(?, 'OBJETO POSTADO', CURRENT_TIMESTAMP)";
+			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, status, datahora_atualizacao) VALUES(?, 'OBJETO RECEBIDO NO CENTRO DE DISTRIBUIÇÃO Maceió/AL', CURRENT_TIMESTAMP)";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, idPacote);

@@ -12,21 +12,27 @@
 		showEffect="fade" hideEffect="fade">
 		<div align="center">
 			<h:form id="formCadAtualizacao">
-				<p:growl id="msgCadAtualizacao" showDetail="true"/>
+				<p:growl id="msgCadAtualizacao" showDetail="true" />
 				<p:panelGrid columns="2" styleClass="semBorda">
-					<p:outputLabel value="Pacote:"/>
-					<p:outputLabel value="#{pacoteController.pacoteSelecionado.codigoRastreio}"/>
-					<p:outputLabel value="Status:"/>
-					<p:inputTextarea value="#{pacoteController.novaAtualizacao.status}" required="true" requiredMessage="Insira o status"/>
-					<p:outputLabel value="Observação:"/>
-					<p:inputTextarea value="#{pacoteController.novaAtualizacao.observacao}"/>
+					<p:outputLabel value="Pacote:" />
+					<p:outputLabel
+						value="#{pacoteController.pacoteSelecionado.codigoRastreio}" />
+					<p:outputLabel value="Status:" />
+					<p:inputTextarea value="#{pacoteController.novaAtualizacao.status}"
+						required="true" requiredMessage="Insira o status" />
+					<p:outputLabel value="Observação:" />
+					<p:inputTextarea
+						value="#{pacoteController.novaAtualizacao.observacao}" />
 				</p:panelGrid>
-				<br/>
+				<br />
 				<div align="center">
 					<p:panelGrid columns="2" styleClass="semBorda">
-						<b:commandButton ajax="true" actionListener="#{pacoteController.cadastrarNovaAtualizacao()}" look="info" value="Salvar"
-								update="msgCadAtualizacao"/>
-						<b:button onclick="PF('dlgCadAtualizacao').hide();" look="danger" value="Fechar"/>
+						<b:commandButton ajax="true"
+							actionListener="#{pacoteController.cadastrarNovaAtualizacao()}"
+							style="background: #0099ff; color:white;" value="Salvar"
+							update="msgCadAtualizacao" />
+						<b:button onclick="PF('dlgCadAtualizacao').hide();" look="danger"
+							value="Fechar" />
 					</p:panelGrid>
 				</div>
 			</h:form>

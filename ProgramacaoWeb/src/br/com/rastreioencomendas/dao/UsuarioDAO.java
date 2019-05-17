@@ -21,8 +21,8 @@ public class UsuarioDAO {
 		
 		try {
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, usuario.getEmail());
-			ps.setString(2, usuario.getSenha());
+			ps.setString(1, usuario.getEmail().toLowerCase());
+			ps.setString(2, usuario.getSenha().toLowerCase());
 			rs = ps.executeQuery();
 			if(rs.next()) {
 				usuarioLogado = new Usuario();
@@ -85,8 +85,8 @@ public class UsuarioDAO {
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, usuario.getNome());
-			ps.setString(2, usuario.getEmail());
-			ps.setString(3, usuario.getSenha());
+			ps.setString(2, usuario.getEmail().toLowerCase());
+			ps.setString(3, usuario.getSenha().toLowerCase());
 			ps.setBoolean(4, usuario.getAdmin());
 			ps.setInt(5, usuario.getId());
 			ps.executeUpdate();
@@ -137,8 +137,8 @@ public class UsuarioDAO {
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, usuario.getNome());
-			ps.setString(2, usuario.getEmail());
-			ps.setString(3, usuario.getSenha());
+			ps.setString(2, usuario.getEmail().toLowerCase());
+			ps.setString(3, usuario.getSenha().toLowerCase());
 			ps.setBoolean(4, usuario.getAdmin());
 			ps.executeUpdate();
 			cadastrou = true;
