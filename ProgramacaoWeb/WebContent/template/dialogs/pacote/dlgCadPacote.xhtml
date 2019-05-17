@@ -26,14 +26,29 @@
 								<p:commandButton value="Gerar" ajax="true"
 									actionListener="#{pacoteController.retornaCodigoDeRastreio()}"
 									immediate="true" update="codigoRastreio" />
+								<p:outputLabel value="Empresa remetente:" />
+								<p:selectOneMenu
+									value="#{pacoteController.pacoteParaCadastrar.empresaRemetente.id}"
+									required="true" requiredMessage="Selecione a empresa remetente">
+									<f:selectItem itemLabel="Selecione" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems
+										value="#{empresaController.retornaListaEmpresa()}"
+										var="empresa" itemLabel="#{empresa.razaoSocial}"
+										itemValue="#{empresa.id}" />
+								</p:selectOneMenu>
+								<br />
 								<p:outputLabel value="Destinatário" />
 								<p:panelGrid id="tipoDocumento" styleClass="semBorda">
-									<p:inputMask required="true" requiredMessage="Informe o CPF/CNPJ"
+									<p:inputMask required="true"
+										requiredMessage="Informe o CPF/CNPJ"
 										value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}"
 										mask="#{pacoteController.tipoCpfCnpj eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
-										rendered="#{pacoteController.tipoCpfCnpj ne null}" validator="CpfCnpjValidator"/>
+										rendered="#{pacoteController.tipoCpfCnpj ne null}"
+										validator="CpfCnpjValidator" />
 								</p:panelGrid>
-								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}" required="true" requiredMessage="Selecione o tipo de documento">
+								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}"
+									required="true" requiredMessage="Selecione o tipo de documento">
 									<f:selectItem noSelectionOption="true"
 										itemLabel="Tipo documento" itemValue="" />
 									<f:selectItem itemLabel="CPF" itemValue="CPF" />
@@ -49,8 +64,9 @@
 								<p:outputLabel value="Peso:" />
 								<p:inputNumber
 									value="#{pacoteController.pacoteParaCadastrar.peso}"
-									required="true" requiredMessage="Insira o peso do pacote" inputStyle="width: 52%;"
-									symbol=" Kg" symbolPosition="s" decimalPlaces="1" thousandSeparator=""/>
+									required="true" requiredMessage="Insira o peso do pacote"
+									inputStyle="width: 52%;" symbol=" Kg" symbolPosition="s"
+									decimalPlaces="1" thousandSeparator="" />
 								<br />
 								<p:outputLabel value="Frete:" />
 								<p:selectOneMenu
@@ -116,7 +132,9 @@
 								<p:outputLabel value="N°:" />
 								<p:inputNumber
 									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.numero}"
-									inputStyle="width: 30%;" required="true" requiredMessage="Insira o número do endereço" decimalPlaces="0" thousandSeparator=""/>
+									inputStyle="width: 30%;" required="true"
+									requiredMessage="Insira o número do endereço" decimalPlaces="0"
+									thousandSeparator="" />
 							</p:panelGrid>
 						</div>
 					</p:fieldset>
@@ -124,7 +142,7 @@
 				<div align="right">
 					<p:panelGrid columns="2" styleClass="semBorda">
 						<b:commandButton value="Salvar" ajax="true"
-							update=":formCadPacote" look="primary"
+							update=":formCadPacote" look="info"
 							action="#{pacoteController.cadastrarPacote()}" />
 						<b:button value="Fechar" onclick="PF('dlgCadPacote').hide();"
 							look="danger" />

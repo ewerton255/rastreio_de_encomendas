@@ -13,9 +13,14 @@ public class CpfCnpjValidator implements Validator{
 	@Override
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 		String cpfCnpj = (String)value;
-
-        if (!CpfCnpjUtil.isValid(cpfCnpj)) {
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF/CNPJ inválido.", "CPF/CNPJ inválido."));
+		String cpfCnpjFormatados = cpfCnpj.trim().replace(".", "").replace("-", "").replace("/","");
+		
+        if (!CpfCnpjUtil.isValid(cpfCnpj) && cpfCnpjFormatados.length() == 11) {
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF inválido.", "CPF inválido."));
+        }
+        
+        if (!CpfCnpjUtil.isValid(cpfCnpj) && cpfCnpjFormatados.length() == 14) {
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CNPJ inválido.", "CNPJ inválido."));
         }
 	}
 

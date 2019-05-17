@@ -78,8 +78,9 @@
 								onclick="PF('dlgLogin').show();" ajax="true" rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}" update="@this"/>
 							
 							<p:menuButton value="Menu" style="width: 100%; " rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}">
-								<p:menuitem value="Usuarios" action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}" ajax="true"/>
-								<p:menuitem value="Pacotes" action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}" ajax="true"/>
+								<p:menuitem value="Usuario" action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}" ajax="true"/>
+								<p:menuitem value="Pacote" action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}" ajax="true"/>
+								<p:menuitem value="Empresa" action="#{pageUtil.redirecionarParaPage('pages/administrador/empresa')}" ajax="true"/>
 							</p:menuButton>
 							
 							<p:commandButton value="Sair" ajax="true" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" 
@@ -146,6 +147,10 @@
 	
 	<ui:insert name="dlgCadAtualizacao">
 		<ui:include src="/template/dialogs/pacote/dlgCadAtualizacao.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="dlgCadEmpresa">
+		<ui:include src="/template/dialogs/Empresa/dlgCadEmpresa.xhtml" />
 	</ui:insert>
 </h:body>
 </html>

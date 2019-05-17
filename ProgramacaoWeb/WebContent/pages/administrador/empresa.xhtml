@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="/template/templateGeral.xhtml">
+		<ui:define name="conteudo">
+			<h:form id="formListaEmpresas">
+				<br />
+				<div align="center">
+					<p:outputLabel value="Gerenciar Empresas" style="font-size: 1.7em;" />
+				</div>
+				<p:commandButton value="Cadastrar" title="Cadastrar nova empresa"
+					ajax="true" action="#{empresaController.abrirDialogCadEmpresa()}" />
+				<br />
+				<br />
+				<p:dataTable paginator="true" paginatorPosition="bottom"
+					id="tbEmpresa" var="empresa"
+					emptyMessage="Nenhuma empresa encontrada"
+					value="#{empresaController.retornaListaEmpresa()}">
+
+					<p:column headerText="CNPJ">
+						<div align="center">
+							<h:outputText value="#{empresa.cnpj}" />
+						</div>
+					</p:column>
+
+					<p:column headerText="Razão social">
+						<div align="center">
+							<h:outputText value="#{empresa.razaoSocial}" />
+						</div>
+					</p:column>
+
+					<p:column headerText="Nome Fantasma">
+						<div align="center">
+							<h:outputText value="#{empresa.nomeFantasma}" />
+						</div>
+					</p:column>
+
+					<p:column headerText="Ação">
+						<div align="center">
+							<b:commandButton icon="edit" style="color: orange; border:none;"
+								ajax="true" title="Editar" />
+							<b:commandButton style="color: red; border:none;" ajax="true"
+								title="Excluir">
+								<b:iconAwesome name="times-circle" />
+							</b:commandButton>
+						</div>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

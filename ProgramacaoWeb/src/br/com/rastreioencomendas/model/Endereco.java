@@ -2,6 +2,7 @@ package br.com.rastreioencomendas.model;
 
 public class Endereco {
 
+	private Integer id;
 	private String cep;
 	private String logradouro;
 	private String cidade;
@@ -52,5 +53,10 @@ public class Endereco {
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}
-	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }

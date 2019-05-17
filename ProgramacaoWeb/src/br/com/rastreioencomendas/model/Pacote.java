@@ -14,6 +14,7 @@ public class Pacote {
 	private Date previsaoEntrega;
 	private Frete tipoFrete = new Frete();
 	private Endereco enderecoDestinatario = new Endereco();
+	private Empresa empresaRemetente = new Empresa();
 	
 	public String getCodigoRastreio() {
 		return codigoRastreio;
@@ -68,5 +69,8 @@ public class Pacote {
 	}
 	public void setPeso(Double peso) {
 		this.peso = peso;
+	}
+	public Empresa getEmpresaRemetente() {
+		return empresaRemetente;
 	}
 }
