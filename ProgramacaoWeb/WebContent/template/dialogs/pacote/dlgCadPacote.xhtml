@@ -13,7 +13,7 @@
 		<div align="left">
 			<h:form id="formCadPacote">
 				<p:panelGrid styleClass="semBorda" columns="2">
-					<p:fieldset legend="Dados do pacote" style="height: 390px;">
+					<p:fieldset legend="Dados do pacote">
 						<div align="left">
 							<p:growl id="msgCadPacote" />
 
@@ -38,23 +38,6 @@
 										itemValue="#{empresa.id}" />
 								</p:selectOneMenu>
 								<br />
-								<p:outputLabel value="Destinatário" />
-								<p:panelGrid id="tipoDocumento" styleClass="semBorda">
-									<p:inputMask required="true"
-										requiredMessage="Informe o CPF/CNPJ"
-										value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}"
-										mask="#{pacoteController.tipoCpfCnpj eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
-										rendered="#{pacoteController.tipoCpfCnpj ne null}"
-										validator="CpfCnpjValidator" />
-								</p:panelGrid>
-								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}"
-									required="true" requiredMessage="Selecione o tipo de documento">
-									<f:selectItem noSelectionOption="true"
-										itemLabel="Tipo documento" itemValue="" />
-									<f:selectItem itemLabel="CPF" itemValue="CPF" />
-									<f:selectItem itemLabel="CNPJ" itemValue="CNPJ" />
-									<p:ajax update="tipoDocumento" event="change" />
-								</p:selectOneMenu>
 								<p:outputLabel value="Descrição:" />
 								<p:inputTextarea
 									value="#{pacoteController.pacoteParaCadastrar.descricao}"
@@ -86,10 +69,30 @@
 						</div>
 					</p:fieldset>
 
-					<p:fieldset legend="Endereço de entrega" id="enderecoEntrega"
-						style="height: 390px;">
+					<p:fieldset legend="Dados de entrega" id="enderecoEntrega">
 						<div align="left">
-							<p:panelGrid styleClass="semBorda" columns="4"
+							<p:panelGrid id="tipoDocumento" styleClass="semBorda" columns="3">
+								<p:outputLabel value="Destinatário" />
+								
+								<p:inputMask required="true"
+									requiredMessage="Informe o CPF/CNPJ"
+									value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}"
+									mask="#{pacoteController.tipoCpfCnpj eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
+									rendered="#{pacoteController.tipoCpfCnpj ne null}"
+									validator="CpfCnpjValidator" />
+									
+								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}"
+									required="true" requiredMessage="Selecione o tipo de documento">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Tipo documento" itemValue="" />
+									<f:selectItem itemLabel="CPF" itemValue="CPF" />
+									<f:selectItem itemLabel="CNPJ" itemValue="CNPJ" />
+									<p:ajax update="tipoDocumento" event="change" />
+								</p:selectOneMenu>
+							</p:panelGrid>
+							<br/>
+							<p:panel header="Endereço">
+								<p:panelGrid styleClass="semBorda" columns="4"
 								id="enderecoDestinatario">
 								<p:outputLabel value="CEP:" />
 								<p:inputMask mask="99999-999"
@@ -136,6 +139,7 @@
 									requiredMessage="Insira o número do endereço" decimalPlaces="0"
 									thousandSeparator="" />
 							</p:panelGrid>
+							</p:panel>
 						</div>
 					</p:fieldset>
 				</p:panelGrid>
