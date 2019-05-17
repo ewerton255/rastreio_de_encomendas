@@ -7,6 +7,8 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import br.com.rastreioencomendas.dao.UsuarioDAO;
 import br.com.rastreioencomendas.model.Usuario;
 import br.com.rastreioencomendas.util.PageUtil;
@@ -102,15 +104,24 @@ public class UsuarioController {
 	}
 	
 	public void cadastrarUsuario() {
-		if(usuarioDAO.cadastrarUsuario(this.user)) {
-			PageUtil.mensagemDeSucesso("Usuário cadastrado com sucesso!");
+		if(usuarioDAO.verificaSeUsuarioJaExiste(user)) {
+			PageUtil.mensagemDeErro("Email já existente");
 		}else {
-			PageUtil.mensagemDeErro("Erro ao cadastrar usuário!");
+			if(EmailValidator.getInstance().isValid(user.getEmail())) {
+				if(usuarioDAO.cadastrarUsuario(user)) {
+					PageUtil.mensagemDeSucesso("Usuário cadastrado com sucesso!");
+					PageUtil.fecharDialog("dlgCadUsuario");
+					this.user = new Usuario();
+				}else {
+					PageUtil.mensagemDeErro("Erro ao cadastrar usuário!");
+				}
+			}else {
+				PageUtil.mensagemDeErro("E-mail inválido");
+			}
 		}
+		PageUtil.atualizarComponente("formLogin");
 		PageUtil.atualizarComponente("formListUsuarios");
 		PageUtil.atualizarComponente("formCadUsuario");
-		PageUtil.fecharDialog("dlgCadUsuario");
-		this.user = new Usuario();
 	}
 	
 	public Usuario getUser() {

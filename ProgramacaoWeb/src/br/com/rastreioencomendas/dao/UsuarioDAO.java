@@ -154,4 +154,31 @@ public class UsuarioDAO {
 		
 		return cadastrou;
 	}
+	
+	public Boolean verificaSeUsuarioJaExiste(Usuario usuario) {
+		Boolean existe = false;
+		Connection conn = ConnectionFactory.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+		String sql = "SELECT id FROM rastreioencomendas.usuario WHERE email = ?";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, usuario.getEmail());
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				existe = true;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return existe;
+	}
 }
