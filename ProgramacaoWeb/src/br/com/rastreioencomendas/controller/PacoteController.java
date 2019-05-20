@@ -84,10 +84,12 @@ public class PacoteController {
 			if(listaHistoricoRastreio.size() > 0) {
 				if(listaHistoricoRastreio.size() == 1) {
 					status = "RECEBIDO";
-				}else if(listaHistoricoRastreio.size() > 1 && listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase() != "ENTREGUE") {
-					status = "TRANSITO";
-				}else if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase() == "ENTREGUE") {
-					status = "ENTREGUE";
+				}else if(listaHistoricoRastreio.size() > 1 ) {
+					if(!listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase().equalsIgnoreCase("ENTREGUE")){
+						status = "TRANSITO";
+					}else if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase().equalsIgnoreCase("ENTREGUE")) {
+						status = "ENTREGUE";
+					}
 				}
 			}
 		}
