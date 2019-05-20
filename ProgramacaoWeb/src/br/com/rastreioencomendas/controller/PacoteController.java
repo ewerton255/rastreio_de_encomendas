@@ -25,7 +25,11 @@ import br.com.rastreioencomendas.util.ViaCEPException;
 @SessionScoped
 @ManagedBean
 public class PacoteController {
-	
+
+	private static final String RECEBIDO = "RECEBIDO";
+	private static final String TRANSITO = "TRANSITO";
+	private static final String ENTREGUE = "ENTREGUE";
+
 	private PacoteDAO pacoteDAO = new PacoteDAO();
 	private Pacote pacoteParaCadastrar;
 	private HistoricoModel novaAtualizacao = new HistoricoModel();
@@ -83,12 +87,12 @@ public class PacoteController {
 		if(listaHistoricoRastreio != null) {
 			if(listaHistoricoRastreio.size() > 0) {
 				if(listaHistoricoRastreio.size() == 1) {
-					status = "RECEBIDO";
+					status = RECEBIDO;
 				}else if(listaHistoricoRastreio.size() > 1 ) {
 					if(!listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase().equalsIgnoreCase("ENTREGUE")){
-						status = "TRANSITO";
+						status = TRANSITO;
 					}else if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase().equalsIgnoreCase("ENTREGUE")) {
-						status = "ENTREGUE";
+						status = ENTREGUE;
 					}
 				}
 			}
