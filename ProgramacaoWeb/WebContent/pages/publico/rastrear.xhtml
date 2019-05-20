@@ -39,7 +39,7 @@
 					<br/>
 					<p:outputLabel value="Pacote Recebido" rendered="#{pacoteController.retornaStatusEncomenda() eq 'RECEBIDO'}" style="color: #0099ff"/>
 					<p:outputLabel value="Em Trânsito" rendered="#{pacoteController.retornaStatusEncomenda() eq 'TRANSITO'}" style="color: #0099ff"/>
-					<p:outputLabel value="Entregue" rendered="#{pacoteController.retornaStatusEncomenda() eq 'ENTREGUE'}" style="color: #0099ff"/>
+					<p:outputLabel value="Entregue ao destinatário" rendered="#{pacoteController.retornaStatusEncomenda() eq 'ENTREGUE'}" style="color: #0099ff"/>
 					<br/><br/>
 					<p:dataTable emptyMessage="Nenhum resultado encontrado" style="width: 50%;" id="tbResultadoRastreio" var="historico"
 							value="#{pacoteController.listaHistoricoRastreio}" rendered="#{pacoteController.listaHistoricoRastreio.size() > 0}">
