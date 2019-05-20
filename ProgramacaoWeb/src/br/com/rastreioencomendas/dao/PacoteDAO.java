@@ -184,7 +184,7 @@ public class PacoteDAO {
 				idPacote = rs.getInt("id");
 			}
 			
-			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, status, datahora_atualizacao) VALUES(?, 'OBJETO RECEBIDO NO CENTRO DE DISTRIBUI«√O MaceiÛ/AL', CURRENT_TIMESTAMP)";
+			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, status, datahora_atualizacao) VALUES(?, 'OBJETO RECEBIDO NO CENTRO DE DISTRIBUI√á√ÉO Macei√≥/AL', CURRENT_TIMESTAMP)";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, idPacote);

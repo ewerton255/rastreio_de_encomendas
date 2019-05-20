@@ -37,7 +37,7 @@ public class UsuarioController {
 			this.usuarioLogado = usuarioLogado;
 			PageUtil.redirecionarParaPaginaPrincipal();
 		}else {
-			PageUtil.mensagemDeErro("Usu·rio ou senha inv·lido!");
+			PageUtil.mensagemDeErro("Usu√°rio ou senha inv√°lido!");
 		}
 	}
 	
@@ -85,9 +85,9 @@ public class UsuarioController {
 	
 	public void editarUsuario() {
 		if(usuarioDAO.editarUsuario(this.usuarioSelecionado)) {
-			PageUtil.mensagemDeSucesso("Usu·rio editado com sucesso!");
+			PageUtil.mensagemDeSucesso("Usu√°rio editado com sucesso!");
 		}else {
-			PageUtil.mensagemDeErro("Erro ao editar usu·rio!");
+			PageUtil.mensagemDeErro("Erro ao editar usu√°rio!");
 		}
 		PageUtil.atualizarComponente("formListUsuarios");
 		PageUtil.fecharDialog("dlgEditUsuario");
@@ -95,9 +95,9 @@ public class UsuarioController {
 	
 	public void excluirUsuario() {
 		if(usuarioDAO.excluirUsuario(this.usuarioSelecionado)) {
-			PageUtil.mensagemDeSucesso("Usu·rio excluido com sucesso!");
+			PageUtil.mensagemDeSucesso("Usu√°rio excluido com sucesso!");
 		}else {
-			PageUtil.mensagemDeErro("Erro ao excluir usu·rio!");
+			PageUtil.mensagemDeErro("Erro ao excluir usu√°rio!");
 		}
 		PageUtil.atualizarComponente("formListUsuarios");
 		PageUtil.fecharDialog("dlgDelUsuario");
@@ -105,18 +105,18 @@ public class UsuarioController {
 	
 	public void cadastrarUsuario() {
 		if(usuarioDAO.verificaSeUsuarioJaExiste(user)) {
-			PageUtil.mensagemDeErro("Email j· existente");
+			PageUtil.mensagemDeErro("Email j√° existente");
 		}else {
 			if(EmailValidator.getInstance().isValid(user.getEmail())) {
 				if(usuarioDAO.cadastrarUsuario(user)) {
-					PageUtil.mensagemDeSucesso("Usu·rio cadastrado com sucesso!");
+					PageUtil.mensagemDeSucesso("Usu√°rio cadastrado com sucesso!");
 					PageUtil.fecharDialog("dlgCadUsuario");
 					this.user = new Usuario();
 				}else {
-					PageUtil.mensagemDeErro("Erro ao cadastrar usu·rio!");
+					PageUtil.mensagemDeErro("Erro ao cadastrar usu√°rio!");
 				}
 			}else {
-				PageUtil.mensagemDeErro("E-mail inv·lido");
+				PageUtil.mensagemDeErro("E-mail inv√°lido");
 			}
 		}
 		PageUtil.atualizarComponente("formLogin");

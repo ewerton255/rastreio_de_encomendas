@@ -16,11 +16,11 @@ public class CpfCnpjValidator implements Validator{
 		String cpfCnpjFormatados = cpfCnpj.trim().replace(".", "").replace("-", "").replace("/","");
 		
         if (!CpfCnpjUtil.isValid(cpfCnpj) && cpfCnpjFormatados.length() == 11) {
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF inválido.", "CPF inválido."));
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF invÃ¡lido.", "CPF invÃ¡lido."));
         }
         
         if (!CpfCnpjUtil.isValid(cpfCnpj) && cpfCnpjFormatados.length() == 14) {
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CNPJ inválido.", "CNPJ inválido."));
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "CNPJ invÃ¡lido.", "CNPJ invÃ¡lido."));
         }
 	}
 

@@ -33,7 +33,7 @@ public class EmpresaController {
 		Boolean valido = true;
 
 		if (empresaCadastrar.getEndereco().getNumero() <= 0) {
-			PageUtil.mensagemDeErro("Número endereço inválido");
+			PageUtil.mensagemDeErro("NÃ¡mero endereÃ¡o invÃ¡lido");
 			valido = false;
 		}
 		if (empresaCadastrar.getEndereco().getBairro() == null) {

@@ -50,7 +50,7 @@ public class PageUtil {
     }
 	
 	public static void mensagemDeAlerta(String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, mensagem, "Atenção!"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, mensagem, "AtenÃ§Ã£o!"));
 	}
 	
 	public static void mensagemDeErro(String mensagem) {
