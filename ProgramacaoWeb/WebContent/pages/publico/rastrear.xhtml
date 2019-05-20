@@ -25,15 +25,24 @@
 					<p:panelGrid columns="2" styleClass="semBorda">
 						<b:inputText maxlength="13" style="margin-top: 7%;" value="#{pacoteController.pacoteParaBuscar.codigoRastreio}"
 							required="true" requiredMessage="Informe o código de rastreio"/>
-						<b:commandButton title="Buscar" ajax="true" update="msgRastreio, tbResultadoRastreio"
+						<b:commandButton title="Buscar" ajax="true" update="formRastreio"
 								action="#{pacoteController.buscarPacote()}">
 							<b:iconAwesome name="search"/>
 						</b:commandButton>
 					</p:panelGrid>
 					<span>O código é formado por 4 letras e 9 número, exemplo : </span><span style="font-weight: bold;">LB123456789SE</span>
-					<br/><br/><br/>
+					<br/><br/>
+					
+					<p:graphicImage value="/resources/imgs/pacote_recebido.png" rendered="#{pacoteController.retornaStatusEncomenda() eq 'RECEBIDO'}"/>
+					<p:graphicImage value="/resources/imgs/pacote_em_transito.png" rendered="#{pacoteController.retornaStatusEncomenda() eq 'TRANSITO'}"/>
+					<p:graphicImage value="/resources/imgs/pacote_entregue.png" rendered="#{pacoteController.retornaStatusEncomenda() eq 'ENTREGUE'}"/>
+					<br/>
+					<p:outputLabel value="PACOTE RECEBIDO" rendered="#{pacoteController.retornaStatusEncomenda() eq 'RECEBIDO'}" style="color: #0099ff"/>
+					<p:outputLabel value="EM TRÂNSITO" rendered="#{pacoteController.retornaStatusEncomenda() eq 'TRANSITO'}" style="color: #0099ff"/>
+					<p:outputLabel value="ENTREGUE" rendered="#{pacoteController.retornaStatusEncomenda() eq 'ENTREGUE'}" style="color: #0099ff"/>
+					<br/><br/>
 					<p:dataTable emptyMessage="Nenhum resultado encontrado" style="width: 50%;" id="tbResultadoRastreio" var="historico"
-							value="#{pacoteController.listaHistoricoRastreio}">
+							value="#{pacoteController.listaHistoricoRastreio}" rendered="#{pacoteController.listaHistoricoRastreio.size() > 0}">
 						<p:column headerText="Data/Hora atualização">
 							<div align="center">
 								<h:outputText value="#{historico.dataHoraAtualizacaoFormatados}" />

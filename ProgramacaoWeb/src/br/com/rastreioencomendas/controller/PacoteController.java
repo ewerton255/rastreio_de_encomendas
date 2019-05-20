@@ -78,6 +78,22 @@ public class PacoteController {
 		return codigo.toUpperCase();
 	}
 	
+	public String retornaStatusEncomenda() {
+		String status = "";
+		if(listaHistoricoRastreio != null) {
+			if(listaHistoricoRastreio.size() > 0) {
+				if(listaHistoricoRastreio.size() == 1) {
+					status = "RECEBIDO";
+				}else if(listaHistoricoRastreio.size() > 1 && listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase() != "ENTREGUE") {
+					status = "TRANSITO";
+				}else if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase() == "ENTREGUE") {
+					status = "ENTREGUE";
+				}
+			}
+		}
+		return status;
+	}
+	
 	public void carregaDadosPageRastrear() {
 		this.pacoteParaBuscar = new Pacote();
 		this.listaHistoricoRastreio = new ArrayList<>();
