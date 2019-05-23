@@ -7,7 +7,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
 <body>
-	<p:dialog widgetVar="dlgCadAtualizacao" header="Cadastrar atualização"
+	<p:dialog widgetVar="dlgCadAtualizacao" header="Cadastrar Status"
 		closable="false" resizable="false" modal="true" draggable="false"
 		showEffect="fade" hideEffect="fade">
 		<div align="center">
@@ -18,10 +18,26 @@
 					<p:outputLabel
 						value="#{pacoteController.pacoteSelecionado.codigoRastreio}" />
 					<p:outputLabel value="Status:" />
-					<p:inputTextarea value="#{pacoteController.novaAtualizacao.status}"
-						required="true" requiredMessage="Insira o status" />
+					<p:selectOneMenu
+						value="#{pacoteController.novaAtualizacao.status.id}"
+						required="true" requiredMessage="Selecione o status">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione o status" />
+						<f:selectItems
+							value="#{statusPacoteController.retornaListaDeStatus()}"
+							var="status" itemValue="#{status.id}"
+							itemLabel="#{status.descricao}" />
+						<p:ajax event="change" update="formCadAtualizacao"
+							listener="#{pacoteController.renderizaLocalizacao()}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Local:"
+						rendered="#{pacoteController.renderizaLocalizacao()}" />
+					<p:inputText style="width: 100%;"
+						value="#{pacoteController.novaAtualizacao.localizacao}"
+						required="true" requiredMessage="Insira o local da atualização"
+						rendered="#{pacoteController.renderizaLocalizacao()}" />
 					<p:outputLabel value="Observação:" />
-					<p:inputTextarea
+					<p:inputTextarea style="width: 100%;"
 						value="#{pacoteController.novaAtualizacao.observacao}" />
 				</p:panelGrid>
 				<br />

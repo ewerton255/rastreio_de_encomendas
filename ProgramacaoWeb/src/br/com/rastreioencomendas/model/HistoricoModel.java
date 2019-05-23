@@ -5,22 +5,23 @@ import java.util.Date;
 public class HistoricoModel {
 
 	private Pacote pacote;
-	private String status;
 	private Date dataHoraAtualizacao;
 	private String dataHoraAtualizacaoFormatados;
+	private String localizacao;
 	private String observacao;
+	private StatusPacote status = new StatusPacote();
 	
+	public String getLocalizacao() {
+		return localizacao;
+	}
+	public void setLocalizacao(String localizacao) {
+		this.localizacao = localizacao;
+	}
 	public Pacote getPacote() {
 		return pacote;
 	}
 	public void setPacote(Pacote pacote) {
 		this.pacote = pacote;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 	public Date getDataHoraAtualizacao() {
 		return dataHoraAtualizacao;
@@ -39,5 +40,11 @@ public class HistoricoModel {
 	}
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+	public StatusPacote getStatus() {
+		return status;
+	}
+	public void setStatus(StatusPacote status) {
+		this.status = status;
 	}
 }

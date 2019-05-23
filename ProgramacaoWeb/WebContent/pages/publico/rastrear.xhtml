@@ -51,7 +51,8 @@
 						
 						<p:column headerText="Status">
 							<div align="center">
-								<h:outputText value="#{historico.status}" />
+								<h:outputText value="#{historico.status.descricao} #{historico.localizacao}" 
+								style="color: #{historico.status.id eq 5 ? 'green' : 'black'};"/>
 							</div>
 						</p:column>
 						

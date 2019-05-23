@@ -83,14 +83,15 @@ public class PacoteDAO {
 		Boolean cadastrou = false;
 		Connection conn = ConnectionFactory.getConnection();
 		PreparedStatement ps;
-		String sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, datahora_atualizacao, status, observacao) "
-				+ "VALUES(?, CURRENT_TIMESTAMP, ?, ?)";
+		String sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, datahora_atualizacao, id_status, observacao, localizacao) "
+				+ "VALUES(?, CURRENT_TIMESTAMP, ?, ?, ?)";
 		
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, pacote.getId());
-			ps.setString(2, atualizacao.getStatus());
+			ps.setInt(2, atualizacao.getStatus().getId());
 			ps.setString(3, atualizacao.getObservacao());
+			ps.setString(4, atualizacao.getLocalizacao());
 			
 			ps.executeUpdate();
 			cadastrou = true;
@@ -112,9 +113,11 @@ public class PacoteDAO {
 		Connection conn = ConnectionFactory.getConnection();
 		PreparedStatement ps;
 		ResultSet rs;
-		String sql = "SELECT hp.id_pacote, hp.datahora_atualizacao, hp.status, hp.observacao " + 
+		String sql = "SELECT hp.id_pacote, hp.datahora_atualizacao, hp.observacao, st.id as id_status," + 
+				" st.descricao as descricao_status, hp.localizacao " + 
 				"FROM rastreioencomendas.historico_pacote hp " + 
 				"JOIN rastreioencomendas.pacote P ON p.id = hp.id_pacote " + 
+				"JOIN rastreioencomendas.status st ON st.id = hp.id_status " + 
 				"WHERE p.codigo_rastreio = ? ORDER BY hp.datahora_atualizacao";
 		
 		try {
@@ -127,7 +130,9 @@ public class PacoteDAO {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 				historico.setDataHoraAtualizacaoFormatados(sdf.format(rs.getTimestamp("datahora_atualizacao").getTime()));
 				historico.setObservacao(rs.getString("observacao"));
-				historico.setStatus(rs.getString("status"));
+				historico.setLocalizacao(rs.getString("localizacao"));
+				historico.getStatus().setId(rs.getInt("id_status"));
+				historico.getStatus().setDescricao(rs.getString("descricao_status"));
 				
 				lista.add(historico);
 				
@@ -184,10 +189,11 @@ public class PacoteDAO {
 				idPacote = rs.getInt("id");
 			}
 			
-			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, status, datahora_atualizacao) VALUES(?, 'OBJETO RECEBIDO NO CENTRO DE DISTRIBUIÇÃO Maceió/AL', CURRENT_TIMESTAMP)";
+			sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, id_status, datahora_atualizacao) VALUES(?, ?, CURRENT_TIMESTAMP)";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, idPacote);
+			ps.setInt(2, 1);
 			ps.executeUpdate();
 			
 			cadastrou = true;
@@ -209,7 +215,11 @@ public class PacoteDAO {
 		Connection conn = ConnectionFactory.getConnection();
 		PreparedStatement ps;
 		ResultSet rs;
-		String sql = "SELECT * FROM rastreioencomendas.historico_pacote WHERE id_pacote = ?";
+		String sql = "SELECT hp.datahora_atualizacao, hp.observacao, hp.localizacao," + 
+				"s.descricao as status, s.id as id_status " + 
+				"FROM rastreioencomendas.historico_pacote hp " + 
+				"JOIN rastreioencomendas.status s ON s.id = hp.id_status " + 
+				"WHERE hp.id_pacote = ?";
 		
 		try {
 			ps = conn.prepareStatement(sql);
@@ -221,7 +231,9 @@ public class PacoteDAO {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 				atualizacao.setDataHoraAtualizacaoFormatados(sdf.format(rs.getTimestamp("datahora_atualizacao").getTime()));
 				atualizacao.setObservacao(rs.getString("observacao"));
-				atualizacao.setStatus(rs.getString("status"));
+				atualizacao.setLocalizacao(rs.getString("localizacao"));
+				atualizacao.getStatus().setDescricao(rs.getString("status"));
+				atualizacao.getStatus().setId(rs.getInt("id_status"));
 				
 				lista.add(atualizacao);
 			}

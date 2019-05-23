@@ -89,9 +89,9 @@ public class PacoteController {
 				if(listaHistoricoRastreio.size() == 1) {
 					status = RECEBIDO;
 				}else if(listaHistoricoRastreio.size() > 1 ) {
-					if(!listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase().equalsIgnoreCase("ENTREGUE")){
+					if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().getId() != 5){
 						status = TRANSITO;
-					}else if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().trim().toUpperCase().equalsIgnoreCase("ENTREGUE")) {
+					}else if(listaHistoricoRastreio.get(listaHistoricoRastreio.size() -1).getStatus().getId() == 5) {
 						status = ENTREGUE;
 					}
 				}
@@ -199,6 +199,18 @@ public class PacoteController {
 		this.novaAtualizacao = new HistoricoModel();
 		PageUtil.atualizarComponente("formCadAtualizacao");
 		PageUtil.abrirDialog("dlgCadAtualizacao");
+	}
+	
+	public Boolean renderizaLocalizacao() {
+		Boolean renderiza = false;
+		
+		if(novaAtualizacao.getStatus().getId() != null) {
+			if(novaAtualizacao.getStatus().getId() == 1 || novaAtualizacao.getStatus().getId() == 2) {
+				renderiza = true;
+			}
+		}
+		
+		return renderiza;
 	}
 	
 	public void cadastrarNovaAtualizacao() {

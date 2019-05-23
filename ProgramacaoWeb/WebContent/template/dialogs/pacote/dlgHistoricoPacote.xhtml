@@ -8,37 +8,46 @@
 	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
 <body>
 	<p:dialog widgetVar="dlgHistoricoPacote"
-		header="Atualizações"
-		closable="false" resizable="false" modal="true" draggable="false"
-		showEffect="fade" hideEffect="fade" width="650">
+		header="Atualizações de status" closable="false" resizable="false"
+		modal="true" draggable="false" showEffect="fade" hideEffect="fade"
+		width="800">
 		<div>
 			<h:form id="formHistoricoPacote">
-				<p:dataTable value="#{pacoteController.retornaListaDeHistorico()}" emptyMessage="Nenhuma atualização encontrada" 
-					var="atualizacao" paginator="true" paginatorPosition="bottom" >
-					
+				<p:dataTable value="#{pacoteController.retornaListaDeHistorico()}"
+					emptyMessage="Nenhuma atualização encontrada" var="atualizacao"
+					paginator="true" paginatorPosition="bottom">
+
 					<p:column headerText="Data/Hora atualização">
 						<div align="center">
-							<h:outputText value="#{atualizacao.dataHoraAtualizacaoFormatados}" />
+							<h:outputText
+								value="#{atualizacao.dataHoraAtualizacaoFormatados}" />
 						</div>
 					</p:column>
-					
+
 					<p:column headerText="Status">
 						<div align="center">
-							<h:outputText value="#{atualizacao.status}" />
+							<h:outputText
+								value="#{atualizacao.status.descricao} #{atualizacao.localizacao}"
+								style="color: #{atualizacao.status.id eq 5 ? 'green' : 'black'};" />
 						</div>
 					</p:column>
-					
+
 					<p:column headerText="Observação">
 						<div align="center">
 							<h:outputText value="#{atualizacao.observacao}" />
 						</div>
 					</p:column>
+
+					<p:column headerText="Ações">
+						<div align="center"></div>
+					</p:column>
 				</p:dataTable>
 			</h:form>
 		</div>
-		<br/>
+		<br />
 		<div align="right">
-			<b:button look="danger" onclick="PF('dlgHistoricoPacote').hide();" value="Fechar"/>
+			<b:button look="danger" onclick="PF('dlgHistoricoPacote').hide();"
+				value="Fechar" />
 		</div>
 	</p:dialog>
 </body>
