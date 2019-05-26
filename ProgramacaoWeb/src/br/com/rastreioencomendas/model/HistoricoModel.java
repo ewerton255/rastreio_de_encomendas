@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class HistoricoModel {
 
+	private Integer id;
 	private Pacote pacote;
 	private Date dataHoraAtualizacao;
 	private String dataHoraAtualizacaoFormatados;
@@ -46,5 +47,11 @@ public class HistoricoModel {
 	}
 	public void setStatus(StatusPacote status) {
 		this.status = status;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

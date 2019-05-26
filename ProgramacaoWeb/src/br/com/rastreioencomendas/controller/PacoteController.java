@@ -33,6 +33,7 @@ public class PacoteController {
 	private PacoteDAO pacoteDAO = new PacoteDAO();
 	private Pacote pacoteParaCadastrar;
 	private HistoricoModel novaAtualizacao = new HistoricoModel();
+	private HistoricoModel atualizacaoSelecionada = new HistoricoModel();
 	private String tipoCpfCnpj;
 	private Pacote pacoteSelecionado;
 	private Pacote pacoteParaBuscar;
@@ -194,6 +195,22 @@ public class PacoteController {
 		return lista;
 	}
 	
+	public void abrirDlgExcluirAtualizacao(HistoricoModel atualizacao) {
+		this.atualizacaoSelecionada = atualizacao;
+		PageUtil.abrirDialog("dlgExcluirAtualizacao");
+		PageUtil.atualizarComponente("formExcluirAtualizacao");
+	}
+	
+	public void excluirAtualizacao() {
+		if(pacoteDAO.excluirAtualizacao(atualizacaoSelecionada)) {
+			PageUtil.mensagemDeSucesso("Atualização excluída com sucesso");
+			PageUtil.fecharDialog("dlgExcluirAtualizacao");
+			PageUtil.atualizarComponente("formHistoricoPacote");
+		}else {
+			PageUtil.mensagemDeErro("Erro ao excluir atualização");
+		}
+	}
+	
 	public void abrirDialogCadastroAtualizacao(Pacote pacote) {
 		this.pacoteSelecionado = pacote;
 		this.novaAtualizacao = new HistoricoModel();
@@ -201,11 +218,39 @@ public class PacoteController {
 		PageUtil.abrirDialog("dlgCadAtualizacao");
 	}
 	
+	public void abrirDialogEditarAtualizacao(HistoricoModel atualizacao) {
+		this.atualizacaoSelecionada = atualizacao;
+		PageUtil.abrirDialog("dlgEditarAtualizacao");
+		PageUtil.atualizarComponente("formEditarAtualizacao");
+	}
+	
+	public void editarAtualizacao() {
+		if(pacoteDAO.editarAtualizacao(atualizacaoSelecionada)) {
+			PageUtil.mensagemDeSucesso("Atualização editada com sucesso");
+			PageUtil.fecharDialog("dlgEditarAtualizacao");
+			PageUtil.atualizarComponente("formHistoricoPacote");
+		}else {
+			PageUtil.mensagemDeErro("Erro ao editar atualização");
+		}
+	}
+	
 	public Boolean renderizaLocalizacao() {
 		Boolean renderiza = false;
 		
 		if(novaAtualizacao.getStatus().getId() != null) {
 			if(novaAtualizacao.getStatus().getId() == 1 || novaAtualizacao.getStatus().getId() == 2) {
+				renderiza = true;
+			}
+		}
+		
+		return renderiza;
+	}
+	
+	public Boolean renderizaLocalizacaoEditar() {
+		Boolean renderiza = false;
+		
+		if(atualizacaoSelecionada.getStatus().getId() != null) {
+			if(atualizacaoSelecionada.getStatus().getId() == 1 || atualizacaoSelecionada.getStatus().getId() == 2) {
 				renderiza = true;
 			}
 		}
@@ -221,6 +266,11 @@ public class PacoteController {
 			PageUtil.mensagemDeErro("Erro ao cadastrar atualização");
 			PageUtil.fecharDialog("dlgCadAtualizacao");
 		}
+	}
+	
+	public void abrirDlgStatusPacote() {
+		PageUtil.abrirDialog("dlgStatusPacote");
+		PageUtil.atualizarComponente("formStatusPacote");
 	}
 	
 	public List<Pacote> retornaListaDePacotes(){
@@ -253,5 +303,9 @@ public class PacoteController {
 
 	public HistoricoModel getNovaAtualizacao() {
 		return novaAtualizacao;
+	}
+
+	public HistoricoModel getAtualizacaoSelecionada() {
+		return atualizacaoSelecionada;
 	}
 }

@@ -16,6 +16,8 @@
 					<p:outputLabel value="Gerenciar pacotes" style="font-size: 1.7em;"/>
 				</div>
 				<p:commandButton value="Cadastrar" title="Cadastrar novo pacote" ajax="true" action="#{pacoteController.abrirDialogCadastroPacote()}"/>
+				#{'  '}
+				<p:commandButton value="Status" title="Cadastrar, editar, excluir status" ajax="true" action="#{pacoteController.abrirDlgStatusPacote()}"/>
 				<br/><br/>
 				<p:dataTable id="tbPacotes" value="#{pacoteController.retornaListaDePacotes()}" var="pacote" paginator="true"
 				 emptyMessage="Nenhum pacote encontrado" paginatorPosition="bottom">

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgExcluirAtualizacao" header="Confirmar exclusão"
+		closable="false" resizable="false" modal="true" draggable="false"
+		showEffect="fade" hideEffect="fade">
+		<div align="center">
+			<h:form id="formExcluirAtualizacao">
+				<p:growl id="msgExcluirAtualizacao" showDetail="true" />
+				Deseja excluir o status, <b>#{pacoteController.atualizacaoSelecionada.status.descricao}</b>?
+				<br />
+				<br />
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<b:commandButton value="Confirmar" ajax="true"
+						style="background: #0099ff; color:white;"
+						action="#{pacoteController.excluirAtualizacao()}"
+						update="msgExcluirAtualizacao" />
+
+					<b:button value="Fechar" onclick="PF('dlgExcluirAtualizacao').hide()"
+						look="danger" />
+				</p:panelGrid>
+			</h:form>
+		</div>
+	</p:dialog>
+</body>
+</html>

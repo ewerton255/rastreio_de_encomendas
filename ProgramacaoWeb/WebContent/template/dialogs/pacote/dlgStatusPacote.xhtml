@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgStatusPacote" header="Status"
+		closable="false" resizable="false" modal="true" draggable="false"
+		showEffect="fade" hideEffect="fade" width="650">
+		<div align="center">
+			<h:form id="formStatusPacote">
+				<div align="left">
+					<p:commandButton value="Cadastrar" action="#{statusPacoteController.abrirDlgCadStatus()}"/>
+					<br/><br/>
+				</div>
+				<p:dataTable
+					value="#{statusPacoteController.retornaListaDeStatus()}"
+					var="status" paginator="true" paginatorPosition="bottom"
+					emptyMessage="Nenhum status encontrado" rows="5">
+					
+					<p:column headerText="ID" style="width: 5%;">
+						<div align="center">
+							<h:outputText value="#{status.id}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Status">
+						<div align="center">
+							<h:outputText value="#{status.descricao}" />
+						</div>
+					</p:column>
+					
+					<p:column headerText="Ação" style="width:20%;">
+						<div align="center">
+							<b:commandButton icon="edit" style="color: orange; border:none;" ajax="true"
+								action="#{statusPacoteController.abrirDlgEditarStatus(status)}" title="Editar"/>
+							<b:commandButton style="color: red; border:none;" ajax="true"
+								action="#{statusPacoteController.abrirDlgExcluirStatus(status)}" title="Excluir">
+								<b:iconAwesome name="times-circle"/>
+							</b:commandButton>
+						</div>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+		<br/>
+		<div align="right">
+			<b:button look="danger" value="Fechar" onclick="PF('dlgStatusPacote').hide();"/>
+		</div>
+	</p:dialog>
+</body>
+</html>

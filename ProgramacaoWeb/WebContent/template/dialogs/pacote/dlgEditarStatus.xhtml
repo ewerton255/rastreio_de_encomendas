@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgEditarStatus" header="Editar Status"
+		closable="false" resizable="false" modal="true" draggable="false"
+		showEffect="fade" hideEffect="fade" >
+		<div align="center">
+			<h:form id="formEditarStatus">
+				<p:growl id="msgEditarStatus" showDetail="true"/>
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<p:outputLabel value="Descrição"/>
+					<p:inputText value="#{statusPacoteController.statusSelecionado.descricao}" required="true" requiredMessage="Insira a descrição do status"/>
+				</p:panelGrid>
+				<br/>
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<b:commandButton value="Salvar" ajax="true" style="background: #0099ff; color:white;"
+							action="#{statusPacoteController.editarStatus()}" update="msgEditarStatus"/>
+							
+					<b:button value="Fechar" onclick="PF('dlgEditarStatus').hide()" look="danger"/>
+				</p:panelGrid>
+			</h:form>
+		</div>
+	</p:dialog>
+</body>
+</html>

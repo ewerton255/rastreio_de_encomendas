@@ -38,8 +38,15 @@
 						</div>
 					</p:column>
 
-					<p:column headerText="Ações">
-						<div align="center"></div>
+					<p:column headerText="Ações" style="width: 15%;">
+						<div align="center">
+							<b:commandButton icon="edit" style="color: orange; border:none;" ajax="true"
+								action="#{pacoteController.abrirDialogEditarAtualizacao(atualizacao)}" title="Editar"/>
+							<b:commandButton style="color: red; border:none;" ajax="true"
+								action="#{pacoteController.abrirDlgExcluirAtualizacao(atualizacao)}" title="Excluir">
+								<b:iconAwesome name="times-circle"/>
+							</b:commandButton>
+						</div>
 					</p:column>
 				</p:dataTable>
 			</h:form>

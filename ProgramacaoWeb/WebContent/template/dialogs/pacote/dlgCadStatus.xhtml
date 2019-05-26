@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<body>
+	<p:dialog widgetVar="dlgCadStatus" header="Cadastrar Status"
+		closable="false" resizable="false" modal="true" draggable="false"
+		showEffect="fade" hideEffect="fade">
+		<div align="center">
+			<h:form id="formCadStatus">
+				<p:growl id="msgCadStatus" showDetail="true"/>
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<p:outputLabel value="Descrição"/>
+					<p:inputText value="#{statusPacoteController.statusParaCadastrar.descricao}" required="true" requiredMessage="Insira a descrição do status"/>
+				</p:panelGrid>
+				<br/>
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<b:commandButton value="Salvar" ajax="true" style="background: #0099ff; color:white;"
+							action="#{statusPacoteController.cadastrarStatus()}" update="msgCadStatus"/>
+							
+					<b:button value="Fechar" onclick="PF('dlgCadStatus').hide()" look="danger"/>
+				</p:panelGrid>
+			</h:form>
+		</div>
+	</p:dialog>
+</body>
+</html>
