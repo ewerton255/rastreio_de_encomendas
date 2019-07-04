@@ -77,11 +77,11 @@
 								<p:inputMask required="true"
 									requiredMessage="Informe o CPF/CNPJ"
 									value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}"
-									mask="#{pacoteController.tipoCpfCnpj eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
-									rendered="#{pacoteController.tipoCpfCnpj ne null}"
+									mask="#{pacoteController.tipoDocumento eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
+									rendered="#{pacoteController.tipoDocumento ne null}"
 									validator="CpfCnpjValidator" />
 									
-								<p:selectOneMenu value="#{pacoteController.tipoCpfCnpj}"
+								<p:selectOneMenu value="#{pacoteController.tipoDocumento}"
 									required="true" requiredMessage="Selecione o tipo de documento">
 									<f:selectItem noSelectionOption="true"
 										itemLabel="Tipo documento" itemValue="" />

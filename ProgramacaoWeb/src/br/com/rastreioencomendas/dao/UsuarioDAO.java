@@ -63,9 +63,9 @@ public class UsuarioDAO extends AbstractUsuarioController {
         try {
             ps = con.prepareStatement(sql);
             if (tipoBusca.equals(BUSCA_POR_EMAIL)) {
-                ps.setString(1, usuarioParaBuscar.getEmail()+SIMBOLO_PORCETAGEM);
+                ps.setString(1, usuarioParaBuscar.getEmail() + SIMBOLO_PORCETAGEM);
             } else if (tipoBusca.equals(BUSCA_POR_NOME)) {
-                ps.setString(1, usuarioParaBuscar.getNome()+SIMBOLO_PORCETAGEM);
+                ps.setString(1, usuarioParaBuscar.getNome() + SIMBOLO_PORCETAGEM);
             }
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -110,6 +110,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 usuario.setNome(rs.getString("nome"));
                 usuario.setId(rs.getInt("id"));
                 usuario.setSenha(rs.getString("senha"));
+
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -139,8 +140,11 @@ public class UsuarioDAO extends AbstractUsuarioController {
             ps.setBoolean(4, usuario.getAdmin());
             ps.setInt(5, usuario.getId());
             ps.executeUpdate();
+
             editou = true;
+
             conn.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -164,7 +168,11 @@ public class UsuarioDAO extends AbstractUsuarioController {
             ps = conn.prepareStatement(sql);
             ps.setInt(1, usuario.getId());
             ps.executeUpdate();
+
             excluiu = true;
+
+            conn.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -191,7 +199,11 @@ public class UsuarioDAO extends AbstractUsuarioController {
             ps.setString(3, usuario.getSenha().toLowerCase());
             ps.setBoolean(4, usuario.getAdmin());
             ps.executeUpdate();
+
             cadastrou = true;
+
+            conn.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

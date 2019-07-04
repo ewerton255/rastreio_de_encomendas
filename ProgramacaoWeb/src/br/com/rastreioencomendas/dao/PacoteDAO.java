@@ -93,8 +93,11 @@ public class PacoteDAO {
 			ps.setString(4, atualizacao.getLocalizacao());
 
 			ps.executeUpdate();
+
 			cadastrou = true;
+
 			conn.commit();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -118,8 +121,11 @@ public class PacoteDAO {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, atualizacao.getId());
 			ps.executeUpdate();
+
 			excluiu = true;
+
 			conn.commit();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -148,7 +154,9 @@ public class PacoteDAO {
 			ps.executeUpdate();
 			
 			editou = true;
+
 			conn.commit();
+
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -189,7 +197,6 @@ public class PacoteDAO {
 				historico.getStatus().setDescricao(rs.getString("descricao_status"));
 
 				lista.add(historico);
-
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -251,7 +258,9 @@ public class PacoteDAO {
 			ps.executeUpdate();
 
 			cadastrou = true;
+
 			conn.commit();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

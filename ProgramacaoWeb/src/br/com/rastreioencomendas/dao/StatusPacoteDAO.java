@@ -53,6 +53,9 @@ public class StatusPacoteDAO {
 			ps.executeUpdate();
 
 			cadastrou = true;
+
+			conn.commit();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -80,6 +83,8 @@ public class StatusPacoteDAO {
 
 			editou = true;
 
+			conn.commit();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -105,6 +110,8 @@ public class StatusPacoteDAO {
 			ps.executeUpdate();
 
 			excluiu = true;
+
+			conn.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

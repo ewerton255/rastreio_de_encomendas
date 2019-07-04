@@ -1,11 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+      xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
     <h:outputStylesheet library="css" name="style.css"/>
 
@@ -43,7 +43,7 @@
 </h:head>
 <h:body>
 
-    <div class="cabecalho" align="center">
+    <aside class="navegacao-site">
 
         <h:form id="formLogo">
 
@@ -54,7 +54,7 @@
             </div>
         </h:form>
 
-        <h:form id="formLogin">
+        <h:form id="formLogin" style="display: none;">
 
             <p:growl id="msg" showDetail="true"/>
 
@@ -64,17 +64,9 @@
                         value="#{!usuarioController.verificaSeExisteSessaoAtiva() ? 'Visitante' : usuarioController.retornaNomeUsuarioLogado()}"
                         style="font-weight: bold; color: white"/>
 
-                <br/><br/>
+                <br/>
                 <p:panelGrid columns="1" styleClass="semBorda"
-                             rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}">
-                    <p:inputText placeholder="E-mail" style="width: 100%;" value="#{usuarioController.user.email}"
-                                 required="true" requiredMessage="Informe o e-mail"/>
-
-                    <p:password placeholder="Senha" style="width: 100%;" value="#{usuarioController.user.senha}"
-                                required="true" requiredMessage="Informa a senha"/>
-                </p:panelGrid>
-
-                <p:panelGrid columns="1" styleClass="semBorda" rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" style="width: 100%;">
+                             rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" style="width: 100%;">
 
                     <b:dropButton value="Menu" look="info">
                         <b:navCommandLink value="Usuário"
@@ -87,47 +79,77 @@
                                           action="#{pageUtil.redirecionarParaPage('pages/administrador/empresa')}"
                                           ajax="true"/>
                     </b:dropButton>
-
-                    <b:commandButton value="Sair" ajax="true" look="info" style="width: 100%;"
-                                     action="#{usuarioController.deslogar()}" update="@this"/>
                 </p:panelGrid>
 
-                <br/>
                 <b:commandButton type="button" value="Entrar"
-                                 style="width: 70%;" look="info" action="#{usuarioController.login()}"
+                                 style="width: 70%;" look="info" onclick="PF('dlgLogin').show()"
                                  update="formLogin" ajax="true"
                                  rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}"/>
+
+                <b:commandButton value="Sair" ajax="true" look="info" style="width: 100%;"
+                                 action="#{usuarioController.deslogar()}" update="@this"
+                                 rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"/>
             </div>
         </h:form>
 
         <br/>
-        <h:form id="formMenus">
-            <ul class="listaMenus">
-                <li>
-                    <h:commandLink action="#{pageUtil.redirecionarParaPaginaPrincipal()}" value="Início"/>
-                </li>
 
-                <li>
-                    <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/rastrear')}"
-                                   value="Rastrear"/>
-                </li>
+        <h:form>
+            <nav class="menu-nav">
+                <ul>
+                    <li>
+                        <h:commandLink action="#{pageUtil.redirecionarParaPaginaPrincipal()}" value="Início"/>
+                    </li>
 
-                <li>
-                    <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/servicos')}"
-                                   value="Serviços"/>
-                </li>
+                    <li>
+                        <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/rastrear')}"
+                                       value="Rastrear"/>
+                    </li>
 
-                <li>
-                    <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/contato')}"
-                                   value="Contato"/>
-                </li>
-            </ul>
+                    <li>
+                        <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/servicos')}"
+                                       value="Serviços"/>
+                    </li>
+
+                    <li>
+                        <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/publico/contato')}"
+                                       value="Contato"/>
+                    </li>
+
+                    <c:if test="#{usuarioController.verificaSeExisteSessaoAtiva()}">
+                        <li class="item">
+                            <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/administrador/administracao')}"
+                                           value="Administração"/>
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
         </h:form>
-    </div>
 
-    <div class="conteudo">
-        <ui:insert name="conteudo"></ui:insert>
-    </div>
+        <ul class="footer icones-redes-sociais">
+            <li>
+                <a class="github" href="#">
+                    <p:graphicImage value="/resources/imgs/github.png"/>
+                </a>
+            </li>
+            <li>
+                <a class="twitter" href="#">
+                    <p:graphicImage value="/resources/imgs/twitter.png"/>
+                </a>
+            </li>
+            <li>
+                <a class="linkedin" href="#">
+                    <p:graphicImage value="/resources/imgs/linkedin.png"/>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="foto" style="background-image: url('/resources/imgs/background-caminhao.jpg')">
+        <div class="container">
+            <ui:insert name="conteudo"></ui:insert>
+        </div>
+    </main>
 
     <p:ajaxStatus onstart="PF('dlgLoading').show();" oncomplete="PF('dlgLoading').hide();"/>
 
