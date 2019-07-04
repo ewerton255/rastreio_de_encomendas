@@ -94,6 +94,7 @@ public class PacoteDAO {
 
 			ps.executeUpdate();
 			cadastrou = true;
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -118,6 +119,7 @@ public class PacoteDAO {
 			ps.setInt(1, atualizacao.getId());
 			ps.executeUpdate();
 			excluiu = true;
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -146,6 +148,7 @@ public class PacoteDAO {
 			ps.executeUpdate();
 			
 			editou = true;
+			conn.commit();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -248,6 +251,7 @@ public class PacoteDAO {
 			ps.executeUpdate();
 
 			cadastrou = true;
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

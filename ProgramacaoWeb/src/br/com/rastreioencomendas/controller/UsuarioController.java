@@ -15,13 +15,16 @@ import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.SessionUtil;
 
 @SessionScoped
-@ManagedBean(name = "usuarioController")
-public class UsuarioController {
+@ManagedBean
+public class UsuarioController extends AbstractUsuarioController{
 
 	private Usuario user;
 	private Usuario usuarioLogado;
 	private Usuario usuarioSelecionado;
+	private Usuario usuarioBuscar = new Usuario();;
 	private UsuarioDAO usuarioDAO = new UsuarioDAO();
+	private List<Usuario> listaDeUsuarios = new ArrayList<>();
+	private String tipoDeBusca;
 	
 	public UsuarioController() {
 		user = new Usuario();
@@ -40,11 +43,30 @@ public class UsuarioController {
 			PageUtil.mensagemDeErro("Usuário ou senha inválido!");
 		}
 	}
-	
-	public List<Usuario> retornaListaDeUsuarios(){
-		List<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios = usuarioDAO.retornaListaDeUsuarios();
-		return usuarios;
+
+	public void buscarUsuarios(){
+		if(tipoDeBusca.equals(null)){
+			PageUtil.mensagemDeErro("Selecione o tipo de busca");
+		}else if(usuarioBuscar.getEmail() == null && usuarioBuscar.getNome() == null){
+			PageUtil.mensagemDeErro("Insira a busca");
+		}else{
+			listaDeUsuarios = usuarioDAO.buscarUsuarios(tipoDeBusca, usuarioBuscar);
+		}
+		PageUtil.atualizarComponente("formListUsuarios");
+	}
+
+	public void limparBuscaUsuario(){
+		this.usuarioBuscar = new Usuario();
+		this.tipoDeBusca = null;
+		carregaDadosUsuario();
+		PageUtil.atualizarComponente("formListUsuarios");
+	}
+
+	public void carregaDadosUsuario(){
+		this.listaDeUsuarios = usuarioDAO.retornaListaDeUsuarios();
+		this.tipoDeBusca = null;
+		usuarioBuscar = new Usuario();
+		tipoDeBusca = null;
 	}
 	
 	public String retornaNomeUsuarioLogado() {
@@ -86,6 +108,7 @@ public class UsuarioController {
 	public void editarUsuario() {
 		if(usuarioDAO.editarUsuario(this.usuarioSelecionado)) {
 			PageUtil.mensagemDeSucesso("Usuário editado com sucesso!");
+			carregaDadosUsuario();
 		}else {
 			PageUtil.mensagemDeErro("Erro ao editar usuário!");
 		}
@@ -96,6 +119,7 @@ public class UsuarioController {
 	public void excluirUsuario() {
 		if(usuarioDAO.excluirUsuario(this.usuarioSelecionado)) {
 			PageUtil.mensagemDeSucesso("Usuário excluido com sucesso!");
+			carregaDadosUsuario();
 		}else {
 			PageUtil.mensagemDeErro("Erro ao excluir usuário!");
 		}
@@ -111,6 +135,7 @@ public class UsuarioController {
 				if(usuarioDAO.cadastrarUsuario(user)) {
 					PageUtil.mensagemDeSucesso("Usuário cadastrado com sucesso!");
 					PageUtil.fecharDialog("dlgCadUsuario");
+					carregaDadosUsuario();
 					this.user = new Usuario();
 				}else {
 					PageUtil.mensagemDeErro("Erro ao cadastrar usuário!");
@@ -134,5 +159,21 @@ public class UsuarioController {
 
 	public Usuario getUsuarioSelecionado() {
 		return usuarioSelecionado;
+	}
+
+	public List<Usuario> getListaDeUsuarios() {
+		return listaDeUsuarios;
+	}
+
+	public String getTipoDeBusca() {
+		return tipoDeBusca;
+	}
+
+	public void setTipoDeBusca(String tipoDeBusca) {
+		this.tipoDeBusca = tipoDeBusca;
+	}
+
+	public Usuario getUsuarioBuscar() {
+		return usuarioBuscar;
 	}
 }

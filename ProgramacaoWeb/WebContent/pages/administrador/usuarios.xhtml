@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -7,62 +7,117 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+    <f:viewAction action="#{usuarioController.carregaDadosUsuario}"/>
+</f:metadata>
 <body>
-	<ui:composition template="/template/templateGeral.xhtml">
-	
-		<ui:define name="conteudo">
-			<h:form id="formListUsuarios">
-			<br/>
-			<div align="center">
-				<p:outputLabel value="Gerenciar Usuários" style="font-size: 1.7em;"/>
-			</div>
-				<p:commandButton value="Cadastrar" onclick="PF('dlgCadUsuario').show();" ajax="true"
-					disabled="#{!usuarioController.usuarioLogado.admin}"/>
-			<br/><br/>
+<ui:composition template="/template/templateGeral.xhtml">
 
-			<p:dataTable value="#{usuarioController.retornaListaDeUsuarios()}" var="usuario" emptyMessage="Nenhum usuário encontrado"
-			 paginator="true" paginatorPosition="bottom" id="listaUsuarios">
-			 	
-			 	<p:growl id="msgUsuarios" showDetail="true"/>
-			  
-				<p:column headerText="ID">
-					<div align="center">
-						<h:outputText value="#{usuario.id}" />
-					</div>
-				</p:column>
-					
-				<p:column headerText="Nome">
-					<div align="center">
-						<h:outputText value="#{usuario.nome}" />
-					</div>
-				</p:column>
-					
-				<p:column headerText="E-mail">
-					<div align="center">
-						<h:outputText value="#{usuario.email}" />
-					</div>
-				</p:column>
-					
-				<p:column headerText="Administrador">
-					<div align="center">
-						<b:iconAwesome rendered="#{!usuario.admin}" style="color: red;" value="fa-times"/>
-						<b:iconAwesome rendered="#{usuario.admin}" style="color: green;" value="fa-check"/>
-					</div>
-				</p:column>
-				
-				<p:column headerText="Ação">
-					<div align="center">
-						<b:commandButton icon="edit" style="color: orange; border:none;" disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
-							action="#{usuarioController.selecionaUsuarioParaEditar(usuario)}" update=":formEditUsuario" title="Editar"/>
-						<b:commandButton style="color: red; border:none;" disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
-							action="#{usuarioController.selecionaUsuarioParaExcluir(usuario)}" update=":formEditUsuario" title="Excluir">
-							<b:iconAwesome name="times-circle"/>
-						</b:commandButton>
-					</div>
-				</p:column>
-			</p:dataTable>
-			</h:form>
-		</ui:define>
-	</ui:composition>
+    <ui:define name="conteudo">
+
+        <h:form id="formListUsuarios">
+
+            <p:growl id="msgUsuarios" showDetail="true"/>
+
+            <p:panelGrid columns="5" styleClass="semBorda">
+
+                <h:outputLabel value="Buscar:" for="busca"/>
+
+                <p:selectOneMenu value="#{usuarioController.tipoDeBusca}" id="busca" required="true"
+                                 requiredMessage="Selecione o tipo de busca">
+                    <f:selectItem itemLabel="Tipo de busca" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItem itemLabel="Nome" itemValue="N"/>
+                    <f:selectItem itemLabel="E-mail" itemValue="E"/>
+                    <p:ajax event="change" update="formListUsuarios"/>
+                </p:selectOneMenu>
+
+                <p:inputText value="#{usuarioController.usuarioBuscar.nome}"
+                             rendered="#{usuarioController.tipoDeBusca eq 'N'}" required="true"
+                             requiredMessage="Insira o nome"/>
+
+                <p:inputText validator="EmailValidator" value="#{usuarioController.usuarioBuscar.email}"
+                             rendered="#{usuarioController.tipoDeBusca eq 'E'}" required="true"
+                             requiredMessage="Insira o E-mail">
+                    <p:ajax event="blur" update="formListUsuarios"/>
+                </p:inputText>
+
+                <b:commandButton iconAwesome="fa-search" title="Buscar" style="background: transparent;" ajax="true"
+                                 action="#{usuarioController.buscarUsuarios}" update="msgUsuarios"/>
+
+                <b:commandButton value="Limpar" title="Limpar" style="background: transparent;"
+                                 action="#{usuarioController.limparBuscaUsuario}"
+                                 ajax="true"/>
+            </p:panelGrid>
+
+            <br/>
+
+            <p:dataTable value="#{usuarioController.listaDeUsuarios}" var="usuario"
+                         emptyMessage="Nenhum usuário encontrado" rows="10" widgetVar="tbUsuarios"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="({startRecord} de {totalPages})"
+                         paginator="true" paginatorPosition="bottom" id="listaUsuarios">
+
+                <f:facet name="header">
+                    <b:panelGrid columns="3" styleClass="semBorda">
+                        <p:commandButton value="Cadastrar" onclick="PF('dlgCadUsuario').show();" ajax="true"
+                                         disabled="#{!usuarioController.usuarioLogado.admin}" iconAwesome="fa-user-plus"
+                                         style="margin-top: 16px;"/>
+                        <h3>Usuários</h3>
+                        <h:outputLabel value="#{usuarioController.listaDeUsuarios.size()} Usuário(s)"
+                                       style="padding: 5px; background-color: #0099ff; border-radius: 10px; color: white; margin-top: 16px;"/>
+                    </b:panelGrid>
+                </f:facet>
+
+                <p:column headerText="ID">
+                    <div align="center">
+                        <h:outputText value="#{usuario.id}"/>
+                    </div>
+                </p:column>
+
+                <p:column headerText="Nome">
+                    <div align="center">
+                        <h:outputText value="#{usuario.nome}"/>
+                    </div>
+                </p:column>
+
+                <p:column headerText="E-mail">
+                    <div align="center">
+                        <h:outputText value="#{usuario.email}"/>
+                    </div>
+                </p:column>
+
+                <p:column headerText="Administrador" filterBy="#{usuario.admin}" filterMatchMode="exact">
+                    <div align="center">
+                        <b:iconAwesome rendered="#{!usuario.admin}" style="color: red;" value="fa-times"/>
+                        <b:iconAwesome rendered="#{usuario.admin}" style="color: green;" value="fa-check"/>
+                    </div>
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('tbUsuarios').filter()">
+                            <f:converter converterId="javax.faces.Boolean"/>
+                            <f:selectItem itemLabel="Todos" itemValue=""/>
+                            <f:selectItem itemLabel="Sim" itemValue="true"/>
+                            <f:selectItem itemLabel="Nao" itemValue="false"/>
+                        </p:selectOneButton>
+                    </f:facet>
+                </p:column>
+
+                <p:column headerText="Ação">
+                    <div align="center">
+                        <b:commandButton icon="edit" style="color: orange; border:none;"
+                                         disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
+                                         action="#{usuarioController.selecionaUsuarioParaEditar(usuario)}"
+                                         update=":formEditUsuario" title="Editar" process="@this"/>
+                        <b:commandButton style="color: red; border:none;"
+                                         disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
+                                         action="#{usuarioController.selecionaUsuarioParaExcluir(usuario)}"
+                                         update=":formEditUsuario" title="Excluir">
+                            <b:iconAwesome name="times-circle"/>
+                        </b:commandButton>
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
 </body>
 </html>

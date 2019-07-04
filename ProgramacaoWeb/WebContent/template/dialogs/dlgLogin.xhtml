@@ -10,7 +10,7 @@
 <body>
 	<p:dialog widgetVar="dlgLogin" modal="true" header="Entrar" closable="false" resizable="false"
 	   draggable="false" showEffect="fade" hideEffect="fade">
-	   	<h:form id="formLogin">
+	   	<h:form id="formLogin2">
 	   	
 	   	<p:growl id="msg" showDetail="true"/>
 	   	
@@ -23,7 +23,7 @@
 			<br/>
 			<div align="center">
 				<p:panelGrid columns="2" styleClass="semBorda">
-					<b:commandButton value="Entrar" style="background: #0099ff; color:white;'" action="#{usuarioController.login()}" update="msg" ajax="true"/>
+					<b:commandButton value="Entrar" style="background: #0099ff; color:white;" action="#{usuarioController.login()}" update="msg" ajax="true"/>
 					<b:button value="Fechar" onclick="PF('dlgLogin').hide();" look="danger"/>
 				</p:panelGrid>
 			</div>
