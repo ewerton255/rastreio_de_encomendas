@@ -1,5 +1,5 @@
 # rastreio_de_encomendas
-Para testar o sistema, deverá executar o arquivo 'sql_rastreio_encomendas.sql' em seu Banco de dados.
+Para testar o sistema, deverá executar o arquivo 'sql_sistema.sql' em seu Banco de dados.
 
 Ao executar o sistema, realizar login com as seguintes credenciais, email: 'teste@gmail.com' e senha: '123456', 
 após o login será redirecionado para o CRUD de usuários.
