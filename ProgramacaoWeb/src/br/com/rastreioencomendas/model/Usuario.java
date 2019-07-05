@@ -7,6 +7,7 @@ public class Usuario {
 	private String senha;
 	private String nome;
 	private Boolean admin;
+	private Endereco endereco = new Endereco();
 	
 	public String getEmail() {
 		return email;
@@ -37,5 +38,13 @@ public class Usuario {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 }

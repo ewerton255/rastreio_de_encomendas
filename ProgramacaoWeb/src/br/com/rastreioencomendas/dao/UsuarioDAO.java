@@ -52,13 +52,20 @@ public class UsuarioDAO extends AbstractUsuarioController {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "";
+        String parametroBusca ="";
 
         if (tipoBusca.equals(BUSCA_POR_NOME)) {
-            sql = "SELECT id, nome, email, senha, admin FROM rastreioencomendas.usuario WHERE nome ILIKE ?";
+            parametroBusca = "us.nome";
         } else if (tipoBusca.equals(BUSCA_POR_EMAIL)) {
-            sql = "SELECT id, nome, email, senha, admin FROM rastreioencomendas.usuario WHERE email ILIKE ?";
+            parametroBusca = "us.email";
         }
+
+        String sql = "SELECT us.id, us.nome, us.email, us.senha, us.admin, " +
+                "ed.cep, ed.logradouro, ed.cidade, ed.bairro, ed.id as id_endereco, " +
+                "ed.complemento, ed.estado, ed.numero " +
+                "FROM rastreioencomendas.usuario us " +
+                "JOIN rastreioencomendas.endereco ed ON ed.id = us.id_endereco " +
+                "WHERE "+parametroBusca+" ILIKE ?";
 
         try {
             ps = con.prepareStatement(sql);
@@ -98,7 +105,12 @@ public class UsuarioDAO extends AbstractUsuarioController {
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id, admin, email, nome, senha FROM rastreioencomendas.usuario ORDER BY nome";
+        String sql = "SELECT us.id, us.admin, us.email, us.nome, us.senha, " +
+                "ed.cep, ed.logradouro, ed.cidade, ed.bairro, ed.id as id_endereco, " +
+                "ed.complemento, ed.estado, ed.numero " +
+                "FROM rastreioencomendas.usuario us " +
+                "JOIN rastreioencomendas.endereco ed ON ed.id = us.id_endereco " +
+                "ORDER BY nome";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -110,7 +122,14 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 usuario.setNome(rs.getString("nome"));
                 usuario.setId(rs.getInt("id"));
                 usuario.setSenha(rs.getString("senha"));
-
+                usuario.getEndereco().setId(rs.getInt("id_endereco"));
+                usuario.getEndereco().setBairro(rs.getString("bairro"));
+                usuario.getEndereco().setCidade(rs.getString("cidade"));
+                usuario.getEndereco().setEstado(rs.getString("estado"));
+                usuario.getEndereco().setComplemento(rs.getString("complemento"));
+                usuario.getEndereco().setNumero(rs.getInt("numero"));
+                usuario.getEndereco().setCep(rs.getString("cep"));
+                usuario.getEndereco().setLogradouro(rs.getString("logradouro"));
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -130,15 +149,31 @@ public class UsuarioDAO extends AbstractUsuarioController {
         Boolean editou = false;
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
-        String sql = "UPDATE rastreioencomendas.usuario SET nome = ?, email = ?, senha =?, admin = ? WHERE id = ?";
+        String sql = "";
 
         try {
+            sql = "UPDATE rastreioencomendas.usuario SET nome = ?, email = ?, senha =?, admin = ? WHERE id = ?";
+
             ps = conn.prepareStatement(sql);
             ps.setString(1, usuario.getNome().toUpperCase());
             ps.setString(2, usuario.getEmail().toLowerCase());
             ps.setString(3, usuario.getSenha().toLowerCase());
             ps.setBoolean(4, usuario.getAdmin());
             ps.setInt(5, usuario.getId());
+            ps.executeUpdate();
+
+            sql = "UPDATE rastreioencomendas.endereco SET cep = ?, logradouro = ?, bairro = ?, cidade = ?, estado =?, complemento =?, numero = ?" +
+                    " WHERE id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, usuario.getEndereco().getCep());
+            ps.setString(2, usuario.getEndereco().getLogradouro());
+            ps.setString(3, usuario.getEndereco().getBairro());
+            ps.setString(4, usuario.getEndereco().getCidade());
+            ps.setString(5, usuario.getEndereco().getEstado());
+            ps.setString(6, usuario.getEndereco().getComplemento());
+            ps.setInt(7, usuario.getEndereco().getNumero());
+            ps.setInt(8, usuario.getEndereco().getId());
             ps.executeUpdate();
 
             editou = true;
@@ -162,11 +197,20 @@ public class UsuarioDAO extends AbstractUsuarioController {
         Boolean excluiu = false;
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
-        String sql = "DELETE FROM rastreioencomendas.usuario WHERE id = ?";
+        String sql = "";
+
 
         try {
+            sql = "DELETE FROM rastreioencomendas.usuario WHERE id = ?";
+
             ps = conn.prepareStatement(sql);
             ps.setInt(1, usuario.getId());
+            ps.executeUpdate();
+
+            sql = "DELETE FROM rastreioencomendas.endereco WHERE id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, usuario.getEndereco().getId());
             ps.executeUpdate();
 
             excluiu = true;
@@ -190,19 +234,40 @@ public class UsuarioDAO extends AbstractUsuarioController {
         Boolean cadastrou = false;
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
-        String sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin) VALUES (?, ?, ?, ?)";
+        ResultSet rs;
+        Integer idEndereco = null;
+
+        String sql = "INSERT INTO rastreioencomendas.endereco(cep, logradouro, cidade, bairro, numero, estado, complemento) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getNome().toUpperCase());
-            ps.setString(2, usuario.getEmail().toLowerCase());
-            ps.setString(3, usuario.getSenha().toLowerCase());
-            ps.setBoolean(4, usuario.getAdmin());
-            ps.executeUpdate();
+            ps.setString(1, usuario.getEndereco().getCep());
+            ps.setString(2, usuario.getEndereco().getLogradouro());
+            ps.setString(3, usuario.getEndereco().getCidade());
+            ps.setString(4, usuario.getEndereco().getBairro());
+            ps.setInt(5, usuario.getEndereco().getNumero());
+            ps.setString(6, usuario.getEndereco().getEstado());
+            ps.setString(7, usuario.getEndereco().getComplemento());
 
-            cadastrou = true;
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                idEndereco = rs.getInt("id");
 
-            conn.commit();
+                sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
+
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, usuario.getNome().toUpperCase());
+                ps.setString(2, usuario.getEmail().toLowerCase());
+                ps.setString(3, usuario.getSenha().toLowerCase());
+                ps.setBoolean(4, usuario.getAdmin());
+                ps.setInt(5, idEndereco);
+                ps.executeUpdate();
+
+                cadastrou = true;
+
+                conn.commit();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
