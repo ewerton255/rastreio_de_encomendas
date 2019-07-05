@@ -71,8 +71,8 @@ public class UsuarioController extends AbstractUsuarioController{
 	public void carregaDadosUsuario(){
 		this.listaDeUsuarios = usuarioDAO.retornaListaDeUsuarios();
 		this.tipoDeBusca = null;
-		usuarioBuscar = new Usuario();
-		tipoDeBusca = null;
+		this.usuarioBuscar = new Usuario();
+		this.tipoDeBusca = null;
 	}
 	
 	public String retornaNomeUsuarioLogado() {

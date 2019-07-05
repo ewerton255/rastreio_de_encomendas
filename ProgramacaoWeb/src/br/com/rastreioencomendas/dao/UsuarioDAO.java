@@ -43,7 +43,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 e.printStackTrace();
             }
         }
-
         return usuarioLogado;
     }
 
@@ -52,7 +51,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String parametroBusca ="";
+        String parametroBusca = "";
 
         if (tipoBusca.equals(BUSCA_POR_NOME)) {
             parametroBusca = "us.nome";
@@ -65,7 +64,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 "ed.complemento, ed.estado, ed.numero " +
                 "FROM rastreioencomendas.usuario us " +
                 "JOIN rastreioencomendas.endereco ed ON ed.id = us.id_endereco " +
-                "WHERE "+parametroBusca+" ILIKE ?";
+                "WHERE " + parametroBusca + " ILIKE ?";
 
         try {
             ps = con.prepareStatement(sql);
@@ -96,7 +95,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 ex.printStackTrace();
             }
         }
-
         return usuarios;
     }
 
@@ -141,7 +139,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 e.printStackTrace();
             }
         }
-
         return usuarios;
     }
 
@@ -175,10 +172,9 @@ public class UsuarioDAO extends AbstractUsuarioController {
             ps.setInt(7, usuario.getEndereco().getNumero());
             ps.setInt(8, usuario.getEndereco().getId());
             ps.executeUpdate();
+            conn.commit();
 
             editou = true;
-
-            conn.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -189,7 +185,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 e.printStackTrace();
             }
         }
-
         return editou;
     }
 
@@ -212,10 +207,9 @@ public class UsuarioDAO extends AbstractUsuarioController {
             ps = conn.prepareStatement(sql);
             ps.setInt(1, usuario.getEndereco().getId());
             ps.executeUpdate();
+            conn.commit();
 
             excluiu = true;
-
-            conn.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -226,7 +220,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 e.printStackTrace();
             }
         }
-
         return excluiu;
     }
 
@@ -254,7 +247,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
             if (rs.next()) {
                 idEndereco = rs.getInt("id");
 
-                if(idEndereco != null){
+                if (idEndereco != null) {
                     sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
 
                     ps = conn.prepareStatement(sql);
@@ -264,10 +257,9 @@ public class UsuarioDAO extends AbstractUsuarioController {
                     ps.setBoolean(4, usuario.getAdmin());
                     ps.setInt(5, idEndereco);
                     ps.executeUpdate();
+                    conn.commit();
 
                     cadastrou = true;
-
-                    conn.commit();
                 }
             }
 
@@ -280,7 +272,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 e.printStackTrace();
             }
         }
-
         return cadastrou;
     }
 
@@ -307,7 +298,6 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 e.printStackTrace();
             }
         }
-
         return existe;
     }
 }

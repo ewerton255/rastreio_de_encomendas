@@ -85,9 +85,9 @@ public class EmpresaDAO {
             ps.setString(3, empresa.getNomeFantasma());
             ps.setString(4, empresa.getRazaoSocial());
             ps.executeUpdate();
+            conn.commit();
 
             cadastrou = true;
-            conn.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
