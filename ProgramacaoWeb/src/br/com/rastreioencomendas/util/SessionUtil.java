@@ -5,13 +5,15 @@ import br.com.rastreioencomendas.model.Usuario;
 
 public class SessionUtil {
 
+	private static final String OBJ_USUARIO = "usuarioLogado";
+
 	public static void adicionaObjetoUsuarioNaSessao(Object objeto) {
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", objeto);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(OBJ_USUARIO, objeto);
 	}
 	
 	public static Boolean verificaSeUsuarioEstaNaSessao() {
 		Boolean sessaoAtiva = false;
-		Usuario usuarioLogado = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+		Usuario usuarioLogado = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(OBJ_USUARIO);
 		if(usuarioLogado != null) {
 			sessaoAtiva = true;
 		}

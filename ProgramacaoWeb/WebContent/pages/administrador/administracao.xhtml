@@ -5,7 +5,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
 <f:metadata>
     <f:viewAction action="#{usuarioController.carregaDadosUsuario}"/>
 </f:metadata>
@@ -18,10 +19,10 @@
                     <p:menuitem value="Usuário" process="@this"
                                 action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}"/>
 
-                    <p:menuitem value="Pacote" process="@this"
+                    <p:menuitem value="Pacote" process="@this" disabled="true"
                                 action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}"/>
 
-                    <p:menuitem value="Empresa" process="@this"
+                    <p:menuitem value="Empresa" process="@this" disabled="true"
                                 action="#{pageUtil.redirecionarParaPage('pages/administrador/empresa')}"/>
                 </p:tabMenu>
             </div>
@@ -29,9 +30,8 @@
 
         <br/>
 
-        <ui:insert name="page">
+        <ui:insert name="page"/>
 
-        </ui:insert>
     </ui:define>
 </ui:composition>
 </body>

@@ -68,7 +68,7 @@
                     </b:panelGrid>
                 </f:facet>
 
-                <p:column headerText="ID">
+                <p:column headerText="ID" style="width: 5%;">
                     <div align="center">
                         <h:outputText value="#{usuario.id}"/>
                     </div>
@@ -83,6 +83,14 @@
                 <p:column headerText="E-mail">
                     <div align="center">
                         <h:outputText value="#{usuario.email}"/>
+                    </div>
+                </p:column>
+
+                <p:column headerText="Endereço">
+                    <div align="center">
+                        <h:outputText
+                                value="#{usuario.endereco.logradouro}, #{usuario.endereco.numero},
+                                 #{usuario.endereco.bairro}, #{usuario.endereco.cidade}/#{usuario.endereco.estado}"/>
                     </div>
                 </p:column>
 
@@ -101,7 +109,7 @@
                     </f:facet>
                 </p:column>
 
-                <p:column headerText="Ação">
+                <p:column headerText="Ação" style="width: 10%;">
                     <div align="center">
                         <b:commandButton icon="edit" style="color: orange; border:none;"
                                          disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
