@@ -1,2 +1,13 @@
 # rastreio_de_encomendas
-Sistema de rastreio de encomendas criado para avaliação da matéria de programação web
+Para testar o sistema, deverá executar o arquivo 'sql_sistema.sql' em seu Banco de dados.
+
+Ao executar o sistema, realizar login com as seguintes credenciais, email: 'teste@gmail.com' e senha: '123456', 
+após o login será redirecionado para o CRUD de usuários.
+
+Os arquivos do CRUD de usuários para serem avaliados estão localizados respectivamente em:
+- ProgramacaoWeb/WebContent/Pages/administrador/usuarios.xhtml
+- ProgramacaoWeb/WebContent/template/dialogs/usuario/dlgCadUsuario.xhtml
+- ProgramacaoWeb/WebContent/template/dialogs/usuario/dlgDelUsuario.xhtml
+- ProgramacaoWeb/WebContent/template/dialogs/usuario/dlgEditUsuario.xhtml
+- ProgramacaoWeb/src/br/com/rastreioencomendas/controller/UsuarioController.java
+- ProgramacaoWeb/src/br/com/rastreioencomendas/dao/UsuarioDAO.java
