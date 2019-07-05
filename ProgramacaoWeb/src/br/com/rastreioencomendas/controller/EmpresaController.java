@@ -7,9 +7,11 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.rastreioencomendas.dao.EmpresaDAO;
 import br.com.rastreioencomendas.model.Empresa;
+import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
 import br.com.rastreioencomendas.util.ViaCEPException;
+import br.com.rastreioencomendas.util.ViaCepUtil;
 
 @ViewScoped
 @ManagedBean
@@ -65,12 +67,10 @@ public class EmpresaController {
 	}
 	
 	public void buscarCepDestinatario() throws ViaCEPException {
-		ViaCEP viaCep = new ViaCEP();
-		viaCep.buscar(this.empresaCadastrar.getEndereco().getCep());
-		this.empresaCadastrar.getEndereco().setEstado(viaCep.getUf());
-		this.empresaCadastrar.getEndereco().setBairro(viaCep.getBairro());
-		this.empresaCadastrar.getEndereco().setLogradouro(viaCep.getLogradouro());
-		this.empresaCadastrar.getEndereco().setCidade(viaCep.getLocalidade());
+		if(!empresaCadastrar.getEndereco().getCep().equals(null)){
+			Endereco endereco = ViaCepUtil.buscarEndereco(empresaCadastrar.getEndereco());
+			this.empresaCadastrar.setEndereco(endereco);
+		}
 	}
 
 	public List<Empresa> retornaListaEmpresa() {

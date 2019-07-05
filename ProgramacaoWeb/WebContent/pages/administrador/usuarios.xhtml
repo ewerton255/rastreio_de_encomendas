@@ -58,7 +58,8 @@
 
                 <f:facet name="header">
                     <b:panelGrid columns="3" styleClass="semBorda">
-                        <p:commandButton value="Cadastrar" onclick="PF('dlgCadUsuario').show();" ajax="true"
+                        <p:commandButton value="Cadastrar" action="#{usuarioController.abrirDlgCadUsuario()}"
+                                         ajax="true" process="@this"
                                          disabled="#{!usuarioController.usuarioLogado.admin}" iconAwesome="fa-user-plus"
                                          style="margin-top: 16px;"/>
                         <h3>Usuários</h3>
@@ -109,18 +110,12 @@
                         <b:commandButton style="color: red; border:none;"
                                          disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
                                          action="#{usuarioController.selecionaUsuarioParaExcluir(usuario)}"
-                                         update=":formEditUsuario" title="Excluir">
+                                         update=":formEditUsuario" title="Excluir" process="@this">
                             <b:iconAwesome name="times-circle"/>
                         </b:commandButton>
                     </div>
                 </p:column>
             </p:dataTable>
-
-            <br/>
-
-            <div align="center">
-                <p:commandButton value="Gerar Relatorio" action="#{reportController.gerarRelatorioUsuarios}" process="@this"/>
-            </div>
         </h:form>
     </ui:define>
 </ui:composition>

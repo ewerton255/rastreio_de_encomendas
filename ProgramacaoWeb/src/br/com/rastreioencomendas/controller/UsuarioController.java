@@ -7,18 +7,18 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.util.*;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import br.com.rastreioencomendas.dao.UsuarioDAO;
 import br.com.rastreioencomendas.model.Usuario;
-import br.com.rastreioencomendas.util.PageUtil;
-import br.com.rastreioencomendas.util.SessionUtil;
 
 @SessionScoped
 @ManagedBean
 public class UsuarioController extends AbstractUsuarioController{
 
-	private Usuario user;
+	private Usuario usuarioCadastrar;
 	private Usuario usuarioLogado;
 	private Usuario usuarioSelecionado;
 	private Usuario usuarioBuscar = new Usuario();;
@@ -27,39 +27,45 @@ public class UsuarioController extends AbstractUsuarioController{
 	private String tipoDeBusca;
 	
 	public UsuarioController() {
-		user = new Usuario();
+		usuarioCadastrar = new Usuario();
 		usuarioSelecionado = new Usuario();
 	}
 	
 	public void login() throws IOException {
-		Usuario usuarioLogado = usuarioDAO.login(user);
+		Usuario usuarioLogado = usuarioDAO.login(usuarioCadastrar);
 		
 		if(usuarioLogado != null) {
 			SessionUtil.adicionaObjetoUsuarioNaSessao(usuarioLogado);
-			this.user = new Usuario();
+			this.usuarioCadastrar = new Usuario();
 			this.usuarioLogado = usuarioLogado;
 			PageUtil.redirecionarParaPaginaPrincipalAdministrador();
 		}else {
-			PageUtil.mensagemDeErro("Usuário ou senha inválido!");
+			PageUtil.mensagemDeErro(MENSAGEM_USUARIO_OU_SENHA_INVALIDOS);
 		}
+	}
+
+	public void abrirDlgCadUsuario(){
+		usuarioCadastrar = new Usuario();
+		PageUtil.abrirDialog(DIALOG_CADASTRO_USUARIO);
+		PageUtil.atualizarComponente(FORM_CADASTRO_USUARIO);
 	}
 
 	public void buscarUsuarios(){
 		if(tipoDeBusca.equals(null)){
-			PageUtil.mensagemDeErro("Selecione o tipo de busca");
+			PageUtil.mensagemDeErro(MENSAGEM_SELECIONAR_TIPO_DE_BUSCA);
 		}else if(usuarioBuscar.getEmail() == null && usuarioBuscar.getNome() == null){
-			PageUtil.mensagemDeErro("Insira a busca");
+			PageUtil.mensagemDeErro(MENSAGEM_INSIRA_BUSCA);
 		}else{
 			listaDeUsuarios = usuarioDAO.buscarUsuarios(tipoDeBusca, usuarioBuscar);
 		}
-		PageUtil.atualizarComponente("formListUsuarios");
+		PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
 	}
 
 	public void limparBuscaUsuario(){
 		this.usuarioBuscar = new Usuario();
 		this.tipoDeBusca = null;
 		carregaDadosUsuario();
-		PageUtil.atualizarComponente("formListUsuarios");
+		PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
 	}
 
 	public void carregaDadosUsuario(){
@@ -72,9 +78,9 @@ public class UsuarioController extends AbstractUsuarioController{
 	public String retornaNomeUsuarioLogado() {
 		String primeiroNome = "";
 		if(SessionUtil.verificaSeUsuarioEstaNaSessao()) {
-			Usuario usuarioLogado = (Usuario) SessionUtil.recuperaObjetoDaSessao("usuarioLogado");
-			String[] nomes = usuarioLogado.getNome().split(" ");
-			primeiroNome = nomes[0];
+			Usuario usuarioLogado = (Usuario) SessionUtil.recuperaObjetoDaSessao(USUARIO);
+			String[] nome = usuarioLogado.getNome().split(" ");
+			primeiroNome = nome[0];
 		}
 		return primeiroNome.toUpperCase();
 	}
@@ -84,7 +90,21 @@ public class UsuarioController extends AbstractUsuarioController{
 		PageUtil.redirecionarParaPaginaPrincipal();
 		this.usuarioLogado = null;
 	}
-	
+
+	public void buscarCepUsuario(String tipo) throws ViaCEPException {
+		if(tipo.equals(CADASTRO)){
+			if(!usuarioCadastrar.getEndereco().getCep().equals(null)){
+				Endereco endereco = ViaCepUtil.buscarEndereco(usuarioCadastrar.getEndereco());
+				usuarioCadastrar.setEndereco(endereco);
+			}
+		}else if(tipo.equals(EDICAO)){
+			if(!usuarioSelecionado.getEndereco().getCep().equals(null)){
+				Endereco endereco = ViaCepUtil.buscarEndereco(usuarioSelecionado.getEndereco());
+				usuarioSelecionado.setEndereco(endereco);
+			}
+		}
+	}
+
 	public Boolean verificaSeExisteSessaoAtiva() {
 		Boolean existe = false;
 		
@@ -97,61 +117,61 @@ public class UsuarioController extends AbstractUsuarioController{
 	
 	public void selecionaUsuarioParaEditar(Usuario usuario) {
 		this.usuarioSelecionado = usuario;
-		PageUtil.abrirDialog("dlgEditUsuario");
+		PageUtil.abrirDialog(DIALOG_EDITAR_USUARIO);
 	}
 	
 	public void selecionaUsuarioParaExcluir(Usuario usuario) {
 		this.usuarioSelecionado = usuario;
-		PageUtil.atualizarComponente("formDelUsuario");
-		PageUtil.abrirDialog("dlgDelUsuario");
+		PageUtil.atualizarComponente(FORM_DELETAR_USUARIO);
+		PageUtil.abrirDialog(DIALOG_DELETAR_USUARIO);
 	}
 	
 	public void editarUsuario() {
 		if(usuarioDAO.editarUsuario(this.usuarioSelecionado)) {
-			PageUtil.mensagemDeSucesso("Usuário editado com sucesso!");
+			PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_EDITADO_COM_SUCESSO);
 			carregaDadosUsuario();
 		}else {
-			PageUtil.mensagemDeErro("Erro ao editar usuário!");
+			PageUtil.mensagemDeErro(MENSAGEM_ERRO_EDITAR_USUARIO);
 		}
-		PageUtil.atualizarComponente("formListUsuarios");
-		PageUtil.fecharDialog("dlgEditUsuario");
+		PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
+		PageUtil.fecharDialog(DIALOG_EDITAR_USUARIO);
 	}
 	
 	public void excluirUsuario() {
 		if(usuarioDAO.excluirUsuario(this.usuarioSelecionado)) {
-			PageUtil.mensagemDeSucesso("Usuário excluido com sucesso!");
+			PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_EXCLUIDO_COM_SUCESSO);
 			carregaDadosUsuario();
 		}else {
-			PageUtil.mensagemDeErro("Erro ao excluir usuário!");
+			PageUtil.mensagemDeErro(MENSAGEM_ERRO_EXCLUIR_USUARIO);
 		}
-		PageUtil.atualizarComponente("formListUsuarios");
-		PageUtil.fecharDialog("dlgDelUsuario");
+		PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
+		PageUtil.fecharDialog(DIALOG_DELETAR_USUARIO);
 	}
 	
 	public void cadastrarUsuario() {
-		if(usuarioDAO.verificaSeUsuarioJaExiste(user)) {
-			PageUtil.mensagemDeErro("Email já existente");
+		if(usuarioDAO.verificaSeUsuarioJaExiste(usuarioCadastrar)) {
+			PageUtil.mensagemDeErro(MENSAGEM_EMAIL_EXISTENTE);
 		}else {
-			if(EmailValidator.getInstance().isValid(user.getEmail())) {
-				if(usuarioDAO.cadastrarUsuario(user)) {
-					PageUtil.mensagemDeSucesso("Usuário cadastrado com sucesso!");
-					PageUtil.fecharDialog("dlgCadUsuario");
+			if(EmailValidator.getInstance().isValid(usuarioCadastrar.getEmail())) {
+				if(usuarioDAO.cadastrarUsuario(usuarioCadastrar)) {
+					PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_CADASTRADO_COM_SUCESSO);
+					PageUtil.fecharDialog(DIALOG_CADASTRO_USUARIO);
 					carregaDadosUsuario();
-					this.user = new Usuario();
+					this.usuarioCadastrar = new Usuario();
 				}else {
-					PageUtil.mensagemDeErro("Erro ao cadastrar usuário!");
+					PageUtil.mensagemDeErro(MENSAGEM_ERRO_CADASTRO_USUARIO);
 				}
 			}else {
-				PageUtil.mensagemDeErro("E-mail inválido");
+				PageUtil.mensagemDeErro(MENSAGEM_EMAIL_INVALIDO);
 			}
 		}
-		PageUtil.atualizarComponente("formLogin");
-		PageUtil.atualizarComponente("formListUsuarios");
-		PageUtil.atualizarComponente("formCadUsuario");
+		PageUtil.atualizarComponente(FORM_LOGIN);
+		PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
+		PageUtil.atualizarComponente(FORM_CADASTRO_USUARIO);
 	}
 	
-	public Usuario getUser() {
-		return user;
+	public Usuario getUsuarioCadastrar() {
+		return usuarioCadastrar;
 	}
 
 	public Usuario getUsuarioLogado() {

@@ -254,19 +254,21 @@ public class UsuarioDAO extends AbstractUsuarioController {
             if (rs.next()) {
                 idEndereco = rs.getInt("id");
 
-                sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
+                if(idEndereco != null){
+                    sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
 
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, usuario.getNome().toUpperCase());
-                ps.setString(2, usuario.getEmail().toLowerCase());
-                ps.setString(3, usuario.getSenha().toLowerCase());
-                ps.setBoolean(4, usuario.getAdmin());
-                ps.setInt(5, idEndereco);
-                ps.executeUpdate();
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, usuario.getNome().toUpperCase());
+                    ps.setString(2, usuario.getEmail().toLowerCase());
+                    ps.setString(3, usuario.getSenha().toLowerCase());
+                    ps.setBoolean(4, usuario.getAdmin());
+                    ps.setInt(5, idEndereco);
+                    ps.executeUpdate();
 
-                cadastrou = true;
+                    cadastrou = true;
 
-                conn.commit();
+                    conn.commit();
+                }
             }
 
         } catch (SQLException e) {
