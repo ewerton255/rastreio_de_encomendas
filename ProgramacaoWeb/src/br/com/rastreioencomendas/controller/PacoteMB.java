@@ -16,7 +16,7 @@ import br.com.rastreioencomendas.util.ViaCEPException;
 
 @SessionScoped
 @ManagedBean
-public class PacoteController extends AbstractPacoteController {
+public class PacoteMB extends AbstractPacoteMB {
 
     private PacoteDAO pacoteDAO = new PacoteDAO();
     private Pacote pacoteParaCadastrar;
@@ -27,7 +27,7 @@ public class PacoteController extends AbstractPacoteController {
     private Pacote pacoteParaBuscar;
     private List<HistoricoModel> listaHistoricoRastreio;
 
-    public PacoteController() {
+    public PacoteMB() {
         this.pacoteSelecionado = new Pacote();
         this.pacoteParaCadastrar = new Pacote();
         this.listaHistoricoRastreio = new ArrayList<>();
@@ -75,7 +75,7 @@ public class PacoteController extends AbstractPacoteController {
     public void buscarPacote() {
         this.listaHistoricoRastreio = pacoteDAO.retornalIstaParaRastreio(pacoteParaBuscar.getCodigoRastreio());
         if (listaHistoricoRastreio.size() == 0) {
-            PageUtil.mensagemDeErro("Nenhum resultado encontrado");
+            PageUtil.mensagemDeErro(MENSAGEM_NENHUM_RESULTADO_ENCONTRADO);
         }
     }
 
@@ -90,48 +90,48 @@ public class PacoteController extends AbstractPacoteController {
     public void abrirDialogCadastroPacote() {
         this.pacoteParaCadastrar = new Pacote();
         this.tipoDocumento = null;
-        PageUtil.abrirDialog("dlgCadPacote");
-        PageUtil.atualizarComponente("formCadPacote");
+        PageUtil.abrirDialog(DIALOG_CADASTRO_PACOTE);
+        PageUtil.atualizarComponente(FORM_CADASTRO_PACOTE);
     }
 
     public void cadastrarPacote() {
         Boolean valido = true;
 
         if (pacoteParaCadastrar.getCodigoRastreio() == null) {
-            PageUtil.mensagemDeErro("Gere um código de rastreio");
+            PageUtil.mensagemDeErro(MENSAGEM_CODIGO_RASTREIO_VAZIO);
             valido = false;
         }
         if (pacoteParaCadastrar.getPeso() <= 0) {
-            PageUtil.mensagemDeErro("Peso inválido");
+            PageUtil.mensagemDeErro(MENSAGEM_PESO_INVALIDO);
             valido = false;
         }
         if (pacoteParaCadastrar.getEnderecoDestinatario().getNumero() <= 0) {
-            PageUtil.mensagemDeErro("Número endereço inválido");
+            PageUtil.mensagemDeErro(MENSAGEM_NUMERO_ENDERECO_INVALIDO);
             valido = false;
         }
         if (pacoteParaCadastrar.getEnderecoDestinatario().getBairro() == null) {
-            PageUtil.mensagemDeErro("Informe o Bairro");
+            PageUtil.mensagemDeErro(MENSAGEM_BAIRRO_VAZIO);
             valido = false;
         }
         if (pacoteParaCadastrar.getEnderecoDestinatario().getEstado() == null) {
-            PageUtil.mensagemDeErro("Informe o Estado");
+            PageUtil.mensagemDeErro(MENSAGEM_ESTADO_VAZIO);
             valido = false;
         }
         if (pacoteParaCadastrar.getEnderecoDestinatario().getCidade() == null) {
-            PageUtil.mensagemDeErro("Informe a Cidade");
+            PageUtil.mensagemDeErro(MENSAGEM_CIDADE_VAZIA);
             valido = false;
         }
         if (pacoteParaCadastrar.getEnderecoDestinatario().getLogradouro() == null) {
-            PageUtil.mensagemDeErro("Informe o logradouro");
+            PageUtil.mensagemDeErro(MENSAGEM_LOGRADOURO_VAZIO);
             valido = false;
         }
         if (valido) {
             if (pacoteDAO.cadastrarPacote(this.pacoteParaCadastrar)) {
-                PageUtil.mensagemDeSucesso("Pacote cadastrado com sucesso!");
-                PageUtil.atualizarComponente("formListaPacotes");
-                PageUtil.fecharDialog("dlgCadPacote");
+                PageUtil.mensagemDeSucesso(MENSAGEM_PACOTE_CADASTRADO_COM_SUCESSO);
+                PageUtil.atualizarComponente(FORM_LISTA_PACOTES);
+                PageUtil.fecharDialog(DIALOG_CADASTRO_PACOTE);
             } else {
-                PageUtil.mensagemDeErro("Erro ao cadastrar pacote!");
+                PageUtil.mensagemDeErro(MENSAGEM_ERRO_CADASTRO_PACOTE);
             }
         }
 
@@ -151,8 +151,8 @@ public class PacoteController extends AbstractPacoteController {
     public void abrirHistoricoDoPacote(Pacote pacote) {
         this.pacoteSelecionado = pacote;
         retornaListaDeHistorico();
-        PageUtil.atualizarComponente("formHistoricoPacote");
-        PageUtil.abrirDialog("dlgHistoricoPacote");
+        PageUtil.atualizarComponente(FORM_HISTORICO_PACOTES);
+        PageUtil.abrirDialog(DIALOG_HISTORICO_PACOTES);
     }
 
     public List<HistoricoModel> retornaListaDeHistorico() {
@@ -165,40 +165,40 @@ public class PacoteController extends AbstractPacoteController {
 
     public void abrirDlgExcluirAtualizacao(HistoricoModel atualizacao) {
         this.atualizacaoSelecionada = atualizacao;
-        PageUtil.abrirDialog("dlgExcluirAtualizacao");
-        PageUtil.atualizarComponente("formExcluirAtualizacao");
+        PageUtil.abrirDialog(DIALOG_EXCLUSAO_ATUALIZACAO_);
+        PageUtil.atualizarComponente(FORM_EXCLUSAO_ATUALIZACAO);
     }
 
     public void excluirAtualizacao() {
         if (pacoteDAO.excluirAtualizacao(atualizacaoSelecionada)) {
-            PageUtil.mensagemDeSucesso("Atualização excluída com sucesso");
-            PageUtil.fecharDialog("dlgExcluirAtualizacao");
-            PageUtil.atualizarComponente("formHistoricoPacote");
+            PageUtil.mensagemDeSucesso(MENSAGEM_ATUALIZACAO_EXCLUIDA_COM_SUCESSO);
+            PageUtil.fecharDialog(DIALOG_EXCLUSAO_ATUALIZACAO_);
+            PageUtil.atualizarComponente(FORM_HISTORICO_PACOTES);
         } else {
-            PageUtil.mensagemDeErro("Erro ao excluir atualização");
+            PageUtil.mensagemDeErro(MENSAGEM_ERRO_EXCLUIR_ATUALIZACAO);
         }
     }
 
     public void abrirDialogCadastroAtualizacao(Pacote pacote) {
         this.pacoteSelecionado = pacote;
         this.novaAtualizacao = new HistoricoModel();
-        PageUtil.atualizarComponente("formCadAtualizacao");
-        PageUtil.abrirDialog("dlgCadAtualizacao");
+        PageUtil.atualizarComponente(FORM_CADASTRO_ATUALIZACAO);
+        PageUtil.abrirDialog(DIALOG_CADASTRO_ATUALIZACAO);
     }
 
     public void abrirDialogEditarAtualizacao(HistoricoModel atualizacao) {
         this.atualizacaoSelecionada = atualizacao;
-        PageUtil.abrirDialog("dlgEditarAtualizacao");
-        PageUtil.atualizarComponente("formEditarAtualizacao");
+        PageUtil.abrirDialog(DIALOG_EDITAR_ATUALIZACAO);
+        PageUtil.atualizarComponente(FORM_EDITAR_ATUALIZACAO);
     }
 
     public void editarAtualizacao() {
         if (pacoteDAO.editarAtualizacao(atualizacaoSelecionada)) {
-            PageUtil.mensagemDeSucesso("Atualização editada com sucesso");
-            PageUtil.fecharDialog("dlgEditarAtualizacao");
-            PageUtil.atualizarComponente("formHistoricoPacote");
+            PageUtil.mensagemDeSucesso(MENSAGEM_ATUALIZACAO_EDITADA_COM_SUCESSO);
+            PageUtil.fecharDialog(DIALOG_EDITAR_ATUALIZACAO);
+            PageUtil.atualizarComponente(FORM_HISTORICO_PACOTES);
         } else {
-            PageUtil.mensagemDeErro("Erro ao editar atualização");
+            PageUtil.mensagemDeErro(MENSAGEM_ERRO_EDITAR_ATUALIZACAO);
         }
     }
 
@@ -228,17 +228,17 @@ public class PacoteController extends AbstractPacoteController {
 
     public void cadastrarNovaAtualizacao() {
         if (pacoteDAO.cadastrarAtualizacao(pacoteSelecionado, novaAtualizacao)) {
-            PageUtil.mensagemDeSucesso("Atualizacação cadastrada com sucesso");
-            PageUtil.fecharDialog("dlgCadAtualizacao");
+            PageUtil.mensagemDeSucesso(MENSAGEM_SUCESSO_CADASTRO_ATUALIZACAO);
+            PageUtil.fecharDialog(DIALOG_CADASTRO_ATUALIZACAO);
         } else {
-            PageUtil.mensagemDeErro("Erro ao cadastrar atualização");
-            PageUtil.fecharDialog("dlgCadAtualizacao");
+            PageUtil.mensagemDeErro(MENSAGEM_ERRO_CADASTRO_ATUALIZACAO);
+            PageUtil.fecharDialog(DIALOG_CADASTRO_ATUALIZACAO);
         }
     }
 
     public void abrirDlgStatusPacote() {
-        PageUtil.abrirDialog("dlgStatusPacote");
-        PageUtil.atualizarComponente("formStatusPacote");
+        PageUtil.abrirDialog(DIALOG_STATUS_PACOTE);
+        PageUtil.atualizarComponente(FORM_STATUS_PACOTE);
     }
 
     public List<Pacote> retornaListaDePacotes() {

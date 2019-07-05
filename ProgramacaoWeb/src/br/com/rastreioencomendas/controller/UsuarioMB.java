@@ -16,7 +16,7 @@ import br.com.rastreioencomendas.model.Usuario;
 
 @SessionScoped
 @ManagedBean
-public class UsuarioController extends AbstractUsuarioController{
+public class UsuarioMB extends AbstractUsuarioMB {
 
 	private Usuario usuarioCadastrar;
 	private Usuario usuarioLogado;
@@ -26,7 +26,7 @@ public class UsuarioController extends AbstractUsuarioController{
 	private List<Usuario> listaDeUsuarios = new ArrayList<>();
 	private String tipoDeBusca;
 	
-	public UsuarioController() {
+	public UsuarioMB() {
 		usuarioCadastrar = new Usuario();
 		usuarioSelecionado = new Usuario();
 	}
@@ -78,7 +78,7 @@ public class UsuarioController extends AbstractUsuarioController{
 	public String retornaNomeUsuarioLogado() {
 		String primeiroNome = "";
 		if(SessionUtil.verificaSeUsuarioEstaNaSessao()) {
-			Usuario usuarioLogado = (Usuario) SessionUtil.recuperaObjetoDaSessao(USUARIO);
+			Usuario usuarioLogado = (Usuario) SessionUtil.recuperaObjetoDaSessao(OBJ_USUARIO);
 			String[] nome = usuarioLogado.getNome().split(" ");
 			primeiroNome = nome[0];
 		}

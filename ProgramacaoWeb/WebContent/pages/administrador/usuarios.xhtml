@@ -8,7 +8,7 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
 <f:metadata>
-    <f:viewAction action="#{usuarioController.carregaDadosUsuario}"/>
+    <f:viewAction action="#{usuarioMB.carregaDadosUsuario}"/>
 </f:metadata>
 <body>
 <ui:composition template="/pages/administrador/administracao.xhtml">
@@ -22,7 +22,7 @@
 
                 <h:outputLabel value="Buscar:" for="busca"/>
 
-                <b:selectOneMenu value="#{usuarioController.tipoDeBusca}" id="busca" required="true"
+                <b:selectOneMenu value="#{usuarioMB.tipoDeBusca}" id="busca" required="true"
                                  requiredMessage="Selecione o tipo de busca">
                     <f:selectItem itemLabel="Tipo de busca" itemValue="#{null}" noSelectionOption="true"/>
                     <f:selectItem itemLabel="Nome" itemValue="N"/>
@@ -30,27 +30,27 @@
                     <p:ajax event="change" update="formListUsuarios"/>
                 </b:selectOneMenu>
 
-                <b:inputText value="#{usuarioController.usuarioBuscar.nome}"
-                             rendered="#{usuarioController.tipoDeBusca eq 'N'}" required="true"
+                <b:inputText value="#{usuarioMB.usuarioBuscar.nome}"
+                             rendered="#{usuarioMB.tipoDeBusca eq 'N'}" required="true"
                              requiredMessage="Insira o nome"/>
 
-                <b:inputText validator="EmailValidator" value="#{usuarioController.usuarioBuscar.email}"
-                             rendered="#{usuarioController.tipoDeBusca eq 'E'}" required="true"
+                <b:inputText validator="EmailValidator" value="#{usuarioMB.usuarioBuscar.email}"
+                             rendered="#{usuarioMB.tipoDeBusca eq 'E'}" required="true"
                              requiredMessage="Insira o E-mail">
                     <p:ajax event="blur" update="formListUsuarios"/>
                 </b:inputText>
 
                 <b:commandButton iconAwesome="fa-search" title="Buscar" style="background: transparent;" ajax="true"
-                                 action="#{usuarioController.buscarUsuarios}" update="msgUsuarios"/>
+                                 action="#{usuarioMB.buscarUsuarios}" update="msgUsuarios"/>
 
                 <b:commandButton value="Limpar" title="Limpar" style="background: transparent;"
-                                 action="#{usuarioController.limparBuscaUsuario}"
+                                 action="#{usuarioMB.limparBuscaUsuario}"
                                  ajax="true" process="@this"/>
             </p:panelGrid>
 
             <br/>
 
-            <p:dataTable value="#{usuarioController.listaDeUsuarios}" var="usuario"
+            <p:dataTable value="#{usuarioMB.listaDeUsuarios}" var="usuario"
                          emptyMessage="Nenhum usuário encontrado" rows="10" widgetVar="tbUsuarios"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          currentPageReportTemplate="({startRecord} de {totalPages})"
@@ -58,12 +58,12 @@
 
                 <f:facet name="header">
                     <b:panelGrid columns="3" styleClass="semBorda">
-                        <p:commandButton value="Cadastrar" action="#{usuarioController.abrirDlgCadUsuario()}"
+                        <p:commandButton value="Cadastrar" action="#{usuarioMB.abrirDlgCadUsuario()}"
                                          ajax="true" process="@this"
-                                         disabled="#{!usuarioController.usuarioLogado.admin}" iconAwesome="fa-user-plus"
+                                         disabled="#{!usuarioMB.usuarioLogado.admin}" iconAwesome="fa-user-plus"
                                          style="margin-top: 16px;"/>
                         <h3>Usuários</h3>
-                        <h:outputLabel value="#{usuarioController.listaDeUsuarios.size()} Usuário(s)"
+                        <h:outputLabel value="#{usuarioMB.listaDeUsuarios.size()} Usuário(s)"
                                        styleClass="contagem-registros-tabela"/>
                     </b:panelGrid>
                 </f:facet>
@@ -112,12 +112,12 @@
                 <p:column headerText="Ação" style="width: 10%;">
                     <div align="center">
                         <b:commandButton icon="edit" style="color: orange; border:none;"
-                                         disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
-                                         action="#{usuarioController.selecionaUsuarioParaEditar(usuario)}"
+                                         disabled="#{!usuarioMB.usuarioLogado.admin}" ajax="true"
+                                         action="#{usuarioMB.selecionaUsuarioParaEditar(usuario)}"
                                          update=":formEditUsuario" title="Editar" process="@this"/>
                         <b:commandButton style="color: red; border:none;"
-                                         disabled="#{!usuarioController.usuarioLogado.admin}" ajax="true"
-                                         action="#{usuarioController.selecionaUsuarioParaExcluir(usuario)}"
+                                         disabled="#{!usuarioMB.usuarioLogado.admin}" ajax="true"
+                                         action="#{usuarioMB.selecionaUsuarioParaExcluir(usuario)}"
                                          update=":formEditUsuario" title="Excluir" process="@this">
                             <b:iconAwesome name="times-circle"/>
                         </b:commandButton>

@@ -15,19 +15,19 @@ import br.com.rastreioencomendas.util.ViaCepUtil;
 
 @ViewScoped
 @ManagedBean
-public class EmpresaController {
+public class EmpresaMB extends AbstractEmpresaMB{
 
 	EmpresaDAO empresaDAO = new EmpresaDAO();
 	Empresa empresaCadastrar = new Empresa();
 
-	public EmpresaController() {
+	public EmpresaMB() {
 
 	}
 
 	public void abrirDialogCadEmpresa() {
 		empresaCadastrar = new Empresa();
-		PageUtil.abrirDialog("dlgCadEmpresa");
-		PageUtil.atualizarComponente("formCadEmpresa");
+		PageUtil.abrirDialog(DIALOG_CADASTRO_EMPRESA);
+		PageUtil.atualizarComponente(FORM_CADASTRO_EMPRESA);
 	}
 
 	public void cadastrarEmpresa() {
@@ -35,33 +35,33 @@ public class EmpresaController {
 		Boolean valido = true;
 
 		if (empresaCadastrar.getEndereco().getNumero() <= 0) {
-			PageUtil.mensagemDeErro("Námero endereáo inválido");
+			PageUtil.mensagemDeErro(MENSAGEM_NUMERO_ENDERECO_INVALIDO);
 			valido = false;
 		}
 		if (empresaCadastrar.getEndereco().getBairro() == null) {
-			PageUtil.mensagemDeErro("Informe o Bairro");
+			PageUtil.mensagemDeErro(MENSAGEM_BAIRRO_VAZIO);
 			valido = false;
 		}
 		if (empresaCadastrar.getEndereco().getEstado() == null) {
-			PageUtil.mensagemDeErro("Informe o Estado");
+			PageUtil.mensagemDeErro(MENSAGEM_ESTADO_VAZIO);
 			valido = false;
 		}
 		if (empresaCadastrar.getEndereco().getCidade() == null) {
-			PageUtil.mensagemDeErro("Informe a Cidade");
+			PageUtil.mensagemDeErro(MENSAGEM_CIDADE_VAZIA);
 			valido = false;
 		}
 		if (empresaCadastrar.getEndereco().getLogradouro() == null) {
-			PageUtil.mensagemDeErro("Informe o logradouro");
+			PageUtil.mensagemDeErro(MENSAGEM_LOGRADOURO_VAZIO);
 			valido = false;
 		}
 		if (valido) {
 
 			if (empresaDAO.cadastrarEmpresa(empresaCadastrar)) {
-				PageUtil.mensagemDeSucesso("Empresa cadastrada com sucesso");
-				PageUtil.fecharDialog("dlgCadEmpresa");
-				PageUtil.atualizarComponente("formListaEmpresas");
+				PageUtil.mensagemDeSucesso(MENSAGEM_CADASTRO_EMPRESA_SUCESSO);
+				PageUtil.fecharDialog(DIALOG_CADASTRO_EMPRESA);
+				PageUtil.atualizarComponente(FORM_LISTA_EMPRESAS);
 			} else {
-				PageUtil.mensagemDeErro("Erro ao cadastrar empresa");
+				PageUtil.mensagemDeErro(MENSAGEM_CADASTRO_EMPRESA_ERRO);
 			}
 		}
 	}

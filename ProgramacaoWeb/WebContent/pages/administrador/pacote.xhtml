@@ -15,12 +15,12 @@
 				<div align="center">
 					<p:outputLabel value="Gerenciar pacotes" style="font-size: 1.7em;"/>
 				</div>
-				<p:commandButton value="Cadastrar" title="Cadastrar novo pacote" ajax="true" action="#{pacoteController.abrirDialogCadastroPacote()}"/>
+				<p:commandButton value="Cadastrar" title="Cadastrar novo pacote" ajax="true" action="#{pacoteMB.abrirDialogCadastroPacote()}"/>
 				#{'  '}
-				<p:commandButton value="Status" title="Cadastrar, editar, excluir status" ajax="true" action="#{pacoteController.abrirDlgStatusPacote()}"/>
+				<p:commandButton value="Status" title="Cadastrar, editar, excluir status" ajax="true" action="#{pacoteMB.abrirDlgStatusPacote()}"/>
 				<br/><br/>
-				<p:dataTable id="tbPacotes" value="#{pacoteController.retornaListaDePacotes()}" var="pacote" paginator="true"
-				 emptyMessage="Nenhum pacote encontrado" paginatorPosition="bottom">
+				<p:dataTable id="tbPacotes" value="#{pacoteMB.retornaListaDePacotes()}" var="pacote" paginator="true"
+                             emptyMessage="Nenhum pacote encontrado" paginatorPosition="bottom">
 					
 					<p:column headerText="Código" filterBy="#{pacote.codigoRastreio}">
 						<div align="center">
@@ -70,11 +70,11 @@
 					
 					<p:column headerText="Ações">
 						<div align="center">
-							<b:commandButton title="Adicionar atualização" style="border: none;" ajax="true" action="#{pacoteController.abrirDialogCadastroAtualizacao(pacote)}">
+							<b:commandButton title="Adicionar atualização" style="border: none;" ajax="true" action="#{pacoteMB.abrirDialogCadastroAtualizacao(pacote)}">
 								<b:iconAwesome name="plus" style="color: #0099ff;"/>
 							</b:commandButton>
 							
-							<b:commandButton title="Visualizar Histórico de atualizações" style="border: none;" ajax="true" action="#{pacoteController.abrirHistoricoDoPacote(pacote)}">
+							<b:commandButton title="Visualizar Histórico de atualizações" style="border: none;" ajax="true" action="#{pacoteMB.abrirHistoricoDoPacote(pacote)}">
 								<b:iconAwesome name="list" style="color: #0099ff;"/>
 							</b:commandButton>
 						</div>

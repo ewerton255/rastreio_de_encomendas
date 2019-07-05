@@ -13,11 +13,11 @@
 		<div align="center">
 			<h:form id="formStatusPacote">
 				<div align="left">
-					<p:commandButton value="Cadastrar" action="#{statusPacoteController.abrirDlgCadStatus()}"/>
+					<p:commandButton value="Cadastrar" action="#{statusPacoteMB.abrirDlgCadStatus()}"/>
 					<br/><br/>
 				</div>
 				<p:dataTable
-					value="#{statusPacoteController.retornaListaDeStatus()}"
+					value="#{statusPacoteMB.retornaListaDeStatus()}"
 					var="status" paginator="true" paginatorPosition="bottom"
 					emptyMessage="Nenhum status encontrado" rows="5">
 					
@@ -36,9 +36,9 @@
 					<p:column headerText="Ação" style="width:20%;">
 						<div align="center">
 							<b:commandButton icon="edit" style="color: orange; border:none;" ajax="true"
-								action="#{statusPacoteController.abrirDlgEditarStatus(status)}" title="Editar"/>
+                                             action="#{statusPacoteMB.abrirDlgEditarStatus(status)}" title="Editar"/>
 							<b:commandButton style="color: red; border:none;" ajax="true"
-								action="#{statusPacoteController.abrirDlgExcluirStatus(status)}" title="Excluir">
+                                             action="#{statusPacoteMB.abrirDlgExcluirStatus(status)}" title="Excluir">
 								<b:iconAwesome name="times-circle"/>
 							</b:commandButton>
 						</div>

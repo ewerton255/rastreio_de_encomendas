@@ -14,7 +14,7 @@
 			<h:form id="formDelUsuario">
 				<p:growl id="msgDeltUsuario" showDetail="true" />
 				<h:outputText value="Deseja excluir o usuário, " />
-				<h:outputText value="#{usuarioController.usuarioSelecionado.nome}"
+				<h:outputText value="#{usuarioMB.usuarioSelecionado.nome}"
 					style="font-weight: bold;" />
 				<h:outputText value="?" />
 				<br />
@@ -22,7 +22,7 @@
 				<p:panelGrid columns="2" styleClass="semBorda">
 					<b:commandButton value="Excluir" ajax="true"
 						style="background: #0099ff; color:white;"
-						action="#{usuarioController.excluirUsuario()}"
+						action="#{usuarioMB.excluirUsuario()}"
 						update="msgDeltUsuario" />
 					<b:button value="Fechar" onclick="PF('dlgDelUsuario').hide();"
 						look="danger" />

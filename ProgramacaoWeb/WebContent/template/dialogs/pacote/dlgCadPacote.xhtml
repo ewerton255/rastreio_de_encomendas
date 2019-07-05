@@ -20,44 +20,44 @@
 							<p:panelGrid columns="3" styleClass="semBorda" id="dadosPacote">
 								<p:outputLabel value="Código:" />
 								<p:inputText
-									value="#{pacoteController.pacoteParaCadastrar.codigoRastreio}"
+									value="#{pacoteMB.pacoteParaCadastrar.codigoRastreio}"
 									required="true" requiredMessage="Gere um Código de rastreio"
 									id="codigoRastreio" readonly="true" />
 								<p:commandButton value="Gerar" ajax="true"
-									actionListener="#{pacoteController.retornaCodigoDeRastreio()}"
+									actionListener="#{pacoteMB.retornaCodigoDeRastreio()}"
 									immediate="true" update="codigoRastreio" />
 								<p:outputLabel value="Empresa remetente:" />
 								<p:selectOneMenu
-									value="#{pacoteController.pacoteParaCadastrar.empresaRemetente.id}"
+									value="#{pacoteMB.pacoteParaCadastrar.empresaRemetente.id}"
 									required="true" requiredMessage="Selecione a empresa remetente">
 									<f:selectItem itemLabel="Selecione" itemValue=""
 										noSelectionOption="true" />
 									<f:selectItems
-										value="#{empresaController.retornaListaEmpresa()}"
+										value="#{empresaMB.retornaListaEmpresa()}"
 										var="empresa" itemLabel="#{empresa.razaoSocial}"
 										itemValue="#{empresa.id}" />
 								</p:selectOneMenu>
 								<br />
 								<p:outputLabel value="Descrição:" />
 								<p:inputTextarea
-									value="#{pacoteController.pacoteParaCadastrar.descricao}"
+									value="#{pacoteMB.pacoteParaCadastrar.descricao}"
 									required="true" requiredMessage="Insira a descrição do pacote"
 									style="width: 100%;" />
 								<br />
 								<p:outputLabel value="Peso:" />
 								<p:inputNumber
-									value="#{pacoteController.pacoteParaCadastrar.peso}"
+									value="#{pacoteMB.pacoteParaCadastrar.peso}"
 									required="true" requiredMessage="Insira o peso do pacote"
 									inputStyle="width: 52%;" symbol=" Kg" symbolPosition="s"
 									decimalPlaces="1" thousandSeparator="" />
 								<br />
 								<p:outputLabel value="Frete:" />
 								<p:selectOneMenu
-									value="#{pacoteController.pacoteParaCadastrar.tipoFrete.id}"
+									value="#{pacoteMB.pacoteParaCadastrar.tipoFrete.id}"
 									required="true" requiredMessage="Selecione o tipo de frete">
 									<f:selectItem itemLabel="Selecione" itemValue=""
 										noSelectionOption="true" />
-									<f:selectItems value="#{freteController.listaDeFretes}"
+									<f:selectItems value="#{freteMB.listaDeFretes}"
 										var="frete"
 										itemLabel="#{frete.tipo eq 'EX' ? 'Express' : 'Standard'}"
 										itemValue="#{frete.id}" />
@@ -76,12 +76,12 @@
 								
 								<p:inputMask required="true"
 									requiredMessage="Informe o CPF/CNPJ"
-									value="#{pacoteController.pacoteParaCadastrar.cpfCnpjDestinatario}"
-									mask="#{pacoteController.tipoDocumento eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
-									rendered="#{pacoteController.tipoDocumento ne null}"
+									value="#{pacoteMB.pacoteParaCadastrar.cpfCnpjDestinatario}"
+									mask="#{pacoteMB.tipoDocumento eq 'CNPJ' ? '99.999.999/9999-99' : '999.999.999-99'}"
+									rendered="#{pacoteMB.tipoDocumento ne null}"
 									validator="CpfCnpjValidator" />
 									
-								<p:selectOneMenu value="#{pacoteController.tipoDocumento}"
+								<p:selectOneMenu value="#{pacoteMB.tipoDocumento}"
 									required="true" requiredMessage="Selecione o tipo de documento">
 									<f:selectItem noSelectionOption="true"
 										itemLabel="Tipo documento" itemValue="" />
@@ -96,45 +96,45 @@
 								id="enderecoDestinatario">
 								<p:outputLabel value="CEP:" />
 								<p:inputMask mask="99999-999"
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.cep}"
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.cep}"
 									required="true" requiredMessage="Insira o CEP de destino"
 									size="9">
 									<p:ajax event="blur"
-										listener="#{pacoteController.buscarCepDestinatario()}"
+										listener="#{pacoteMB.buscarCepDestinatario()}"
 										update="enderecoDestinatario" />
 								</p:inputMask>
 
 								<p:outputLabel value="Estado:" />
 								<p:inputText
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.estado}"
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.estado}"
 									readonly="true" required="true" style="width: 20%;"
 									requiredMessage="Informe o estado" />
 
 								<p:outputLabel value="Cidade:" />
 								<p:inputText
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.cidade}"
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.cidade}"
 									readonly="true" required="true"
 									requiredMessage="Informe a cidade" />
 
 								<p:outputLabel value="Bairro:" />
 								<p:inputText
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.bairro}"
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.bairro}"
 									readonly="true" required="true"
 									requiredMessage="Informe o bairro" />
 
 								<p:outputLabel value="Logradouro:" />
 								<p:inputText
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.logradouro}"
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.logradouro}"
 									readonly="true" required="true"
 									requiredMessage="Informe o logradouro" />
 
 								<p:outputLabel value="Complemento:" />
 								<p:inputText
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.complemento}" />
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.complemento}" />
 
 								<p:outputLabel value="N°:" />
 								<p:inputNumber
-									value="#{pacoteController.pacoteParaCadastrar.enderecoDestinatario.numero}"
+									value="#{pacoteMB.pacoteParaCadastrar.enderecoDestinatario.numero}"
 									inputStyle="width: 30%;" required="true"
 									requiredMessage="Insira o número do endereço" decimalPlaces="0"
 									thousandSeparator="" />
@@ -147,7 +147,7 @@
 					<p:panelGrid columns="2" styleClass="semBorda">
 						<b:commandButton value="Salvar" ajax="true"
 							update=":formCadPacote" style="background: #0099ff; color:white;"
-							action="#{pacoteController.cadastrarPacote()}" />
+							action="#{pacoteMB.cadastrarPacote()}" />
 						<b:button value="Fechar" onclick="PF('dlgCadPacote').hide();"
 							look="danger" />
 					</p:panelGrid>

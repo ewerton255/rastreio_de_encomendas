@@ -13,13 +13,13 @@
 		<div align="center">
 			<h:form id="formExcluirStatus">
 				<p:growl id="msgExcluirStatus" showDetail="true" />
-				Deseja excluir o status, <b>#{statusPacoteController.statusSelecionado.descricao}</b>?
+				Deseja excluir o status, <b>#{statusPacoteMB.statusSelecionado.descricao}</b>?
 				<br />
 				<br />
 				<p:panelGrid columns="2" styleClass="semBorda">
 					<b:commandButton value="Confirmar" ajax="true"
 						style="background: #0099ff; color:white;"
-						action="#{statusPacoteController.excluirStatus()}"
+						action="#{statusPacoteMB.excluirStatus()}"
 						update="msgExcluirStatus" />
 
 					<b:button value="Fechar" onclick="PF('dlgExcluirStatus').hide()"

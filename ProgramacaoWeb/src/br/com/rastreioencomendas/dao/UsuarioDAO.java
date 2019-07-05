@@ -7,11 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.rastreioencomendas.controller.AbstractUsuarioController;
+import br.com.rastreioencomendas.controller.AbstractUsuarioMB;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
+import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Usuario;
 
-public class UsuarioDAO extends AbstractUsuarioController {
+public class UsuarioDAO extends AbstractUsuarioDAO {
 
     public Usuario login(Usuario usuario) {
         Usuario usuarioLogado = null;
@@ -53,9 +54,9 @@ public class UsuarioDAO extends AbstractUsuarioController {
         ResultSet rs;
         String parametroBusca = "";
 
-        if (tipoBusca.equals(BUSCA_POR_NOME)) {
+        if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_NOME)) {
             parametroBusca = "us.nome";
-        } else if (tipoBusca.equals(BUSCA_POR_EMAIL)) {
+        } else if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_EMAIL)) {
             parametroBusca = "us.email";
         }
 
@@ -68,10 +69,10 @@ public class UsuarioDAO extends AbstractUsuarioController {
 
         try {
             ps = con.prepareStatement(sql);
-            if (tipoBusca.equals(BUSCA_POR_EMAIL)) {
-                ps.setString(1, usuarioParaBuscar.getEmail() + SIMBOLO_PORCETAGEM);
-            } else if (tipoBusca.equals(BUSCA_POR_NOME)) {
-                ps.setString(1, usuarioParaBuscar.getNome() + SIMBOLO_PORCETAGEM);
+            if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_EMAIL)) {
+                ps.setString(1, usuarioParaBuscar.getEmail() + AbstractUsuarioMB.SIMBOLO_PORCETAGEM);
+            } else if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_NOME)) {
+                ps.setString(1, usuarioParaBuscar.getNome() + AbstractUsuarioMB.SIMBOLO_PORCETAGEM);
             }
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -82,6 +83,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 usuario.setSenha(rs.getString("senha"));
                 usuario.setAdmin(rs.getBoolean("admin"));
                 usuario.setSenha(rs.getString("senha"));
+                usuario.setEndereco(populaObjEndereco(rs));
 
                 usuarios.add(usuario);
             }
@@ -99,7 +101,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
     }
 
     public List<Usuario> retornaListaDeUsuarios() {
-        List<Usuario> usuarios = new ArrayList<Usuario>();
+        List<Usuario> usuarios = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
@@ -120,14 +122,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
                 usuario.setNome(rs.getString("nome"));
                 usuario.setId(rs.getInt("id"));
                 usuario.setSenha(rs.getString("senha"));
-                usuario.getEndereco().setId(rs.getInt("id_endereco"));
-                usuario.getEndereco().setBairro(rs.getString("bairro"));
-                usuario.getEndereco().setCidade(rs.getString("cidade"));
-                usuario.getEndereco().setEstado(rs.getString("estado"));
-                usuario.getEndereco().setComplemento(rs.getString("complemento"));
-                usuario.getEndereco().setNumero(rs.getInt("numero"));
-                usuario.getEndereco().setCep(rs.getString("cep"));
-                usuario.getEndereco().setLogradouro(rs.getString("logradouro"));
+                usuario.setEndereco(populaObjEndereco(rs));
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {

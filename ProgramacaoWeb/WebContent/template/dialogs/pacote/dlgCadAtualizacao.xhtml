@@ -16,35 +16,35 @@
 				<p:panelGrid columns="2" styleClass="semBorda">
 					<p:outputLabel value="Pacote:" />
 					<p:outputLabel
-						value="#{pacoteController.pacoteSelecionado.codigoRastreio}" />
+						value="#{pacoteMB.pacoteSelecionado.codigoRastreio}" />
 					<p:outputLabel value="Status:" />
 					<p:selectOneMenu
-						value="#{pacoteController.novaAtualizacao.status.id}"
+						value="#{pacoteMB.novaAtualizacao.status.id}"
 						required="true" requiredMessage="Selecione o status">
 						<f:selectItem noSelectionOption="true"
 							itemLabel="Selecione o status" />
 						<f:selectItems
-							value="#{statusPacoteController.retornaListaDeStatus()}"
+							value="#{statusPacoteMB.retornaListaDeStatus()}"
 							var="status" itemValue="#{status.id}"
 							itemLabel="#{status.descricao}" />
 						<p:ajax event="change" update="formCadAtualizacao"
-							listener="#{pacoteController.renderizaLocalizacao()}" />
+							listener="#{pacoteMB.renderizaLocalizacao()}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="Local:"
-						rendered="#{pacoteController.renderizaLocalizacao()}" />
+						rendered="#{pacoteMB.renderizaLocalizacao()}" />
 					<p:inputText style="width: 100%;"
-						value="#{pacoteController.novaAtualizacao.localizacao}"
+						value="#{pacoteMB.novaAtualizacao.localizacao}"
 						required="true" requiredMessage="Insira o local da atualização"
-						rendered="#{pacoteController.renderizaLocalizacao()}" />
+						rendered="#{pacoteMB.renderizaLocalizacao()}" />
 					<p:outputLabel value="Observação:" />
 					<p:inputTextarea style="width: 100%;"
-						value="#{pacoteController.novaAtualizacao.observacao}" />
+						value="#{pacoteMB.novaAtualizacao.observacao}" />
 				</p:panelGrid>
 				<br />
 				<div align="center">
 					<p:panelGrid columns="2" styleClass="semBorda">
 						<b:commandButton ajax="true"
-							actionListener="#{pacoteController.cadastrarNovaAtualizacao()}"
+							actionListener="#{pacoteMB.cadastrarNovaAtualizacao()}"
 							style="background: #0099ff; color:white;" value="Salvar"
 							update="msgCadAtualizacao" />
 						<b:button onclick="PF('dlgCadAtualizacao').hide();" look="danger"

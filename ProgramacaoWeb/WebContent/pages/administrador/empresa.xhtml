@@ -15,13 +15,13 @@
 					<p:outputLabel value="Gerenciar Empresas" style="font-size: 1.7em;" />
 				</div>
 				<p:commandButton value="Cadastrar" title="Cadastrar nova empresa"
-					ajax="true" action="#{empresaController.abrirDialogCadEmpresa()}" />
+					ajax="true" action="#{empresaMB.abrirDialogCadEmpresa()}" />
 				<br />
 				<br />
 				<p:dataTable paginator="true" paginatorPosition="bottom"
 					id="tbEmpresa" var="empresa"
 					emptyMessage="Nenhuma empresa encontrada"
-					value="#{empresaController.retornaListaEmpresa()}">
+					value="#{empresaMB.retornaListaEmpresa()}">
 
 					<p:column headerText="CNPJ">
 						<div align="center">

@@ -16,24 +16,24 @@
 				<p:panelGrid styleClass="semBorda" columns="2">
 					<p:outputLabel value="Status:" />
 					<p:selectOneMenu
-						value="#{pacoteController.atualizacaoSelecionada.status.id}">
+						value="#{pacoteMB.atualizacaoSelecionada.status.id}">
 						<f:selectItems
-							value="#{statusPacoteController.retornaListaDeStatus()}"
+							value="#{statusPacoteMB.retornaListaDeStatus()}"
 							var="status" itemLabel="#{status.descricao}"
 							itemValue="#{status.id}" />
 						<p:ajax event="change" update="formEditarAtualizacao"
-							listener="#{pacoteController.renderizaLocalizacaoEditar()}" />
+							listener="#{pacoteMB.renderizaLocalizacaoEditar()}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="Local:"
-						rendered="#{pacoteController.renderizaLocalizacaoEditar()}" />
+						rendered="#{pacoteMB.renderizaLocalizacaoEditar()}" />
 					<p:inputText
-						rendered="#{pacoteController.renderizaLocalizacaoEditar()}"
-						value="#{pacoteController.atualizacaoSelecionada.localizacao}"
+						rendered="#{pacoteMB.renderizaLocalizacaoEditar()}"
+						value="#{pacoteMB.atualizacaoSelecionada.localizacao}"
 						required="true" requiredMessage="Informe o local da atualização"
 						style="width: 100%;" />
 					<p:outputLabel value="Observação:" />
 					<p:inputTextarea
-						value="#{pacoteController.atualizacaoSelecionada.observacao}"
+						value="#{pacoteMB.atualizacaoSelecionada.observacao}"
 						style="width: 100%;" />
 				</p:panelGrid>
 				<br />
@@ -41,7 +41,7 @@
 					<p:panelGrid columns="2" styleClass="semBorda">
 						<b:commandButton value="Salvar" ajax="true"
 							style="background: #0099ff; color:white;"
-							action="#{pacoteController.editarAtualizacao()}"
+							action="#{pacoteMB.editarAtualizacao()}"
 							update="msgEditarAtualizacao" />
 						<b:button look="danger"
 							onclick="PF('dlgEditarAtualizacao').hide()" value="Fechar" />

@@ -15,12 +15,12 @@
 				<p:growl id="msgCadStatus" showDetail="true"/>
 				<p:panelGrid columns="2" styleClass="semBorda">
 					<p:outputLabel value="Descrição"/>
-					<p:inputText value="#{statusPacoteController.statusParaCadastrar.descricao}" required="true" requiredMessage="Insira a descrição do status"/>
+					<p:inputText value="#{statusPacoteMB.statusParaCadastrar.descricao}" required="true" requiredMessage="Insira a descrição do status"/>
 				</p:panelGrid>
 				<br/>
 				<p:panelGrid columns="2" styleClass="semBorda">
 					<b:commandButton value="Salvar" ajax="true" style="background: #0099ff; color:white;"
-							action="#{statusPacoteController.cadastrarStatus()}" update="msgCadStatus"/>
+                                     action="#{statusPacoteMB.cadastrarStatus()}" update="msgCadStatus"/>
 							
 					<b:button value="Fechar" onclick="PF('dlgCadStatus').hide()" look="danger"/>
 				</p:panelGrid>

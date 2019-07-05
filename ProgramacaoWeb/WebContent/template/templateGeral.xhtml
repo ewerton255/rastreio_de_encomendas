@@ -63,17 +63,17 @@
             <div class="login" align="center">
                 <h:outputText value="Bem Vindo(a), " style="color: white;"/>
                 <h:outputText
-                        value="#{!usuarioController.verificaSeExisteSessaoAtiva() ? 'Visitante' : usuarioController.retornaNomeUsuarioLogado()}"
+                        value="#{!usuarioMB.verificaSeExisteSessaoAtiva() ? 'Visitante' : usuarioMB.retornaNomeUsuarioLogado()}"
                         style="font-weight: bold; color: white"/>
                 <br/><br/>
                 <b:commandButton type="button" value="Entrar" styleClass="btn-custom"
                                  onclick="PF('dlgLogin').show()" style="width: 70%;"
                                  update="formLogin" ajax="true"
-                                 rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}"/>
+                                 rendered="#{!usuarioMB.verificaSeExisteSessaoAtiva()}"/>
 
                 <b:commandButton value="Sair" ajax="true" look="info" style="width: 70%;" styleClass="btn-custom"
-                                 action="#{usuarioController.deslogar()}" update="@this"
-                                 rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"/>
+                                 action="#{usuarioMB.deslogar()}" update="@this"
+                                 rendered="#{usuarioMB.verificaSeExisteSessaoAtiva()}"/>
             </div>
         </h:form>
 
@@ -101,7 +101,7 @@
                                        value="Contato"/>
                     </li>
 
-                    <c:if test="#{usuarioController.verificaSeExisteSessaoAtiva()}">
+                    <c:if test="#{usuarioMB.verificaSeExisteSessaoAtiva()}">
                         <li class="item">
                             <h:commandLink
                                     action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}"

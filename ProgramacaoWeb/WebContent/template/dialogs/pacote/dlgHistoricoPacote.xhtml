@@ -13,7 +13,7 @@
 		width="800">
 		<div>
 			<h:form id="formHistoricoPacote">
-				<p:dataTable value="#{pacoteController.retornaListaDeHistorico()}"
+				<p:dataTable value="#{pacoteMB.retornaListaDeHistorico()}"
 					emptyMessage="Nenhuma atualização encontrada" var="atualizacao"
 					paginator="true" paginatorPosition="bottom">
 
@@ -41,9 +41,9 @@
 					<p:column headerText="Ações" style="width: 15%;">
 						<div align="center">
 							<b:commandButton icon="edit" style="color: orange; border:none;" ajax="true"
-								action="#{pacoteController.abrirDialogEditarAtualizacao(atualizacao)}" title="Editar"/>
+                                             action="#{pacoteMB.abrirDialogEditarAtualizacao(atualizacao)}" title="Editar"/>
 							<b:commandButton style="color: red; border:none;" ajax="true"
-								action="#{pacoteController.abrirDlgExcluirAtualizacao(atualizacao)}" title="Excluir">
+                                             action="#{pacoteMB.abrirDlgExcluirAtualizacao(atualizacao)}" title="Excluir">
 								<b:iconAwesome name="times-circle"/>
 							</b:commandButton>
 						</div>
