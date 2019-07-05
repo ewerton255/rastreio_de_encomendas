@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class ConnectionFactory {
 
 	private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-	private static final String USER = "postgres";
-	private static final String PASSWORD = "post";
+	private static final String USER = "xxx";
+	private static final String PASSWORD = "xxx";
 	
 	public static Connection getConnection() {
 		Connection connection = null;
