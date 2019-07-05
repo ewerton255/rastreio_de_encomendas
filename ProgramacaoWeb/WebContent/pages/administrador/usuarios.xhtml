@@ -11,10 +11,9 @@
     <f:viewAction action="#{usuarioController.carregaDadosUsuario}"/>
 </f:metadata>
 <body>
-<ui:composition template="/template/templateGeral.xhtml">
+<ui:composition template="/pages/administrador/administracao.xhtml">
 
-    <ui:define name="conteudo">
-
+    <ui:define name="page">
         <h:form id="formListUsuarios">
 
             <p:growl id="msgUsuarios" showDetail="true"/>
@@ -23,30 +22,30 @@
 
                 <h:outputLabel value="Buscar:" for="busca"/>
 
-                <p:selectOneMenu value="#{usuarioController.tipoDeBusca}" id="busca" required="true"
+                <b:selectOneMenu value="#{usuarioController.tipoDeBusca}" id="busca" required="true"
                                  requiredMessage="Selecione o tipo de busca">
                     <f:selectItem itemLabel="Tipo de busca" itemValue="#{null}" noSelectionOption="true"/>
                     <f:selectItem itemLabel="Nome" itemValue="N"/>
                     <f:selectItem itemLabel="E-mail" itemValue="E"/>
                     <p:ajax event="change" update="formListUsuarios"/>
-                </p:selectOneMenu>
+                </b:selectOneMenu>
 
-                <p:inputText value="#{usuarioController.usuarioBuscar.nome}"
+                <b:inputText value="#{usuarioController.usuarioBuscar.nome}"
                              rendered="#{usuarioController.tipoDeBusca eq 'N'}" required="true"
                              requiredMessage="Insira o nome"/>
 
-                <p:inputText validator="EmailValidator" value="#{usuarioController.usuarioBuscar.email}"
+                <b:inputText validator="EmailValidator" value="#{usuarioController.usuarioBuscar.email}"
                              rendered="#{usuarioController.tipoDeBusca eq 'E'}" required="true"
                              requiredMessage="Insira o E-mail">
                     <p:ajax event="blur" update="formListUsuarios"/>
-                </p:inputText>
+                </b:inputText>
 
                 <b:commandButton iconAwesome="fa-search" title="Buscar" style="background: transparent;" ajax="true"
                                  action="#{usuarioController.buscarUsuarios}" update="msgUsuarios"/>
 
                 <b:commandButton value="Limpar" title="Limpar" style="background: transparent;"
                                  action="#{usuarioController.limparBuscaUsuario}"
-                                 ajax="true"/>
+                                 ajax="true" process="@this"/>
             </p:panelGrid>
 
             <br/>
@@ -116,6 +115,12 @@
                     </div>
                 </p:column>
             </p:dataTable>
+
+            <br/>
+
+            <div align="center">
+                <p:commandButton value="Gerar Relatorio" action="#{reportController.gerarRelatorioUsuarios}" process="@this"/>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>

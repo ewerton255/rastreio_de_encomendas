@@ -134,7 +134,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getNome());
+            ps.setString(1, usuario.getNome().toUpperCase());
             ps.setString(2, usuario.getEmail().toLowerCase());
             ps.setString(3, usuario.getSenha().toLowerCase());
             ps.setBoolean(4, usuario.getAdmin());
@@ -194,7 +194,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getNome());
+            ps.setString(1, usuario.getNome().toUpperCase());
             ps.setString(2, usuario.getEmail().toLowerCase());
             ps.setString(3, usuario.getSenha().toLowerCase());
             ps.setBoolean(4, usuario.getAdmin());
@@ -226,7 +226,7 @@ public class UsuarioDAO extends AbstractUsuarioController {
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getEmail());
+            ps.setString(1, usuario.getEmail().toLowerCase());
             rs = ps.executeQuery();
             if (rs.next()) {
                 existe = true;

@@ -13,21 +13,19 @@ public class PageUtil {
 	public static void redirecionarParaPaginaPrincipal() throws IOException {
 		FacesContext context  = FacesContext.getCurrentInstance();
 		String url = context.getExternalContext().getRequestContextPath();
-		try {
-			context.getExternalContext().redirect(url+"/"+"index.faces");
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
+		context.getExternalContext().redirect(url+"/"+"index.faces");
+	}
+
+	public static void redirecionarParaPaginaPrincipalAdministrador() throws IOException {
+		FacesContext context  = FacesContext.getCurrentInstance();
+		String url = context.getExternalContext().getRequestContextPath();
+		context.getExternalContext().redirect(url+"/pages/administrador/usuarios.faces");
 	}
 	
 	public static void redirecionarParaPage(String page) throws IOException {
 		FacesContext context  = FacesContext.getCurrentInstance();
 		String url = context.getExternalContext().getRequestContextPath();
-		try {
-			context.getExternalContext().redirect(url+"/"+page+".faces");
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
+		context.getExternalContext().redirect(url+"/"+page+".faces");
 	}
 	
 	public static void abrirDialog(String dialog) {

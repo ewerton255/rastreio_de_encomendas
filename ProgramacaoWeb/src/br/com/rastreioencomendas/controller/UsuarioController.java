@@ -38,7 +38,7 @@ public class UsuarioController extends AbstractUsuarioController{
 			SessionUtil.adicionaObjetoUsuarioNaSessao(usuarioLogado);
 			this.user = new Usuario();
 			this.usuarioLogado = usuarioLogado;
-			PageUtil.redirecionarParaPaginaPrincipal();
+			PageUtil.redirecionarParaPaginaPrincipalAdministrador();
 		}else {
 			PageUtil.mensagemDeErro("Usuário ou senha inválido!");
 		}
@@ -70,12 +70,13 @@ public class UsuarioController extends AbstractUsuarioController{
 	}
 	
 	public String retornaNomeUsuarioLogado() {
-		String nome = "";
+		String primeiroNome = "";
 		if(SessionUtil.verificaSeUsuarioEstaNaSessao()) {
 			Usuario usuarioLogado = (Usuario) SessionUtil.recuperaObjetoDaSessao("usuarioLogado");
-			nome = usuarioLogado.getNome();
+			String[] nomes = usuarioLogado.getNome().split(" ");
+			primeiroNome = nomes[0];
 		}
-		return nome;
+		return primeiroNome.toUpperCase();
 	}
 	
 	public void deslogar() throws IOException {

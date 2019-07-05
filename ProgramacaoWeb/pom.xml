@@ -157,6 +157,11 @@
 			<artifactId>tomcat-websocket-api</artifactId>
 			<version>8.0.53</version>
 		</dependency>
+		<dependency>
+			<groupId>jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>3.5.3</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>

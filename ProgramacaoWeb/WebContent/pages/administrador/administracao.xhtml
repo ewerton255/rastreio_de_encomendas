@@ -1,16 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+    <f:viewAction action="#{usuarioController.carregaDadosUsuario}"/>
+</f:metadata>
 <body>
-	<ui:composition template="/template/templateGeral.xhtml">
-		<ui:define name="conteudo">
+<ui:composition template="/template/templateGeral.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <div class="menu-admin">
+                <p:tabMenu>
+                    <p:menuitem value="Usuário" process="@this"
+                                action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}"/>
 
-		</ui:define>
-	</ui:composition>
+                    <p:menuitem value="Pacote" process="@this"
+                                action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}"/>
+
+                    <p:menuitem value="Empresa" process="@this"
+                                action="#{pageUtil.redirecionarParaPage('pages/administrador/empresa')}"/>
+                </p:tabMenu>
+            </div>
+        </h:form>
+
+        <br/>
+
+        <ui:insert name="page">
+
+        </ui:insert>
+    </ui:define>
+</ui:composition>
 </body>
 </html>

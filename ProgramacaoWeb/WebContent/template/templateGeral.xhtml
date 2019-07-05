@@ -48,13 +48,15 @@
         <h:form id="formLogo">
 
             <div class="logo">
-                <h:commandLink action="#{pageUtil.redirecionarParaPaginaPrincipal()}" style="text-decoration: none;">
+                <h:commandLink action="#{pageUtil.redirecionarParaPaginaPrincipal()}">
                     <p:graphicImage value="/resources/imgs/logo_1.png"/>
                 </h:commandLink>
             </div>
         </h:form>
 
-        <h:form id="formLogin" style="display: none;">
+        <br/>
+
+        <h:form id="formLogin">
 
             <p:growl id="msg" showDetail="true"/>
 
@@ -63,36 +65,19 @@
                 <h:outputText
                         value="#{!usuarioController.verificaSeExisteSessaoAtiva() ? 'Visitante' : usuarioController.retornaNomeUsuarioLogado()}"
                         style="font-weight: bold; color: white"/>
-
-                <br/>
-                <p:panelGrid columns="1" styleClass="semBorda"
-                             rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}" style="width: 100%;">
-
-                    <b:dropButton value="Menu" look="info">
-                        <b:navCommandLink value="Usuário"
-                                          action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}"
-                                          ajax="true"/>
-                        <b:navCommandLink value="Pacote"
-                                          action="#{pageUtil.redirecionarParaPage('pages/administrador/pacote')}"
-                                          ajax="true"/>
-                        <b:navCommandLink value="Empresa"
-                                          action="#{pageUtil.redirecionarParaPage('pages/administrador/empresa')}"
-                                          ajax="true"/>
-                    </b:dropButton>
-                </p:panelGrid>
-
-                <b:commandButton type="button" value="Entrar"
-                                 style="width: 70%;" look="info" onclick="PF('dlgLogin').show()"
+                <br/><br/>
+                <b:commandButton type="button" value="Entrar" styleClass="btn-custom"
+                                 onclick="PF('dlgLogin').show()" style="width: 70%;"
                                  update="formLogin" ajax="true"
                                  rendered="#{!usuarioController.verificaSeExisteSessaoAtiva()}"/>
 
-                <b:commandButton value="Sair" ajax="true" look="info" style="width: 100%;"
+                <b:commandButton value="Sair" ajax="true" look="info" style="width: 70%;" styleClass="btn-custom"
                                  action="#{usuarioController.deslogar()}" update="@this"
                                  rendered="#{usuarioController.verificaSeExisteSessaoAtiva()}"/>
             </div>
         </h:form>
 
-        <br/>
+        <br/><br/>
 
         <h:form>
             <nav class="menu-nav">
@@ -118,8 +103,9 @@
 
                     <c:if test="#{usuarioController.verificaSeExisteSessaoAtiva()}">
                         <li class="item">
-                            <h:commandLink action="#{pageUtil.redirecionarParaPage('pages/administrador/administracao')}"
-                                           value="Administração"/>
+                            <h:commandLink
+                                    action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}"
+                                    value="Administração"/>
                         </li>
                     </c:if>
                 </ul>
@@ -145,7 +131,7 @@
         </ul>
     </aside>
 
-    <main class="foto" style="background-image: url('/resources/imgs/background-caminhao.jpg')">
+    <main class="foto">
         <div class="container">
             <ui:insert name="conteudo"></ui:insert>
         </div>
