@@ -25,7 +25,7 @@
                                      required="true" requiredMessage="Insira um e-mail"/>
 						<p:outputLabel value="Senha:"/>
 						<p:password value="#{usuarioMB.usuarioSelecionado.senha}" required="true"
-                                    requiredMessage="Insira uma senha"/>
+                                    requiredMessage="Insira uma senha" redisplay="true"/>
 						<p:outputLabel value="Administrador"/>
 						<p:selectBooleanCheckbox value="#{usuarioMB.usuarioSelecionado.admin}"/>
 					</p:panelGrid>
