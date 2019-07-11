@@ -9,8 +9,10 @@ import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Empresa;
+import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.util.DBUtil;
 
-public class EmpresaDAO {
+public class EmpresaDAO extends DBUtil {
 
     public List<Empresa> retornaListaEmpresa() {
         List<Empresa> lista = new ArrayList<>();
@@ -27,21 +29,28 @@ public class EmpresaDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Empresa empresa = new Empresa();
-                empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setId(rs.getInt("id"));
-                empresa.setNomeFantasma(rs.getString("nome_fantasma"));
-                empresa.setRazaoSocial(rs.getString("razao_social"));
-                empresa.getEndereco().setBairro(rs.getString("bairro"));
-                empresa.getEndereco().setId(rs.getInt("id_endereco"));
-                empresa.getEndereco().setCidade(rs.getString("cidade"));
-                empresa.getEndereco().setComplemento(rs.getString("complemento"));
-                empresa.getEndereco().setNumero(rs.getInt("numero"));
-                empresa.getEndereco().setEstado(rs.getString("estado"));
-                empresa.getEndereco().setLogradouro(rs.getString("logradouro"));
+                Empresa empresa = new Empresa.EmpresaBuilder()
+                        .id(retornaInteiro(rs, "id"))
+                        .cnpj(retornaString(rs, "cnpj"))
+                        .nomeFantasma(retornaString(rs, "nome_fantasma"))
+                        .razaoSocial(retornaString(rs, "razao_social"))
+                        .endereco(new Endereco.EnderecoBuilder()
+                                .id(retornaInteiro(rs, "id_endereco"))
+                                .bairro(retornaString(rs, "bairro"))
+                                .cep(retornaString(rs, "cep"))
+                                .cidade(retornaString(rs, "cidade"))
+                                .logradouro(retornaString(rs, "logradouro"))
+                                .complemento(retornaString(rs, "complemento"))
+                                .numero(retornaInteiro(rs, "numero"))
+                                .estado(retornaString(rs, "estado"))
+                                .build())
+                        .build();
 
                 lista.add(empresa);
             }
+
+            ps.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

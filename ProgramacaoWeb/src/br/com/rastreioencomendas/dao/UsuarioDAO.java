@@ -9,10 +9,10 @@ import java.util.List;
 
 import br.com.rastreioencomendas.controller.AbstractUsuarioMB;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
-import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Usuario;
+import br.com.rastreioencomendas.util.DBUtil;
 
-public class UsuarioDAO extends AbstractUsuarioDAO {
+public class UsuarioDAO extends DBUtil {
 
     public Usuario login(Usuario usuario) {
         Usuario usuarioLogado = null;
@@ -27,14 +27,15 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
             ps.setString(2, usuario.getSenha().toLowerCase());
             rs = ps.executeQuery();
             if (rs.next()) {
-                usuarioLogado = new Usuario();
-                usuarioLogado.setEmail(rs.getString("email"));
-                usuarioLogado.setNome(rs.getString("nome"));
-                usuarioLogado.setAdmin(rs.getBoolean("admin"));
-                usuarioLogado.setId(rs.getInt("id"));
-                usuarioLogado.setSenha(rs.getString("senha"));
+                usuarioLogado = new Usuario.UsuarioBuilder()
+                        .email(retornaString(rs, "email"))
+                        .nome(retornaString(rs, "nome"))
+                        .admin(retornaBoolean(rs, "admin"))
+                        .id(retornaInteiro(rs, "id"))
+                        .senha(retornaString(rs, "senha"))
+                        .build();
             }
-
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -76,18 +77,18 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setId(rs.getInt("id"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
-                usuario.setAdmin(rs.getBoolean("admin"));
-                usuario.setSenha(rs.getString("senha"));
-                usuario.setEndereco(populaObjEndereco(rs));
-
+                Usuario usuario = new Usuario.UsuarioBuilder()
+                        .id(retornaInteiro(rs, "id"))
+                        .nome(retornaString(rs, "nome"))
+                        .email(retornaString(rs, "emaill"))
+                        .senha(retornaString(rs, "senha"))
+                        .admin(retornaBoolean(rs, "admin"))
+                        .senha(retornaString(rs, "senha"))
+                        .endereco(populaObjEndereco(rs))
+                        .build();
                 usuarios.add(usuario);
             }
-
+            ps.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -116,15 +117,17 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setAdmin(rs.getBoolean("admin"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setId(rs.getInt("id"));
-                usuario.setSenha(rs.getString("senha"));
-                usuario.setEndereco(populaObjEndereco(rs));
+                Usuario usuario = new Usuario.UsuarioBuilder()
+                        .id(retornaInteiro(rs, "id"))
+                        .nome(retornaString(rs, "nome"))
+                        .email(retornaString(rs, "email"))
+                        .senha(retornaString(rs, "senha"))
+                        .admin(retornaBoolean(rs, "admin"))
+                        .endereco(populaObjEndereco(rs))
+                        .build();
                 usuarios.add(usuario);
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -168,7 +171,7 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
             ps.setInt(8, usuario.getEndereco().getId());
             ps.executeUpdate();
             conn.commit();
-
+            ps.close();
             editou = true;
 
         } catch (SQLException e) {
@@ -192,18 +195,16 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
 
         try {
             sql = "DELETE FROM rastreioencomendas.usuario WHERE id = ?";
-
             ps = conn.prepareStatement(sql);
             ps.setInt(1, usuario.getId());
             ps.executeUpdate();
 
             sql = "DELETE FROM rastreioencomendas.endereco WHERE id = ?";
-
             ps = conn.prepareStatement(sql);
             ps.setInt(1, usuario.getEndereco().getId());
             ps.executeUpdate();
             conn.commit();
-
+            ps.close();
             excluiu = true;
 
         } catch (SQLException e) {
@@ -253,11 +254,10 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
                     ps.setInt(5, idEndereco);
                     ps.executeUpdate();
                     conn.commit();
-
                     cadastrou = true;
                 }
             }
-
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -284,6 +284,7 @@ public class UsuarioDAO extends AbstractUsuarioDAO {
             if (rs.next()) {
                 existe = true;
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

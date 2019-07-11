@@ -9,8 +9,9 @@ import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Frete;
+import br.com.rastreioencomendas.util.DBUtil;
 
-public class FreteDAO {
+public class FreteDAO extends DBUtil {
 
     public List<Frete> retornaListaDeFretes() {
         List<Frete> lista = new ArrayList<>();
@@ -23,13 +24,14 @@ public class FreteDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Frete frete = new Frete();
-                frete.setId(rs.getInt("id"));
-                frete.setQtdDias(rs.getInt("qtd_dias"));
-                frete.setTipo(rs.getString("tipo"));
-
+                Frete frete = new Frete.FreteBuilder()
+                        .id(retornaInteiro(rs, "id"))
+                        .qtdDias(retornaInteiro(rs, "qtd_dias"))
+                        .tipo(retornaString(rs, "tipo"))
+                        .build();
                 lista.add(frete);
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -39,7 +41,6 @@ public class FreteDAO {
                 e.printStackTrace();
             }
         }
-
         return lista;
     }
 

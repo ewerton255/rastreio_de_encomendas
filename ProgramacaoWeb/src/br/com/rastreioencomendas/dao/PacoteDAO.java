@@ -4,16 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
-import br.com.rastreioencomendas.model.HistoricoModel;
+import br.com.rastreioencomendas.model.Frete;
+import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
+import br.com.rastreioencomendas.model.StatusPacote;
+import br.com.rastreioencomendas.util.DBUtil;
 
-public class PacoteDAO {
+public class PacoteDAO extends DBUtil {
 
     public List<Pacote> retornaListaDePacotes() {
         List<Pacote> lista = new ArrayList<>();
@@ -27,18 +29,21 @@ public class PacoteDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Pacote pacote = new Pacote();
-                pacote.setCodigoRastreio(rs.getString("codigo_rastreio"));
-                pacote.setDataPostado(rs.getDate("data_postado"));
-                pacote.setCpfCnpjDestinatario(rs.getString("cpf_cnpj_destinatario"));
-                pacote.setDescricao(rs.getString("descricao"));
-                pacote.setId(rs.getInt("id"));
-                pacote.getTipoFrete().setTipo(rs.getString("tipo_frete"));
-                pacote.setPrevisaoEntrega(rs.getDate("previsao_entrega"));
-                pacote.setPeso(rs.getDouble("peso"));
-
+                Pacote pacote = new Pacote.PacoteBuilder()
+                        .id(retornaInteiro(rs, "id"))
+                        .codigoRastreio(retornaString(rs, "codigo_rastreio"))
+                        .dataPostado(retornaDate(rs, "data_postado"))
+                        .cpfCnpjDestinatario(retornaString(rs, "cpf_cnpj_destinatario"))
+                        .descricao(retornaString(rs, "descricao"))
+                        .previsaoEntrega(retornaDate(rs, "previsao_entrega"))
+                        .peso(retornaDouble(rs, "peso"))
+                        .tipoFrete(new Frete.FreteBuilder()
+                                .tipo(retornaString(rs, "tipo_frete"))
+                                .build())
+                        .build();
                 lista.add(pacote);
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -48,7 +53,6 @@ public class PacoteDAO {
                 e.printStackTrace();
             }
         }
-
         return lista;
     }
 
@@ -65,6 +69,7 @@ public class PacoteDAO {
             if (rs.next()) {
                 existe = true;
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -78,7 +83,7 @@ public class PacoteDAO {
         return existe;
     }
 
-    public Boolean cadastrarAtualizacao(Pacote pacote, HistoricoModel atualizacao) {
+    public Boolean cadastrarAtualizacao(Pacote pacote, HistoricoPacote atualizacao) {
         Boolean cadastrou = false;
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
@@ -93,7 +98,7 @@ public class PacoteDAO {
             ps.setString(4, atualizacao.getLocalizacao());
             ps.executeUpdate();
             conn.commit();
-
+            ps.close();
             cadastrou = true;
 
         } catch (SQLException e) {
@@ -105,11 +110,10 @@ public class PacoteDAO {
                 e.printStackTrace();
             }
         }
-
         return cadastrou;
     }
 
-    public Boolean excluirAtualizacao(HistoricoModel atualizacao) {
+    public Boolean excluirAtualizacao(HistoricoPacote atualizacao) {
         Boolean excluiu = false;
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
@@ -120,7 +124,7 @@ public class PacoteDAO {
             ps.setInt(1, atualizacao.getId());
             ps.executeUpdate();
             conn.commit();
-
+            ps.close();
             excluiu = true;
 
         } catch (SQLException e) {
@@ -132,11 +136,10 @@ public class PacoteDAO {
                 e.printStackTrace();
             }
         }
-
         return excluiu;
     }
 
-    public Boolean editarAtualizacao(HistoricoModel atualizacao) {
+    public Boolean editarAtualizacao(HistoricoPacote atualizacao) {
         Boolean editou = false;
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
@@ -150,7 +153,7 @@ public class PacoteDAO {
             ps.setInt(4, atualizacao.getId());
             ps.executeUpdate();
             conn.commit();
-
+            ps.close();
             editou = true;
 
         } catch (SQLException e) {
@@ -162,15 +165,15 @@ public class PacoteDAO {
                 e.printStackTrace();
             }
         }
-
         return editou;
     }
 
-    public List<HistoricoModel> retornalIstaParaRastreio(String codigo) {
-        List<HistoricoModel> lista = new ArrayList<>();
+    public List<HistoricoPacote> retornaListaDeHistorico(String codigo) {
+        List<HistoricoPacote> lista = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String sql = "SELECT hp.id_pacote, hp.datahora_atualizacao, hp.observacao, st.id as id_status,"
                 + " st.descricao as descricao_status, hp.localizacao " + "FROM rastreioencomendas.historico_pacote hp "
                 + "JOIN rastreioencomendas.pacote P ON p.id = hp.id_pacote "
@@ -181,19 +184,21 @@ public class PacoteDAO {
             ps = conn.prepareStatement(sql);
             ps.setString(1, codigo.toUpperCase());
             rs = ps.executeQuery();
-            while (rs.next()) {
-                HistoricoModel historico = new HistoricoModel();
-                historico.setDataHoraAtualizacao(rs.getDate("datahora_atualizacao"));
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                historico.setDataHoraAtualizacaoFormatados(
-                        sdf.format(rs.getTimestamp("datahora_atualizacao").getTime()));
-                historico.setObservacao(rs.getString("observacao"));
-                historico.setLocalizacao(rs.getString("localizacao"));
-                historico.getStatus().setId(rs.getInt("id_status"));
-                historico.getStatus().setDescricao(rs.getString("descricao_status"));
 
+            while (rs.next()) {
+                HistoricoPacote historico = new HistoricoPacote.HistoricoPacoteBuilder()
+                        .observacao(retornaString(rs, "observacao"))
+                        .localizacao(retornaString(rs, "localizacao"))
+                        .dataHoraAtualizacao(retornaDate(rs, "datahora_atualizacao"))
+                        .dataHoraAtualizacaoFormatados(sdf.format(retornaDate(rs, "datahora_atualizacao")))
+                        .status(new StatusPacote.StatusPacoteBuilder()
+                                .id(retornaInteiro(rs, "id_status"))
+                                .descricao(retornaString(rs, "descricao_status"))
+                                .build())
+                        .build();
                 lista.add(historico);
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -203,7 +208,6 @@ public class PacoteDAO {
                 e.printStackTrace();
             }
         }
-
         return lista;
     }
 
@@ -228,12 +232,11 @@ public class PacoteDAO {
 
             rs = ps.executeQuery();
             if (rs.next()) {
-                idEndereco = rs.getInt("id");
+                idEndereco = retornaInteiro(rs, "id");
             }
 
             sql = "INSERT INTO rastreioencomendas.pacote(codigo_rastreio, descricao, peso, cpf_cnpj_destinatario, id_frete, data_postado, id_endereco_destino)"
                     + " VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?) RETURNING id;";
-
             ps = conn.prepareStatement(sql);
             ps.setString(1, pacote.getCodigoRastreio().toUpperCase());
             ps.setString(2, pacote.getDescricao());
@@ -243,17 +246,16 @@ public class PacoteDAO {
             ps.setInt(6, idEndereco);
             rs = ps.executeQuery();
             if (rs.next()) {
-                idPacote = rs.getInt("id");
+                idPacote = retornaInteiro(rs, "id");
             }
 
             sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, id_status, datahora_atualizacao) VALUES(?, ?, CURRENT_TIMESTAMP)";
-
             ps = conn.prepareStatement(sql);
             ps.setInt(1, idPacote);
             ps.setInt(2, 1);
             ps.executeUpdate();
             conn.commit();
-
+            ps.close();
             cadastrou = true;
 
         } catch (SQLException e) {
@@ -265,47 +267,6 @@ public class PacoteDAO {
                 e.printStackTrace();
             }
         }
-
         return cadastrou;
-    }
-
-    public List<HistoricoModel> retornaListaDeHistorico(Integer idPacote) {
-        List<HistoricoModel> lista = new ArrayList<>();
-        Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
-        ResultSet rs;
-        String sql = "SELECT hp.id, hp.datahora_atualizacao, hp.observacao, hp.localizacao,"
-                + "s.descricao as status, s.id as id_status " + "FROM rastreioencomendas.historico_pacote hp "
-                + "JOIN rastreioencomendas.status s ON s.id = hp.id_status " + "WHERE hp.id_pacote = ?";
-
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, idPacote);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                HistoricoModel atualizacao = new HistoricoModel();
-                atualizacao.setId(rs.getInt("id"));
-                atualizacao.setDataHoraAtualizacao(rs.getDate("datahora_atualizacao"));
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                atualizacao.setDataHoraAtualizacaoFormatados(
-                        sdf.format(rs.getTimestamp("datahora_atualizacao").getTime()));
-                atualizacao.setObservacao(rs.getString("observacao"));
-                atualizacao.setLocalizacao(rs.getString("localizacao"));
-                atualizacao.getStatus().setDescricao(rs.getString("status"));
-                atualizacao.getStatus().setId(rs.getInt("id_status"));
-
-                lista.add(atualizacao);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return lista;
     }
 }

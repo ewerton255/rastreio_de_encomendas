@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import br.com.rastreioencomendas.dao.PacoteDAO;
-import br.com.rastreioencomendas.model.HistoricoModel;
+import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
@@ -19,19 +19,16 @@ import br.com.rastreioencomendas.util.ViaCEPException;
 public class PacoteMB extends AbstractPacoteMB {
 
     private PacoteDAO pacoteDAO = new PacoteDAO();
-    private Pacote pacoteParaCadastrar;
-    private HistoricoModel novaAtualizacao = new HistoricoModel();
-    private HistoricoModel atualizacaoSelecionada = new HistoricoModel();
+    private Pacote pacoteParaCadastrar = new Pacote.PacoteBuilder().build();
+    private HistoricoPacote novaAtualizacao = new HistoricoPacote.HistoricoPacoteBuilder().build();
+    private HistoricoPacote atualizacaoSelecionada = new HistoricoPacote.HistoricoPacoteBuilder().build();
     private String tipoDocumento;
-    private Pacote pacoteSelecionado;
-    private Pacote pacoteParaBuscar;
-    private List<HistoricoModel> listaHistoricoRastreio;
+    private Pacote pacoteSelecionado = new Pacote.PacoteBuilder().build();
+    private Pacote pacoteParaBuscar = new Pacote.PacoteBuilder().build();
+    private List<HistoricoPacote> listaHistoricoRastreio = new ArrayList<>();
 
     public PacoteMB() {
-        this.pacoteSelecionado = new Pacote();
-        this.pacoteParaCadastrar = new Pacote();
-        this.listaHistoricoRastreio = new ArrayList<>();
-        this.pacoteParaBuscar = new Pacote();
+
     }
 
     public String gerarCodigoRastreio() {
@@ -68,12 +65,12 @@ public class PacoteMB extends AbstractPacoteMB {
     }
 
     public void carregaDadosPageRastrear() {
-        this.pacoteParaBuscar = new Pacote();
+        this.pacoteParaBuscar = new Pacote.PacoteBuilder().build();
         this.listaHistoricoRastreio = new ArrayList<>();
     }
 
     public void buscarPacote() {
-        this.listaHistoricoRastreio = pacoteDAO.retornalIstaParaRastreio(pacoteParaBuscar.getCodigoRastreio());
+        this.listaHistoricoRastreio = pacoteDAO.retornaListaDeHistorico(pacoteParaBuscar.getCodigoRastreio());
         if (listaHistoricoRastreio.size() == 0) {
             PageUtil.mensagemDeErro(MENSAGEM_NENHUM_RESULTADO_ENCONTRADO);
         }
@@ -88,7 +85,7 @@ public class PacoteMB extends AbstractPacoteMB {
     }
 
     public void abrirDialogCadastroPacote() {
-        this.pacoteParaCadastrar = new Pacote();
+        this.pacoteParaCadastrar = new Pacote.PacoteBuilder().build();
         this.tipoDocumento = null;
         PageUtil.abrirDialog(DIALOG_CADASTRO_PACOTE);
         PageUtil.atualizarComponente(FORM_CADASTRO_PACOTE);
@@ -155,15 +152,15 @@ public class PacoteMB extends AbstractPacoteMB {
         PageUtil.abrirDialog(DIALOG_HISTORICO_PACOTES);
     }
 
-    public List<HistoricoModel> retornaListaDeHistorico() {
-        List<HistoricoModel> lista = new ArrayList<>();
+    public List<HistoricoPacote> retornaListaDeHistorico() {
+        List<HistoricoPacote> lista = new ArrayList<>();
         if (this.pacoteSelecionado.getCodigoRastreio() != null) {
-            lista = pacoteDAO.retornaListaDeHistorico(this.pacoteSelecionado.getId());
+            lista = pacoteDAO.retornaListaDeHistorico(this.pacoteSelecionado.getCodigoRastreio());
         }
         return lista;
     }
 
-    public void abrirDlgExcluirAtualizacao(HistoricoModel atualizacao) {
+    public void abrirDlgExcluirAtualizacao(HistoricoPacote atualizacao) {
         this.atualizacaoSelecionada = atualizacao;
         PageUtil.abrirDialog(DIALOG_EXCLUSAO_ATUALIZACAO_);
         PageUtil.atualizarComponente(FORM_EXCLUSAO_ATUALIZACAO);
@@ -181,12 +178,12 @@ public class PacoteMB extends AbstractPacoteMB {
 
     public void abrirDialogCadastroAtualizacao(Pacote pacote) {
         this.pacoteSelecionado = pacote;
-        this.novaAtualizacao = new HistoricoModel();
+        this.novaAtualizacao = new HistoricoPacote.HistoricoPacoteBuilder().build();
         PageUtil.atualizarComponente(FORM_CADASTRO_ATUALIZACAO);
         PageUtil.abrirDialog(DIALOG_CADASTRO_ATUALIZACAO);
     }
 
-    public void abrirDialogEditarAtualizacao(HistoricoModel atualizacao) {
+    public void abrirDialogEditarAtualizacao(HistoricoPacote atualizacao) {
         this.atualizacaoSelecionada = atualizacao;
         PageUtil.abrirDialog(DIALOG_EDITAR_ATUALIZACAO);
         PageUtil.atualizarComponente(FORM_EDITAR_ATUALIZACAO);
@@ -261,7 +258,7 @@ public class PacoteMB extends AbstractPacoteMB {
         return pacoteSelecionado;
     }
 
-    public List<HistoricoModel> getListaHistoricoRastreio() {
+    public List<HistoricoPacote> getListaHistoricoRastreio() {
         return listaHistoricoRastreio;
     }
 
@@ -269,11 +266,12 @@ public class PacoteMB extends AbstractPacoteMB {
         return pacoteParaBuscar;
     }
 
-    public HistoricoModel getNovaAtualizacao() {
+    public HistoricoPacote getNovaAtualizacao() {
         return novaAtualizacao;
     }
 
-    public HistoricoModel getAtualizacaoSelecionada() {
+    public HistoricoPacote getAtualizacaoSelecionada() {
         return atualizacaoSelecionada;
     }
+
 }

@@ -17,15 +17,15 @@ import br.com.rastreioencomendas.util.PageUtil;
 public class StatusPacoteMB extends AbstractStatusPacoteMB{
 
 	StatusPacoteDAO statusPacoteDAO = new StatusPacoteDAO();
-	StatusPacote statusParaCadastrar = new StatusPacote();
-	StatusPacote statusSelecionado = new StatusPacote();
+	StatusPacote statusParaCadastrar = new StatusPacote.StatusPacoteBuilder().build();
+	StatusPacote statusSelecionado = new StatusPacote.StatusPacoteBuilder().build();
 	
 	public StatusPacoteMB() {
-		
+
 	}
 	
 	public void abrirDlgCadStatus() {
-		statusParaCadastrar = new StatusPacote();
+		statusParaCadastrar = new StatusPacote.StatusPacoteBuilder().build();
 		PageUtil.abrirDialog(DIALOG_CADASTRO_STATUS);
 		PageUtil.atualizarComponente(FORM_CADASTRO_STATUS);
 	}

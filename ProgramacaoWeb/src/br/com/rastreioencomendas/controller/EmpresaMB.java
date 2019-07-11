@@ -18,14 +18,14 @@ import br.com.rastreioencomendas.util.ViaCepUtil;
 public class EmpresaMB extends AbstractEmpresaMB{
 
 	EmpresaDAO empresaDAO = new EmpresaDAO();
-	Empresa empresaCadastrar = new Empresa();
+	Empresa empresaCadastrar = new Empresa.EmpresaBuilder().build();
 
 	public EmpresaMB() {
 
 	}
 
 	public void abrirDialogCadEmpresa() {
-		empresaCadastrar = new Empresa();
+		empresaCadastrar = new Empresa.EmpresaBuilder().build();
 		PageUtil.abrirDialog(DIALOG_CADASTRO_EMPRESA);
 		PageUtil.atualizarComponente(FORM_CADASTRO_EMPRESA);
 	}
