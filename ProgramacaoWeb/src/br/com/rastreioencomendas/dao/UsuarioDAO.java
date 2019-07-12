@@ -10,6 +10,7 @@ import java.util.List;
 import br.com.rastreioencomendas.controller.AbstractUsuarioMB;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Usuario;
+import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
 import br.com.rastreioencomendas.util.DBUtil;
 
 public class UsuarioDAO extends DBUtil {
@@ -27,7 +28,7 @@ public class UsuarioDAO extends DBUtil {
             ps.setString(2, usuario.getSenha().toLowerCase());
             rs = ps.executeQuery();
             if (rs.next()) {
-                usuarioLogado = new Usuario.UsuarioBuilder()
+                usuarioLogado = new UsuarioBuilder()
                         .email(retornaString(rs, "email"))
                         .nome(retornaString(rs, "nome"))
                         .admin(retornaBoolean(rs, "admin"))
@@ -77,7 +78,7 @@ public class UsuarioDAO extends DBUtil {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                Usuario usuario = new Usuario.UsuarioBuilder()
+                Usuario usuario = new UsuarioBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .nome(retornaString(rs, "nome"))
                         .email(retornaString(rs, "emaill"))
@@ -117,7 +118,7 @@ public class UsuarioDAO extends DBUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Usuario usuario = new Usuario.UsuarioBuilder()
+                Usuario usuario = new UsuarioBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .nome(retornaString(rs, "nome"))
                         .email(retornaString(rs, "email"))

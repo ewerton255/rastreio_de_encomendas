@@ -8,6 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
 import br.com.rastreioencomendas.util.*;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -18,10 +19,10 @@ import br.com.rastreioencomendas.model.Usuario;
 @ManagedBean
 public class UsuarioMB extends AbstractUsuarioMB {
 
-    private Usuario usuarioCadastrar = new Usuario.UsuarioBuilder().build();
+    private Usuario usuarioCadastrar = new UsuarioBuilder().build();
     private Usuario usuarioLogado;
-    private Usuario usuarioSelecionado = new Usuario.UsuarioBuilder().build();
-    private Usuario usuarioBuscar = new Usuario.UsuarioBuilder().build();
+    private Usuario usuarioSelecionado = new UsuarioBuilder().build();
+    private Usuario usuarioBuscar = new UsuarioBuilder().build();
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private String tipoDeBusca;
@@ -35,7 +36,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
 
         if (usuarioLogado != null) {
             SessionUtil.adicionaObjetoUsuarioNaSessao(usuarioLogado);
-            this.usuarioCadastrar = new Usuario.UsuarioBuilder().build();
+            this.usuarioCadastrar = new UsuarioBuilder().build();
             this.usuarioLogado = usuarioLogado;
             PageUtil.redirecionarParaPaginaPrincipalAdministrador();
         } else {
@@ -44,7 +45,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
     }
 
     public void abrirDlgCadUsuario() {
-        usuarioCadastrar = new Usuario.UsuarioBuilder().build();
+        usuarioCadastrar = new UsuarioBuilder().build();
         PageUtil.abrirDialog(DIALOG_CADASTRO_USUARIO);
         PageUtil.atualizarComponente(FORM_CADASTRO_USUARIO);
     }
@@ -61,7 +62,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
     }
 
     public void limparBuscaUsuario() {
-        this.usuarioBuscar = new Usuario.UsuarioBuilder().build();
+        this.usuarioBuscar = new UsuarioBuilder().build();
         this.tipoDeBusca = null;
         carregaDadosUsuario();
         PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
@@ -70,7 +71,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
     public void carregaDadosUsuario() {
         this.listaDeUsuarios = usuarioDAO.retornaListaDeUsuarios();
         this.tipoDeBusca = null;
-        this.usuarioBuscar = new Usuario.UsuarioBuilder().build();
+        this.usuarioBuscar = new UsuarioBuilder().build();
         this.tipoDeBusca = null;
     }
 
@@ -156,7 +157,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
                     PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_CADASTRADO_COM_SUCESSO);
                     PageUtil.fecharDialog(DIALOG_CADASTRO_USUARIO);
                     carregaDadosUsuario();
-                    this.usuarioCadastrar = new Usuario.UsuarioBuilder().build();
+                    this.usuarioCadastrar = new UsuarioBuilder().build();
                 } else {
                     PageUtil.mensagemDeErro(MENSAGEM_ERRO_CADASTRO_USUARIO);
                 }

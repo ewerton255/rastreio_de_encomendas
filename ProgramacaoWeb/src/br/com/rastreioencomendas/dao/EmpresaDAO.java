@@ -10,6 +10,8 @@ import java.util.List;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Empresa;
 import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.model.builder.EmpresaBuilder;
+import br.com.rastreioencomendas.model.builder.EnderecoBuilder;
 import br.com.rastreioencomendas.util.DBUtil;
 
 public class EmpresaDAO extends DBUtil {
@@ -29,12 +31,12 @@ public class EmpresaDAO extends DBUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Empresa empresa = new Empresa.EmpresaBuilder()
+                Empresa empresa = new EmpresaBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .cnpj(retornaString(rs, "cnpj"))
                         .nomeFantasma(retornaString(rs, "nome_fantasma"))
                         .razaoSocial(retornaString(rs, "razao_social"))
-                        .endereco(new Endereco.EnderecoBuilder()
+                        .endereco(new EnderecoBuilder()
                                 .id(retornaInteiro(rs, "id_endereco"))
                                 .bairro(retornaString(rs, "bairro"))
                                 .cep(retornaString(rs, "cep"))

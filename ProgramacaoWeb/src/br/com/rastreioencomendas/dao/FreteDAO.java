@@ -9,6 +9,7 @@ import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Frete;
+import br.com.rastreioencomendas.model.builder.FreteBuilder;
 import br.com.rastreioencomendas.util.DBUtil;
 
 public class FreteDAO extends DBUtil {
@@ -24,7 +25,7 @@ public class FreteDAO extends DBUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Frete frete = new Frete.FreteBuilder()
+                Frete frete = new FreteBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .qtdDias(retornaInteiro(rs, "qtd_dias"))
                         .tipo(retornaString(rs, "tipo"))

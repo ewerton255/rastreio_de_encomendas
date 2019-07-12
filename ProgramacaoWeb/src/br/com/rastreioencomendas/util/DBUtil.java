@@ -1,28 +1,31 @@
 package br.com.rastreioencomendas.util;
 
 import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.model.builder.EnderecoBuilder;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBUtil {
 
+    protected Map<Integer, Object> parametrosQuery(){
+        Map<Integer, Object> mapParametros = new HashMap<>();
+        mapParametros.put(1, "a");
+        return mapParametros;
+    }
 
-    protected Endereco populaObjEndereco(ResultSet rs) throws SQLException {
-
-        Endereco endereco = new Endereco.EnderecoBuilder()
-                .id(rs.getInt("id_endereco"))
-                .cep(rs.getString("cep"))
-                .bairro(rs.getString("bairro"))
-                .cidade(rs.getString("cidade"))
-                .estado(rs.getString("estado"))
-                .complemento(rs.getString("complemento"))
-                .numero(rs.getInt("numero"))
-                .logradouro(rs.getString("logradouro"))
+    protected Endereco populaObjEndereco(ResultSet rs) {
+        return new EnderecoBuilder()
+                .id(retornaInteiro(rs, "id_endereco"))
+                .cep(retornaString(rs, "cep"))
+                .bairro(retornaString(rs, "bairro"))
+                .cidade(retornaString(rs, "cidade"))
+                .estado(retornaString(rs, "estado"))
+                .complemento(retornaString(rs, "complemento"))
+                .numero(retornaInteiro(rs, "numero"))
+                .logradouro(retornaString(rs, "logradouro"))
                 .build();
-        return endereco;
     }
 
     public static Integer retornaInteiro(ResultSet resultSet, String nomeColuna){

@@ -10,30 +10,6 @@ public class StatusPacote {
         this.descricao = descricao;
     }
 
-    public static class StatusPacoteBuilder {
-
-        private Integer id;
-        private String descricao;
-
-        public StatusPacoteBuilder() {
-
-        }
-
-        public StatusPacoteBuilder id(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public StatusPacoteBuilder descricao(String descricao) {
-            this.descricao = descricao;
-            return this;
-        }
-
-        public StatusPacote build() {
-            return new StatusPacote(id, descricao);
-        }
-    }
-
     public Integer getId() {
         return id;
     }

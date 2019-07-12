@@ -8,6 +8,7 @@ import javax.faces.bean.ViewScoped;
 import br.com.rastreioencomendas.dao.EmpresaDAO;
 import br.com.rastreioencomendas.model.Empresa;
 import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.model.builder.EmpresaBuilder;
 import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
 import br.com.rastreioencomendas.util.ViaCEPException;
@@ -18,14 +19,14 @@ import br.com.rastreioencomendas.util.ViaCepUtil;
 public class EmpresaMB extends AbstractEmpresaMB{
 
 	EmpresaDAO empresaDAO = new EmpresaDAO();
-	Empresa empresaCadastrar = new Empresa.EmpresaBuilder().build();
+	Empresa empresaCadastrar = new EmpresaBuilder().build();
 
 	public EmpresaMB() {
 
 	}
 
 	public void abrirDialogCadEmpresa() {
-		empresaCadastrar = new Empresa.EmpresaBuilder().build();
+		empresaCadastrar = new EmpresaBuilder().build();
 		PageUtil.abrirDialog(DIALOG_CADASTRO_EMPRESA);
 		PageUtil.atualizarComponente(FORM_CADASTRO_EMPRESA);
 	}

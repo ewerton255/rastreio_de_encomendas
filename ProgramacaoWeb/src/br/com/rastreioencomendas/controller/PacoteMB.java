@@ -10,6 +10,8 @@ import javax.faces.bean.SessionScoped;
 import br.com.rastreioencomendas.dao.PacoteDAO;
 import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
+import br.com.rastreioencomendas.model.builder.HistoricoPacoteBuilder;
+import br.com.rastreioencomendas.model.builder.PacoteBuilder;
 import br.com.rastreioencomendas.util.PageUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
 import br.com.rastreioencomendas.util.ViaCEPException;
@@ -19,12 +21,12 @@ import br.com.rastreioencomendas.util.ViaCEPException;
 public class PacoteMB extends AbstractPacoteMB {
 
     private PacoteDAO pacoteDAO = new PacoteDAO();
-    private Pacote pacoteParaCadastrar = new Pacote.PacoteBuilder().build();
-    private HistoricoPacote novaAtualizacao = new HistoricoPacote.HistoricoPacoteBuilder().build();
-    private HistoricoPacote atualizacaoSelecionada = new HistoricoPacote.HistoricoPacoteBuilder().build();
+    private Pacote pacoteParaCadastrar = new PacoteBuilder().build();
+    private HistoricoPacote novaAtualizacao = new HistoricoPacoteBuilder().build();
+    private HistoricoPacote atualizacaoSelecionada = new HistoricoPacoteBuilder().build();
     private String tipoDocumento;
-    private Pacote pacoteSelecionado = new Pacote.PacoteBuilder().build();
-    private Pacote pacoteParaBuscar = new Pacote.PacoteBuilder().build();
+    private Pacote pacoteSelecionado = new PacoteBuilder().build();
+    private Pacote pacoteParaBuscar = new PacoteBuilder().build();
     private List<HistoricoPacote> listaHistoricoRastreio = new ArrayList<>();
 
     public PacoteMB() {
@@ -65,7 +67,7 @@ public class PacoteMB extends AbstractPacoteMB {
     }
 
     public void carregaDadosPageRastrear() {
-        this.pacoteParaBuscar = new Pacote.PacoteBuilder().build();
+        this.pacoteParaBuscar = new PacoteBuilder().build();
         this.listaHistoricoRastreio = new ArrayList<>();
     }
 
@@ -85,7 +87,7 @@ public class PacoteMB extends AbstractPacoteMB {
     }
 
     public void abrirDialogCadastroPacote() {
-        this.pacoteParaCadastrar = new Pacote.PacoteBuilder().build();
+        this.pacoteParaCadastrar = new PacoteBuilder().build();
         this.tipoDocumento = null;
         PageUtil.abrirDialog(DIALOG_CADASTRO_PACOTE);
         PageUtil.atualizarComponente(FORM_CADASTRO_PACOTE);
@@ -178,7 +180,7 @@ public class PacoteMB extends AbstractPacoteMB {
 
     public void abrirDialogCadastroAtualizacao(Pacote pacote) {
         this.pacoteSelecionado = pacote;
-        this.novaAtualizacao = new HistoricoPacote.HistoricoPacoteBuilder().build();
+        this.novaAtualizacao = new HistoricoPacoteBuilder().build();
         PageUtil.atualizarComponente(FORM_CADASTRO_ATUALIZACAO);
         PageUtil.abrirDialog(DIALOG_CADASTRO_ATUALIZACAO);
     }

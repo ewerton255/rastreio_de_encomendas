@@ -13,6 +13,10 @@ import br.com.rastreioencomendas.model.Frete;
 import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.model.StatusPacote;
+import br.com.rastreioencomendas.model.builder.FreteBuilder;
+import br.com.rastreioencomendas.model.builder.HistoricoPacoteBuilder;
+import br.com.rastreioencomendas.model.builder.PacoteBuilder;
+import br.com.rastreioencomendas.model.builder.StatusPacoteBuilder;
 import br.com.rastreioencomendas.util.DBUtil;
 
 public class PacoteDAO extends DBUtil {
@@ -29,7 +33,7 @@ public class PacoteDAO extends DBUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Pacote pacote = new Pacote.PacoteBuilder()
+                Pacote pacote = new PacoteBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .codigoRastreio(retornaString(rs, "codigo_rastreio"))
                         .dataPostado(retornaDate(rs, "data_postado"))
@@ -37,7 +41,7 @@ public class PacoteDAO extends DBUtil {
                         .descricao(retornaString(rs, "descricao"))
                         .previsaoEntrega(retornaDate(rs, "previsao_entrega"))
                         .peso(retornaDouble(rs, "peso"))
-                        .tipoFrete(new Frete.FreteBuilder()
+                        .tipoFrete(new FreteBuilder()
                                 .tipo(retornaString(rs, "tipo_frete"))
                                 .build())
                         .build();
@@ -186,12 +190,12 @@ public class PacoteDAO extends DBUtil {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                HistoricoPacote historico = new HistoricoPacote.HistoricoPacoteBuilder()
+                HistoricoPacote historico = new HistoricoPacoteBuilder()
                         .observacao(retornaString(rs, "observacao"))
                         .localizacao(retornaString(rs, "localizacao"))
                         .dataHoraAtualizacao(retornaDate(rs, "datahora_atualizacao"))
                         .dataHoraAtualizacaoFormatados(sdf.format(retornaDate(rs, "datahora_atualizacao")))
-                        .status(new StatusPacote.StatusPacoteBuilder()
+                        .status(new StatusPacoteBuilder()
                                 .id(retornaInteiro(rs, "id_status"))
                                 .descricao(retornaString(rs, "descricao_status"))
                                 .build())

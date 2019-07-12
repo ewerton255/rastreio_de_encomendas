@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
+import br.com.rastreioencomendas.model.builder.StatusPacoteBuilder;
 import org.primefaces.mobile.component.page.Page;
 
 import br.com.rastreioencomendas.dao.StatusPacoteDAO;
@@ -17,15 +18,15 @@ import br.com.rastreioencomendas.util.PageUtil;
 public class StatusPacoteMB extends AbstractStatusPacoteMB{
 
 	StatusPacoteDAO statusPacoteDAO = new StatusPacoteDAO();
-	StatusPacote statusParaCadastrar = new StatusPacote.StatusPacoteBuilder().build();
-	StatusPacote statusSelecionado = new StatusPacote.StatusPacoteBuilder().build();
+	StatusPacote statusParaCadastrar = new StatusPacoteBuilder().build();
+	StatusPacote statusSelecionado = new StatusPacoteBuilder().build();
 	
 	public StatusPacoteMB() {
 
 	}
 	
 	public void abrirDlgCadStatus() {
-		statusParaCadastrar = new StatusPacote.StatusPacoteBuilder().build();
+		statusParaCadastrar = new StatusPacoteBuilder().build();
 		PageUtil.abrirDialog(DIALOG_CADASTRO_STATUS);
 		PageUtil.atualizarComponente(FORM_CADASTRO_STATUS);
 	}

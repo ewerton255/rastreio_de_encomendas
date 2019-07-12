@@ -9,6 +9,7 @@ import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.StatusPacote;
+import br.com.rastreioencomendas.model.builder.StatusPacoteBuilder;
 import br.com.rastreioencomendas.util.DBUtil;
 
 public class StatusPacoteDAO extends DBUtil {
@@ -24,7 +25,7 @@ public class StatusPacoteDAO extends DBUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                StatusPacote status = new StatusPacote.StatusPacoteBuilder()
+                StatusPacote status = new StatusPacoteBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .descricao(retornaString(rs, "descricao"))
                         .build();
