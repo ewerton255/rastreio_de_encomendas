@@ -18,6 +18,10 @@ public class Usuario {
         this.endereco = endereco;
     }
 
+    public Boolean isNomeEhEmailNulos(){
+        return this.nome.equals(null) && this.email.equals(null);
+    }
+
     public String getEmail() {
         return email;
     }

@@ -1,9 +1,6 @@
 package br.com.rastreioencomendas.controller;
 
-public class AbstractUsuarioMB {
-    public static final String BUSCA_POR_NOME = "N";
-    public static final String BUSCA_POR_EMAIL = "E";
-    public static final String SIMBOLO_PORCETAGEM = "%";
+public abstract class AbstractUsuarioMB {
     public final String CADASTRO = "CADASTRO";
     public final String EDICAO = "EDIÇÃO";
     protected static final String MENSAGEM_USUARIO_OU_SENHA_INVALIDOS = "Usuário ou senha inválido!";
@@ -25,6 +22,12 @@ public class AbstractUsuarioMB {
     protected static final String MENSAGEM_ERRO_CADASTRO_USUARIO = "Erro ao cadastrar usuário";
     protected static final String MENSAGEM_EMAIL_INVALIDO = "E-mail inválido";
     protected static final String FORM_LOGIN = "formLogin";
+
+    public abstract void editarUsuario();
+
+    public abstract void excluirUsuario();
+
+    public abstract void cadastrarUsuario();
 
     public String getCADASTRO() {
         return CADASTRO;

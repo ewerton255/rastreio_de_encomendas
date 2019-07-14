@@ -63,17 +63,17 @@
             <div class="login" align="center">
                 <h:outputText value="Bem Vindo(a), " style="color: white;"/>
                 <h:outputText
-                        value="#{!usuarioMB.verificaSeExisteSessaoAtiva() ? 'Visitante' : usuarioMB.retornaNomeUsuarioLogado()}"
+                        value="#{!usuarioMB.isSessaoAtiva() ? 'Visitante' : usuarioMB.retornaPrimeiroNomeUsuarioLogado()}"
                         style="font-weight: bold; color: white"/>
                 <br/><br/>
                 <b:commandButton type="button" value="Entrar" styleClass="btn-custom"
                                  onclick="PF('dlgLogin').show()" style="width: 70%;"
                                  update="formLogin" ajax="true"
-                                 rendered="#{!usuarioMB.verificaSeExisteSessaoAtiva()}"/>
+                                 rendered="#{!usuarioMB.isSessaoAtiva()}"/>
 
                 <b:commandButton value="Sair" ajax="true" look="info" style="width: 70%;" styleClass="btn-custom"
-                                 action="#{usuarioMB.deslogar()}" update="@this"
-                                 rendered="#{usuarioMB.verificaSeExisteSessaoAtiva()}"/>
+                                 action="#{usuarioMB.deslogarEhRedirecionarParaHome()}" update="@this"
+                                 rendered="#{usuarioMB.isSessaoAtiva()}"/>
             </div>
         </h:form>
 
@@ -101,7 +101,7 @@
                                        value="Contato"/>
                     </li>
 
-                    <c:if test="#{usuarioMB.verificaSeExisteSessaoAtiva()}">
+                    <c:if test="#{usuarioMB.isSessaoAtiva()}">
                         <li class="item">
                             <h:commandLink
                                     action="#{pageUtil.redirecionarParaPage('pages/administrador/usuarios')}"

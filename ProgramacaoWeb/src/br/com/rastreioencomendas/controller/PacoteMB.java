@@ -13,6 +13,7 @@ import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.model.builder.HistoricoPacoteBuilder;
 import br.com.rastreioencomendas.model.builder.PacoteBuilder;
 import br.com.rastreioencomendas.util.PageUtil;
+import br.com.rastreioencomendas.util.VerificadorUtil;
 import br.com.rastreioencomendas.util.ViaCEP;
 import br.com.rastreioencomendas.util.ViaCEPException;
 
@@ -29,6 +30,7 @@ public class PacoteMB extends AbstractPacoteMB {
     private Pacote pacoteParaBuscar = new PacoteBuilder().build();
     private List<HistoricoPacote> listaHistoricoRastreio = new ArrayList<>();
 
+
     public PacoteMB() {
 
     }
@@ -37,9 +39,9 @@ public class PacoteMB extends AbstractPacoteMB {
         String codigo = "";
         Random random = new Random();
 
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < TAMANHO_CODIGO_DE_RASTREIO; i++) {
 
-            if (i == 0 || i == 1 || i == 11 || i == 12) {
+            if (i == 0 || i == 1 || i == TAMANHO_CODIGO_DE_RASTREIO -1 || i == TAMANHO_CODIGO_DE_RASTREIO - 2) {
                 codigo += String.valueOf((char) (65 + random.nextInt(90 - 65)));
             } else {
                 codigo += String.valueOf(random.nextInt((9 - 1) + 1) + 1);
@@ -149,14 +151,14 @@ public class PacoteMB extends AbstractPacoteMB {
 
     public void abrirHistoricoDoPacote(Pacote pacote) {
         this.pacoteSelecionado = pacote;
-        retornaListaDeHistorico();
+        populaListaDeHistorico();
         PageUtil.atualizarComponente(FORM_HISTORICO_PACOTES);
         PageUtil.abrirDialog(DIALOG_HISTORICO_PACOTES);
     }
 
-    public List<HistoricoPacote> retornaListaDeHistorico() {
+    public List<HistoricoPacote> populaListaDeHistorico() {
         List<HistoricoPacote> lista = new ArrayList<>();
-        if (this.pacoteSelecionado.getCodigoRastreio() != null) {
+        if (VerificadorUtil.isNaoEstaNulo(pacoteSelecionado.getCodigoRastreio())) {
             lista = pacoteDAO.retornaListaDeHistorico(this.pacoteSelecionado.getCodigoRastreio());
         }
         return lista;
@@ -204,24 +206,22 @@ public class PacoteMB extends AbstractPacoteMB {
     public Boolean renderizaLocalizacao() {
         Boolean renderiza = false;
 
-        if (novaAtualizacao.getStatus().getId() != null) {
+        if (VerificadorUtil.isNaoEstaNulo(novaAtualizacao.getStatus().getId())) {
             if (novaAtualizacao.getStatus().getId() == 1 || novaAtualizacao.getStatus().getId() == 2) {
                 renderiza = true;
             }
         }
-
         return renderiza;
     }
 
     public Boolean renderizaLocalizacaoEditar() {
         Boolean renderiza = false;
 
-        if (atualizacaoSelecionada.getStatus().getId() != null) {
+        if (VerificadorUtil.isNaoEstaNulo(atualizacaoSelecionada.getStatus().getId())) {
             if (atualizacaoSelecionada.getStatus().getId() == 1 || atualizacaoSelecionada.getStatus().getId() == 2) {
                 renderiza = true;
             }
         }
-
         return renderiza;
     }
 

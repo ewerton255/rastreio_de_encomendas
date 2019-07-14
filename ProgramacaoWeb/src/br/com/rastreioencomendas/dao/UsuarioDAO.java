@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.rastreioencomendas.controller.AbstractUsuarioMB;
+import br.com.rastreioencomendas.enums.TipoDeBuscaPorUsuario;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
+import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Usuario;
 import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
 import br.com.rastreioencomendas.util.DBUtil;
 
 public class UsuarioDAO extends DBUtil {
+
+    public static final String SIMBOLO_PORCETAGEM = "%";
 
     public Usuario login(Usuario usuario) {
         Usuario usuarioLogado = null;
@@ -49,16 +53,16 @@ public class UsuarioDAO extends DBUtil {
         return usuarioLogado;
     }
 
-    public List<Usuario> buscarUsuarios(String tipoBusca, Usuario usuarioParaBuscar) {
+    public List<Usuario> buscarUsuarios(TipoDeBuscaPorUsuario tipoBusca, Usuario usuarioParaBuscar) {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
         String parametroBusca = "";
 
-        if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_NOME)) {
+        if (tipoBusca.equals(TipoDeBuscaPorUsuario.POR_NOME)) {
             parametroBusca = "us.nome";
-        } else if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_EMAIL)) {
+        } else if (tipoBusca.equals(TipoDeBuscaPorUsuario.POR_EMAIL)) {
             parametroBusca = "us.email";
         }
 
@@ -71,17 +75,17 @@ public class UsuarioDAO extends DBUtil {
 
         try {
             ps = con.prepareStatement(sql);
-            if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_EMAIL)) {
-                ps.setString(1, usuarioParaBuscar.getEmail() + AbstractUsuarioMB.SIMBOLO_PORCETAGEM);
-            } else if (tipoBusca.equals(AbstractUsuarioMB.BUSCA_POR_NOME)) {
-                ps.setString(1, usuarioParaBuscar.getNome() + AbstractUsuarioMB.SIMBOLO_PORCETAGEM);
+            if (tipoBusca.equals(TipoDeBuscaPorUsuario.POR_EMAIL)) {
+                ps.setString(1, usuarioParaBuscar.getEmail() + SIMBOLO_PORCETAGEM);
+            } else if (tipoBusca.equals(TipoDeBuscaPorUsuario.POR_NOME)) {
+                ps.setString(1, usuarioParaBuscar.getNome() + SIMBOLO_PORCETAGEM);
             }
             rs = ps.executeQuery();
             while (rs.next()) {
                 Usuario usuario = new UsuarioBuilder()
                         .id(retornaInteiro(rs, "id"))
                         .nome(retornaString(rs, "nome"))
-                        .email(retornaString(rs, "emaill"))
+                        .email(retornaString(rs, "email"))
                         .senha(retornaString(rs, "senha"))
                         .admin(retornaBoolean(rs, "admin"))
                         .senha(retornaString(rs, "senha"))
@@ -220,43 +224,51 @@ public class UsuarioDAO extends DBUtil {
         return excluiu;
     }
 
-    public Boolean cadastrarUsuario(Usuario usuario) {
-        Boolean cadastrou = false;
-        Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
-        ResultSet rs;
-        Integer idEndereco = null;
-
+    public Integer cadastraEnderecoEhRetornaId(Connection conn, PreparedStatement ps, ResultSet rs, Endereco endereco) throws SQLException {
         String sql = "INSERT INTO rastreioencomendas.endereco(cep, logradouro, cidade, bairro, numero, estado, complemento) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
+        Integer id = null;
+
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, endereco.getCep());
+        ps.setString(2, endereco.getLogradouro());
+        ps.setString(3, endereco.getCidade());
+        ps.setString(4, endereco.getBairro());
+        ps.setInt(5, endereco.getNumero());
+        ps.setString(6, endereco.getEstado());
+        ps.setString(7, endereco.getComplemento());
+        rs = ps.executeQuery();
+        if(rs.next()){
+            id = retornaInteiro(rs, "id");
+        }
+        return id;
+    }
+
+    public Boolean cadastrarUsuario(Usuario usuario) {
+        Boolean cadastrou = false;
+        Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Integer idEndereco = null;
+        String sql = "";
+
         try {
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getEndereco().getCep());
-            ps.setString(2, usuario.getEndereco().getLogradouro());
-            ps.setString(3, usuario.getEndereco().getCidade());
-            ps.setString(4, usuario.getEndereco().getBairro());
-            ps.setInt(5, usuario.getEndereco().getNumero());
-            ps.setString(6, usuario.getEndereco().getEstado());
-            ps.setString(7, usuario.getEndereco().getComplemento());
+            idEndereco = cadastraEnderecoEhRetornaId(conn,ps,rs,usuario.getEndereco());
 
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                idEndereco = rs.getInt("id");
+            if (idEndereco != null) {
 
-                if (idEndereco != null) {
-                    sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
+                sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
 
-                    ps = conn.prepareStatement(sql);
-                    ps.setString(1, usuario.getNome().toUpperCase());
-                    ps.setString(2, usuario.getEmail().toLowerCase());
-                    ps.setString(3, usuario.getSenha().toLowerCase());
-                    ps.setBoolean(4, usuario.getAdmin());
-                    ps.setInt(5, idEndereco);
-                    ps.executeUpdate();
-                    conn.commit();
-                    cadastrou = true;
-                }
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, usuario.getNome().toUpperCase());
+                ps.setString(2, usuario.getEmail().toLowerCase());
+                ps.setString(3, usuario.getSenha().toLowerCase());
+                ps.setBoolean(4, usuario.getAdmin());
+                ps.setInt(5, idEndereco);
+                ps.executeUpdate();
+                conn.commit();
+                cadastrou = true;
             }
             ps.close();
         } catch (SQLException e) {

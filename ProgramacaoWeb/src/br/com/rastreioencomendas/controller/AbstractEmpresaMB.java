@@ -1,6 +1,6 @@
 package br.com.rastreioencomendas.controller;
 
-public class AbstractEmpresaMB {
+public abstract class AbstractEmpresaMB {
 
     protected static final String MENSAGEM_NUMERO_ENDERECO_INVALIDO = "Número endereço inválido";
     protected static final String MENSAGEM_BAIRRO_VAZIO = "Informe o Bairro";

@@ -1,6 +1,6 @@
 package br.com.rastreioencomendas.controller;
 
-public class AbstractStatusPacoteMB {
+public abstract class AbstractStatusPacoteMB {
 
     protected static final String DIALOG_CADASTRO_STATUS = "dlgCadStatus";
     protected static final String DIALOG_EDITAR_STATUS = "dlgEditarStatus";

@@ -2,11 +2,13 @@ package br.com.rastreioencomendas.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import br.com.rastreioencomendas.enums.TipoDeBuscaPorUsuario;
 import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
 import br.com.rastreioencomendas.util.*;
@@ -25,7 +27,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
     private Usuario usuarioBuscar = new UsuarioBuilder().build();
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
-    private String tipoDeBusca;
+    private TipoDeBuscaPorUsuario tipoDeBusca;
 
     public UsuarioMB() {
 
@@ -53,9 +55,11 @@ public class UsuarioMB extends AbstractUsuarioMB {
     public void buscarUsuarios() {
         if (tipoDeBusca.equals(null)) {
             PageUtil.mensagemDeErro(MENSAGEM_SELECIONAR_TIPO_DE_BUSCA);
-        } else if (usuarioBuscar.getEmail() == null && usuarioBuscar.getNome() == null) {
+        }
+        else if (usuarioBuscar.isNomeEhEmailNulos()) {
             PageUtil.mensagemDeErro(MENSAGEM_INSIRA_BUSCA);
-        } else {
+        }
+        else {
             listaDeUsuarios = usuarioDAO.buscarUsuarios(tipoDeBusca, usuarioBuscar);
         }
         PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
@@ -64,55 +68,51 @@ public class UsuarioMB extends AbstractUsuarioMB {
     public void limparBuscaUsuario() {
         this.usuarioBuscar = new UsuarioBuilder().build();
         this.tipoDeBusca = null;
-        carregaDadosUsuario();
+        carregaDadosUsuarios();
         PageUtil.atualizarComponente(FORM_LIST_USUARIOS);
     }
 
-    public void carregaDadosUsuario() {
+    public void carregaDadosUsuarios() {
         this.listaDeUsuarios = usuarioDAO.retornaListaDeUsuarios();
-        this.tipoDeBusca = null;
         this.usuarioBuscar = new UsuarioBuilder().build();
         this.tipoDeBusca = null;
     }
 
-    public String retornaNomeUsuarioLogado() {
+    public String retornaPrimeiroNomeUsuarioLogado() {
         String primeiroNome = "";
         if (SessionUtil.verificaSeUsuarioEstaNaSessao()) {
             Usuario usuarioLogado = (Usuario) SessionUtil.recuperaObjetoDaSessao(OBJ_USUARIO);
-            String[] nome = usuarioLogado.getNome().split(" ");
-            primeiroNome = nome[0];
+            primeiroNome = StringUtil.retornaPrimeiraPalavraDeUmTexto(usuarioLogado.getNome());
         }
         return primeiroNome.toUpperCase();
     }
 
-    public void deslogar() throws IOException {
+    public void deslogarEhRedirecionarParaHome() throws IOException {
         SessionUtil.encerrarSessao();
         PageUtil.redirecionarParaPaginaPrincipal();
         this.usuarioLogado = null;
     }
 
     public void buscarCepUsuario(String tipo) throws ViaCEPException {
-        if (tipo.equals(CADASTRO)) {
-            if (!usuarioCadastrar.getEndereco().getCep().equals(null)) {
-                Endereco endereco = ViaCepUtil.buscarEndereco(usuarioCadastrar.getEndereco());
-                usuarioCadastrar.setEndereco(endereco);
+
+        if(VerificadorUtil.isNaoEstaNulo(usuarioCadastrar.getEndereco().getCep())
+                || VerificadorUtil.isNaoEstaNulo(usuarioSelecionado.getEndereco().getCep())){
+
+            if(tipo.equals(CADASTRO)){
+                usuarioCadastrar.setEndereco(ViaCepUtil.buscarEndereco(usuarioCadastrar.getEndereco()));
             }
-        } else if (tipo.equals(EDICAO)) {
-            if (!usuarioSelecionado.getEndereco().getCep().equals(null)) {
-                Endereco endereco = ViaCepUtil.buscarEndereco(usuarioSelecionado.getEndereco());
-                usuarioSelecionado.setEndereco(endereco);
+            else if(tipo.equals(EDICAO)){
+                usuarioSelecionado.setEndereco(ViaCepUtil.buscarEndereco(usuarioSelecionado.getEndereco()));
             }
         }
     }
 
-    public Boolean verificaSeExisteSessaoAtiva() {
-        Boolean existe = false;
+    public List<TipoDeBuscaPorUsuario> listaTipoDeBuscaPorUsuario(){
+        return Arrays.asList(TipoDeBuscaPorUsuario.values());
+    }
 
-        if (SessionUtil.verificaSeUsuarioEstaNaSessao()) {
-            existe = true;
-        }
-
-        return existe;
+    public Boolean isSessaoAtiva() {
+        return SessionUtil.verificaSeUsuarioEstaNaSessao();
     }
 
     public void selecionaUsuarioParaEditar(Usuario usuario) {
@@ -127,9 +127,9 @@ public class UsuarioMB extends AbstractUsuarioMB {
     }
 
     public void editarUsuario() {
-        if (usuarioDAO.editarUsuario(this.usuarioSelecionado)) {
+        if (usuarioDAO.editarUsuario(usuarioSelecionado)) {
             PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_EDITADO_COM_SUCESSO);
-            carregaDadosUsuario();
+            carregaDadosUsuarios();
         } else {
             PageUtil.mensagemDeErro(MENSAGEM_ERRO_EDITAR_USUARIO);
         }
@@ -138,9 +138,9 @@ public class UsuarioMB extends AbstractUsuarioMB {
     }
 
     public void excluirUsuario() {
-        if (usuarioDAO.excluirUsuario(this.usuarioSelecionado)) {
+        if (usuarioDAO.excluirUsuario(usuarioSelecionado)) {
             PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_EXCLUIDO_COM_SUCESSO);
-            carregaDadosUsuario();
+            carregaDadosUsuarios();
         } else {
             PageUtil.mensagemDeErro(MENSAGEM_ERRO_EXCLUIR_USUARIO);
         }
@@ -156,7 +156,7 @@ public class UsuarioMB extends AbstractUsuarioMB {
                 if (usuarioDAO.cadastrarUsuario(usuarioCadastrar)) {
                     PageUtil.mensagemDeSucesso(MENSAGEM_USUARIO_CADASTRADO_COM_SUCESSO);
                     PageUtil.fecharDialog(DIALOG_CADASTRO_USUARIO);
-                    carregaDadosUsuario();
+                    carregaDadosUsuarios();
                     this.usuarioCadastrar = new UsuarioBuilder().build();
                 } else {
                     PageUtil.mensagemDeErro(MENSAGEM_ERRO_CADASTRO_USUARIO);
@@ -186,15 +186,15 @@ public class UsuarioMB extends AbstractUsuarioMB {
         return listaDeUsuarios;
     }
 
-    public String getTipoDeBusca() {
+    public Usuario getUsuarioBuscar() {
+        return usuarioBuscar;
+    }
+
+    public TipoDeBuscaPorUsuario getTipoDeBusca() {
         return tipoDeBusca;
     }
 
-    public void setTipoDeBusca(String tipoDeBusca) {
+    public void setTipoDeBusca(TipoDeBuscaPorUsuario tipoDeBusca) {
         this.tipoDeBusca = tipoDeBusca;
-    }
-
-    public Usuario getUsuarioBuscar() {
-        return usuarioBuscar;
     }
 }

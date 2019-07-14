@@ -8,7 +8,7 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
 <f:metadata>
-    <f:viewAction action="#{usuarioMB.carregaDadosUsuario}"/>
+    <f:viewAction action="#{usuarioMB.carregaDadosUsuarios}"/>
 </f:metadata>
 <body>
 <ui:composition template="/pages/administrador/administracao.xhtml">
@@ -24,18 +24,17 @@
 
                 <b:selectOneMenu value="#{usuarioMB.tipoDeBusca}" id="busca" required="true"
                                  requiredMessage="Selecione o tipo de busca">
-                    <f:selectItem itemLabel="Tipo de busca" itemValue="#{null}" noSelectionOption="true"/>
-                    <f:selectItem itemLabel="Nome" itemValue="N"/>
-                    <f:selectItem itemLabel="E-mail" itemValue="E"/>
+                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{usuarioMB.listaTipoDeBuscaPorUsuario()}" var="tipo" itemLabel="#{tipo.sigla}" itemValue="#{tipo}"/>
                     <p:ajax event="change" update="formListUsuarios"/>
                 </b:selectOneMenu>
 
                 <b:inputText value="#{usuarioMB.usuarioBuscar.nome}"
-                             rendered="#{usuarioMB.tipoDeBusca eq 'N'}" required="true"
+                             rendered="#{usuarioMB.tipoDeBusca.sigla eq 'Nome'}" required="true"
                              requiredMessage="Insira o nome"/>
 
                 <b:inputText validator="EmailValidator" value="#{usuarioMB.usuarioBuscar.email}"
-                             rendered="#{usuarioMB.tipoDeBusca eq 'E'}" required="true"
+                             rendered="#{usuarioMB.tipoDeBusca.sigla eq 'Email'}" required="true"
                              requiredMessage="Insira o E-mail">
                     <p:ajax event="blur" update="formListUsuarios"/>
                 </b:inputText>

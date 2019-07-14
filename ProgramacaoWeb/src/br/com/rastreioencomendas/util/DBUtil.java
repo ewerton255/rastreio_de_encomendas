@@ -4,16 +4,8 @@ import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.builder.EnderecoBuilder;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DBUtil {
-
-    protected Map<Integer, Object> parametrosQuery(){
-        Map<Integer, Object> mapParametros = new HashMap<>();
-        mapParametros.put(1, "a");
-        return mapParametros;
-    }
 
     protected Endereco populaObjEndereco(ResultSet rs) {
         return new EnderecoBuilder()
@@ -28,50 +20,50 @@ public class DBUtil {
                 .build();
     }
 
-    public static Integer retornaInteiro(ResultSet resultSet, String nomeColuna){
-        try{
+    public static Integer retornaInteiro(ResultSet resultSet, String nomeColuna) {
+        try {
             return resultSet.getInt(nomeColuna);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }
 
-    public static String retornaString(ResultSet resultSet, String nomeColuna){
-        try{
+    public static String retornaString(ResultSet resultSet, String nomeColuna) {
+        try {
             return resultSet.getString(nomeColuna);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }
 
-    public static  Date retornaDate(ResultSet resultSet, String nomeColuna){
-        try{
+    public static Date retornaDate(ResultSet resultSet, String nomeColuna) {
+        try {
             return resultSet.getDate(nomeColuna);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }
 
-    public static  Boolean retornaBoolean(ResultSet resultSet, String nomeColuna){
-        try{
+    public static Boolean retornaBoolean(ResultSet resultSet, String nomeColuna) {
+        try {
             return resultSet.getBoolean(nomeColuna);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }
 
-    public static  Timestamp retornaTimestamp(ResultSet resultSet, String nomeColuna){
-        try{
+    public static Timestamp retornaTimestamp(ResultSet resultSet, String nomeColuna) {
+        try {
             return resultSet.getTimestamp(nomeColuna);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }
 
-    public static  Double retornaDouble(ResultSet resultSet, String nomeColuna){
-        try{
+    public static Double retornaDouble(ResultSet resultSet, String nomeColuna) {
+        try {
             return resultSet.getDouble(nomeColuna);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }

@@ -1,7 +1,8 @@
 package br.com.rastreioencomendas.controller;
 
-public class AbstractPacoteMB {
+public abstract class AbstractPacoteMB {
 
+    protected static final Integer TAMANHO_CODIGO_DE_RASTREIO = 13;
     protected static final String RECEBIDO = "RECEBIDO";
     protected static final String TRANSITO = "TRANSITO";
     protected static final String ENTREGUE = "ENTREGUE";
