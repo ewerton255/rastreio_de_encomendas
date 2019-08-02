@@ -5,9 +5,8 @@ public class StatusPacote {
     private Integer id;
     private String descricao;
 
-    public StatusPacote(Integer id, String descricao) {
-        this.id = id;
-        this.descricao = descricao;
+    public StatusPacote(){
+
     }
 
     public Integer getId() {

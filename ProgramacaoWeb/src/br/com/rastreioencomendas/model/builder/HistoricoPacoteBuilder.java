@@ -3,60 +3,72 @@ package br.com.rastreioencomendas.model.builder;
 import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.model.StatusPacote;
+import br.com.rastreioencomendas.util.DBUtil;
 
+import java.sql.ResultSet;
 import java.util.Date;
+
+import static br.com.rastreioencomendas.util.DBUtil.*;
 
 public class HistoricoPacoteBuilder {
 
-    private Integer id;
-    private Pacote pacote;
-    private Date dataHoraAtualizacao;
-    private String dataHoraAtualizacaoFormatados;
-    private String localizacao;
-    private String observacao;
-    private StatusPacote status;
+    private HistoricoPacote historicoPacote;
 
     public HistoricoPacoteBuilder() {
-        this.status = new StatusPacoteBuilder().build();
+        this.historicoPacote = new HistoricoPacote();
     }
 
-    public HistoricoPacoteBuilder id(Integer id) {
-        this.id = id;
+    public HistoricoPacoteBuilder comId(Integer id) {
+        historicoPacote.setId(id);
         return this;
     }
 
-    public HistoricoPacoteBuilder pacote(Pacote pacote) {
-        this.pacote = pacote;
+    public HistoricoPacoteBuilder comPacote(Pacote pacote) {
+        historicoPacote.setPacote(pacote);
         return this;
     }
 
-    public HistoricoPacoteBuilder dataHoraAtualizacao(Date dataHoraAtualizacao) {
-        this.dataHoraAtualizacao = dataHoraAtualizacao;
+    public HistoricoPacoteBuilder comDataHoraAtualizacao(Date dataHoraAtualizacao) {
+        historicoPacote.setDataHoraAtualizacao(dataHoraAtualizacao);
         return this;
     }
 
-    public HistoricoPacoteBuilder dataHoraAtualizacaoFormatados(String dataHoraAtualizacaoFormatados) {
-        this.dataHoraAtualizacaoFormatados = dataHoraAtualizacaoFormatados;
+    public HistoricoPacoteBuilder comDataHoraAtualizacaoFormatados(String dataHoraAtualizacaoFormatados) {
+        historicoPacote.setDataHoraAtualizacaoFormatados(dataHoraAtualizacaoFormatados);
         return this;
     }
 
-    public HistoricoPacoteBuilder localizacao(String localizacao) {
-        this.localizacao = localizacao;
+    public HistoricoPacoteBuilder comLocalizacao(String localizacao) {
+        historicoPacote.setLocalizacao(localizacao);
         return this;
     }
 
-    public HistoricoPacoteBuilder observacao(String observacao) {
-        this.observacao = observacao;
+    public HistoricoPacoteBuilder comObservacao(String observacao) {
+        historicoPacote.setObservacao(observacao);
         return this;
     }
 
-    public HistoricoPacoteBuilder status(StatusPacote status) {
-        this.status = status;
+    public HistoricoPacoteBuilder comStatus(StatusPacote status) {
+        historicoPacote.setStatus(status);
         return this;
     }
 
     public HistoricoPacote build() {
-        return new HistoricoPacote(id, pacote, dataHoraAtualizacao, dataHoraAtualizacaoFormatados, localizacao, observacao, status);
+        return this.historicoPacote;
+    }
+
+    public HistoricoPacote mapear(ResultSet rs){
+        return this
+                .comId(retornaInteiro(rs, "id_historico"))
+                .comDataHoraAtualizacao(retornaDate(rs, "datahora_atualizacao"))
+                .comDataHoraAtualizacaoFormatados(retornaString(rs, "datahora_atualizacao_formatados"))
+                .comLocalizacao(retornaString(rs, "localizacao"))
+                .comObservacao(retornaString(rs, "observacao"))
+                .comStatus(new StatusPacoteBuilder()
+                        .comId(retornaInteiro(rs, "id_status_pacote"))
+                        .comDescricao(retornaString(rs, "descricao"))
+                        .build())
+                .build();
     }
 
 }

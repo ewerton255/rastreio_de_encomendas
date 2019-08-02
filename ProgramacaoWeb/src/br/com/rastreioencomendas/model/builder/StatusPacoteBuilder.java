@@ -4,25 +4,24 @@ import br.com.rastreioencomendas.model.StatusPacote;
 
 public class StatusPacoteBuilder {
 
-    private Integer id;
-    private String descricao;
+    private StatusPacote statusPacote;
 
     public StatusPacoteBuilder() {
 
     }
 
-    public StatusPacoteBuilder id(Integer id) {
-        this.id = id;
+    public StatusPacoteBuilder comId(Integer id) {
+        statusPacote.setId(id);
         return this;
     }
 
-    public StatusPacoteBuilder descricao(String descricao) {
-        this.descricao = descricao;
+    public StatusPacoteBuilder comDescricao(String descricao) {
+        statusPacote.setDescricao(descricao);
         return this;
     }
 
     public StatusPacote build() {
-        return new StatusPacote(id, descricao);
+        return this.statusPacote;
     }
 
 }

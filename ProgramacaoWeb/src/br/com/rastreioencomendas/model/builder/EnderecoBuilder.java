@@ -1,64 +1,76 @@
 package br.com.rastreioencomendas.model.builder;
 
 import br.com.rastreioencomendas.model.Endereco;
+import br.com.rastreioencomendas.util.DBUtil;
+
+import java.sql.ResultSet;
+
+import static br.com.rastreioencomendas.util.DBUtil.retornaInteiro;
+import static br.com.rastreioencomendas.util.DBUtil.retornaString;
 
 public class EnderecoBuilder {
 
-    private Integer id;
-    private String cep;
-    private String logradouro;
-    private String cidade;
-    private String bairro;
-    private Integer numero;
-    private String estado;
-    private String complemento;
+    private Endereco endereco;
 
     public EnderecoBuilder() {
-
+        this.endereco = new Endereco();
     }
 
-    public EnderecoBuilder id(Integer id) {
-        this.id = id;
+    public EnderecoBuilder comId(Integer id) {
+        endereco.setId(id);
         return this;
     }
 
-    public EnderecoBuilder cep(String cep) {
-        this.cep = cep;
+    public EnderecoBuilder comCep(String cep) {
+        endereco.setCep(cep);
         return this;
     }
 
-    public EnderecoBuilder logradouro(String logradouro) {
-        this.logradouro = logradouro;
+    public EnderecoBuilder comLogradouro(String logradouro) {
+        endereco.setLogradouro(logradouro);
         return this;
     }
 
-    public EnderecoBuilder cidade(String cidade) {
-        this.cidade = cidade;
+    public EnderecoBuilder comCidade(String cidade) {
+        endereco.setCidade(cidade);
         return this;
     }
 
-    public EnderecoBuilder bairro(String bairro) {
-        this.bairro = bairro;
+    public EnderecoBuilder comBairro(String bairro) {
+        endereco.setBairro(bairro);
         return this;
     }
 
-    public EnderecoBuilder numero(Integer numero) {
-        this.numero = numero;
+    public EnderecoBuilder comNumero(Integer numero) {
+        endereco.setNumero(numero);
         return this;
     }
 
-    public EnderecoBuilder estado(String estado) {
-        this.estado = estado;
+    public EnderecoBuilder comEstado(String estado) {
+        endereco.setEstado(estado);
         return this;
     }
 
-    public EnderecoBuilder complemento(String complemento) {
-        this.complemento = complemento;
+    public EnderecoBuilder comComplemento(String complemento) {
+        endereco.setComplemento(complemento);
         return this;
     }
 
     public Endereco build() {
-        return new Endereco(id, cep, logradouro, cidade, bairro, numero, estado, complemento);
+        return this.endereco;
+    }
+
+    public Endereco mapear(ResultSet rs) {
+        return this
+                .comId(retornaInteiro(rs, "id_endereco"))
+                .comCep(retornaString(rs, "cep"))
+                .comLogradouro(retornaString(rs, "logradouro"))
+                .comBairro(retornaString(rs, "bairro"))
+                .comCidade(retornaString(rs, "cidade"))
+                .comComplemento(retornaString(rs, "complemento"))
+                .comEstado(retornaString(rs, "estado"))
+                .comNumero(retornaInteiro(rs, "numero"))
+                .build();
     }
 
 }

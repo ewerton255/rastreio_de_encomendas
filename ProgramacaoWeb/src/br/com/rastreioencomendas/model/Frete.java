@@ -6,10 +6,8 @@ public class Frete {
     private String tipo;
     private Integer qtdDias;
 
-    public Frete(Integer id, String tipo, Integer qtdDias) {
-        this.id = id;
-        this.tipo = tipo;
-        this.qtdDias = qtdDias;
+    public Frete(){
+
     }
 
     public Integer getId() {

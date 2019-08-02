@@ -8,12 +8,8 @@ public class Empresa {
     private String razaoSocial;
     private Endereco endereco;
 
-    public Empresa(Integer id, String cnpj, String nomeFantasma, String razaoSocial, Endereco endereco) {
-        this.id = id;
-        this.cnpj = cnpj;
-        this.nomeFantasma = nomeFantasma;
-        this.razaoSocial = razaoSocial;
-        this.endereco = endereco;
+    public Empresa(){
+
     }
 
     public Integer getId() {

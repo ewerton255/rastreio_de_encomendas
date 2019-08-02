@@ -12,15 +12,8 @@ public class HistoricoPacote {
     private String observacao;
     private StatusPacote status;
 
-    public HistoricoPacote(Integer id, Pacote pacote, Date dataHoraAtualizacao,
-                            String dataHoraAtualizacaoFormatados, String localizacao, String observacao, StatusPacote status) {
-        this.id = id;
-        this.pacote = pacote;
-        this.dataHoraAtualizacao = dataHoraAtualizacao;
-        this.dataHoraAtualizacaoFormatados = dataHoraAtualizacaoFormatados;
-        this.localizacao = localizacao;
-        this.observacao = observacao;
-        this.status = status;
+    public HistoricoPacote(){
+
     }
 
     public String getLocalizacao() {
