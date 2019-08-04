@@ -9,50 +9,30 @@ import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Empresa;
-import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.builder.EmpresaBuilder;
-import br.com.rastreioencomendas.model.builder.EnderecoBuilder;
-import br.com.rastreioencomendas.util.DBUtil;
+import static br.com.rastreioencomendas.util.DBUtil.*;
+import static br.com.rastreioencomendas.util.DateUtil.*;
 
-public class EmpresaDAO extends DBUtil {
+public class EmpresaDAO {
 
     public List<Empresa> retornaListaEmpresa() {
         List<Empresa> lista = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT em.id, em.cnpj, em.razao_social, en.id as id_endereco, " +
+        String sql = "SELECT em.id as id_empresa, em.cnpj, em.razao_social, en.id as id_endereco, " +
                 "em.nome_fantasma, en.cep, en.logradouro, en.bairro, " +
                 "en.cidade, en.complemento, en.cidade, en.numero, en.estado " +
                 "FROM rastreioencomendas.empresa em " +
                 "JOIN rastreioencomendas.endereco en ON en.id = em.id_endereco";
-
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Empresa empresa = new EmpresaBuilder()
-                        .id(retornaInteiro(rs, "id"))
-                        .cnpj(retornaString(rs, "cnpj"))
-                        .nomeFantasma(retornaString(rs, "nome_fantasma"))
-                        .razaoSocial(retornaString(rs, "razao_social"))
-                        .endereco(new EnderecoBuilder()
-                                .id(retornaInteiro(rs, "id_endereco"))
-                                .bairro(retornaString(rs, "bairro"))
-                                .cep(retornaString(rs, "cep"))
-                                .cidade(retornaString(rs, "cidade"))
-                                .logradouro(retornaString(rs, "logradouro"))
-                                .complemento(retornaString(rs, "complemento"))
-                                .numero(retornaInteiro(rs, "numero"))
-                                .estado(retornaString(rs, "estado"))
-                                .build())
-                        .build();
-
+                Empresa empresa = new EmpresaBuilder().mapear(rs);
                 lista.add(empresa);
             }
-
             ps.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -62,7 +42,6 @@ public class EmpresaDAO extends DBUtil {
                 e.printStackTrace();
             }
         }
-
         return lista;
     }
 

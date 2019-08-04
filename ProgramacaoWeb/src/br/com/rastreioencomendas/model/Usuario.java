@@ -9,13 +9,8 @@ public class Usuario {
     private Boolean admin;
     private Endereco endereco;
 
-    public Usuario(Integer id, String email, String senha, String nome, Boolean admin, Endereco endereco) {
-        this.id = id;
-        this.email = email;
-        this.senha = senha;
-        this.nome = nome;
-        this.admin = admin;
-        this.endereco = endereco;
+    public Usuario(){
+        endereco = new Endereco();
     }
 
     public Boolean isNomeEhEmailNulos(){

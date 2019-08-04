@@ -16,20 +16,18 @@ public class Pacote {
     private Endereco enderecoDestinatario;
     private Empresa empresaRemetente;
 
-    public Pacote(Integer id, String codigoRastreio, String descricao, Double peso, String cpfCnpjDestinatario,
-                  Date dataPostado, Date dataAtualizacao, Date previsaoEntrega, Frete tipoFrete, Endereco enderecoDestinatario,
-                  Empresa empresaRemetente) {
+    public Pacote(){
+        tipoFrete = new Frete();
+        enderecoDestinatario = new Endereco();
+        empresaRemetente = new Empresa();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
-        this.codigoRastreio = codigoRastreio;
-        this.descricao = descricao;
-        this.peso = peso;
-        this.cpfCnpjDestinatario = cpfCnpjDestinatario;
-        this.dataPostado = dataPostado;
-        this.dataAtualizacao = dataAtualizacao;
-        this.previsaoEntrega = previsaoEntrega;
-        this.tipoFrete = tipoFrete;
-        this.enderecoDestinatario = enderecoDestinatario;
-        this.empresaRemetente = empresaRemetente;
     }
 
     public String getCodigoRastreio() {
@@ -48,20 +46,20 @@ public class Pacote {
         this.descricao = descricao;
     }
 
+    public Double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(Double peso) {
+        this.peso = peso;
+    }
+
     public String getCpfCnpjDestinatario() {
         return cpfCnpjDestinatario;
     }
 
     public void setCpfCnpjDestinatario(String cpfCnpjDestinatario) {
         this.cpfCnpjDestinatario = cpfCnpjDestinatario;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Date getDataPostado() {
@@ -80,10 +78,6 @@ public class Pacote {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public Frete getTipoFrete() {
-        return tipoFrete;
-    }
-
     public Date getPrevisaoEntrega() {
         return previsaoEntrega;
     }
@@ -92,19 +86,27 @@ public class Pacote {
         this.previsaoEntrega = previsaoEntrega;
     }
 
+    public Frete getTipoFrete() {
+        return tipoFrete;
+    }
+
+    public void setTipoFrete(Frete tipoFrete) {
+        this.tipoFrete = tipoFrete;
+    }
+
     public Endereco getEnderecoDestinatario() {
         return enderecoDestinatario;
     }
 
-    public Double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(Double peso) {
-        this.peso = peso;
+    public void setEnderecoDestinatario(Endereco enderecoDestinatario) {
+        this.enderecoDestinatario = enderecoDestinatario;
     }
 
     public Empresa getEmpresaRemetente() {
         return empresaRemetente;
+    }
+
+    public void setEmpresaRemetente(Empresa empresaRemetente) {
+        this.empresaRemetente = empresaRemetente;
     }
 }

@@ -10,7 +10,7 @@ import br.com.rastreioencomendas.model.Frete;
 
 @ViewScoped
 @ManagedBean
-public class FreteMB {
+public class FreteMB extends AbstractMB{
 
 	private List<Frete> listaDeFretes;
 	private FreteDAO freteDAO = new FreteDAO();

@@ -9,7 +9,7 @@ public class Empresa {
     private Endereco endereco;
 
     public Empresa(){
-
+        endereco = new Endereco();
     }
 
     public Integer getId() {

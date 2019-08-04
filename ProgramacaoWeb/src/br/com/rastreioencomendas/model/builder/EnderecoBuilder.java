@@ -1,14 +1,13 @@
 package br.com.rastreioencomendas.model.builder;
 
 import br.com.rastreioencomendas.model.Endereco;
-import br.com.rastreioencomendas.util.DBUtil;
 
 import java.sql.ResultSet;
 
-import static br.com.rastreioencomendas.util.DBUtil.retornaInteiro;
-import static br.com.rastreioencomendas.util.DBUtil.retornaString;
+import static br.com.rastreioencomendas.util.DBUtil.recuperaInteiro;
+import static br.com.rastreioencomendas.util.DBUtil.recuperaString;
 
-public class EnderecoBuilder {
+public class EnderecoBuilder implements Builder{
 
     private Endereco endereco;
 
@@ -62,14 +61,14 @@ public class EnderecoBuilder {
 
     public Endereco mapear(ResultSet rs) {
         return this
-                .comId(retornaInteiro(rs, "id_endereco"))
-                .comCep(retornaString(rs, "cep"))
-                .comLogradouro(retornaString(rs, "logradouro"))
-                .comBairro(retornaString(rs, "bairro"))
-                .comCidade(retornaString(rs, "cidade"))
-                .comComplemento(retornaString(rs, "complemento"))
-                .comEstado(retornaString(rs, "estado"))
-                .comNumero(retornaInteiro(rs, "numero"))
+                .comId(recuperaInteiro(rs, "id_endereco"))
+                .comCep(recuperaString(rs, "cep"))
+                .comLogradouro(recuperaString(rs, "logradouro"))
+                .comBairro(recuperaString(rs, "bairro"))
+                .comCidade(recuperaString(rs, "cidade"))
+                .comComplemento(recuperaString(rs, "complemento"))
+                .comEstado(recuperaString(rs, "estado"))
+                .comNumero(recuperaInteiro(rs, "numero"))
                 .build();
     }
 

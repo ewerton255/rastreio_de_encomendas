@@ -13,7 +13,8 @@ public class HistoricoPacote {
     private StatusPacote status;
 
     public HistoricoPacote(){
-
+        status = new StatusPacote();
+        pacote = new Pacote();
     }
 
     public String getLocalizacao() {

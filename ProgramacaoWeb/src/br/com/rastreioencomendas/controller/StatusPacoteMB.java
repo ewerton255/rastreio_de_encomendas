@@ -3,11 +3,9 @@ package br.com.rastreioencomendas.controller;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
 import br.com.rastreioencomendas.model.builder.StatusPacoteBuilder;
-import org.primefaces.mobile.component.page.Page;
 
 import br.com.rastreioencomendas.dao.StatusPacoteDAO;
 import br.com.rastreioencomendas.model.StatusPacote;
@@ -15,7 +13,7 @@ import br.com.rastreioencomendas.util.PageUtil;
 
 @ViewScoped
 @ManagedBean
-public class StatusPacoteMB extends AbstractStatusPacoteMB{
+public class StatusPacoteMB extends AbstractMB{
 
 	StatusPacoteDAO statusPacoteDAO = new StatusPacoteDAO();
 	StatusPacote statusParaCadastrar = new StatusPacoteBuilder().build();

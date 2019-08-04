@@ -10,26 +10,23 @@ import java.util.List;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Frete;
 import br.com.rastreioencomendas.model.builder.FreteBuilder;
-import br.com.rastreioencomendas.util.DBUtil;
+import static br.com.rastreioencomendas.util.DBUtil.*;
+import static br.com.rastreioencomendas.util.DateUtil.*;
 
-public class FreteDAO extends DBUtil {
+public class FreteDAO {
 
     public List<Frete> retornaListaDeFretes() {
         List<Frete> lista = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id, qtd_dias, tipo FROM rastreioencomendas.frete";
+        String sql = "SELECT id as id_frete, qtd_dias, tipo FROM rastreioencomendas.frete";
 
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Frete frete = new FreteBuilder()
-                        .id(retornaInteiro(rs, "id"))
-                        .qtdDias(retornaInteiro(rs, "qtd_dias"))
-                        .tipo(retornaString(rs, "tipo"))
-                        .build();
+                Frete frete = new FreteBuilder().mapear(rs);
                 lista.add(frete);
             }
             ps.close();

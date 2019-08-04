@@ -2,52 +2,60 @@ package br.com.rastreioencomendas.model.builder;
 
 import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Usuario;
+import java.sql.ResultSet;
+import static br.com.rastreioencomendas.util.DBUtil.*;
 
-public class UsuarioBuilder {
+public class UsuarioBuilder implements Builder{
 
-    private Integer id;
-    private String email;
-    private String senha;
-    private String nome;
-    private Boolean admin;
-    private Endereco endereco;
+    private Usuario usuario;
 
     public UsuarioBuilder() {
-        this.endereco = new EnderecoBuilder().build();
+        this.usuario = new Usuario();
     }
 
-    public UsuarioBuilder id(Integer id) {
-        this.id = id;
+    public UsuarioBuilder comId(Integer id) {
+        usuario.setId(id);
         return this;
     }
 
-    public UsuarioBuilder email(String email) {
-        this.email = email;
+    public UsuarioBuilder comEmail(String email) {
+        usuario.setEmail(email);
         return this;
     }
 
-    public UsuarioBuilder senha(String senha) {
-        this.senha = senha;
+    public UsuarioBuilder comSenha(String senha) {
+        usuario.setSenha(senha);
         return this;
     }
 
-    public UsuarioBuilder nome(String nome) {
-        this.nome = nome;
+    public UsuarioBuilder comNome(String nome) {
+        usuario.setNome(nome);
         return this;
     }
 
-    public UsuarioBuilder admin(Boolean admin) {
-        this.admin = admin;
+    public UsuarioBuilder comAdmin(Boolean admin) {
+        usuario.setAdmin(admin);
         return this;
     }
 
-    public UsuarioBuilder endereco(Endereco endereco) {
-        this.endereco = endereco;
+    public UsuarioBuilder comEndereco(Endereco endereco) {
+        usuario.setEndereco(endereco);
         return this;
     }
 
     public Usuario build() {
-        return new Usuario(id, email, senha, nome, admin, endereco);
+        return this.usuario;
+    }
+
+    public Usuario mapear(ResultSet rs){
+        return this
+                .comId(recuperaInteiro(rs, "id_usuario"))
+                .comAdmin(recuperaBoolean(rs, "admin"))
+                .comEmail(recuperaString(rs, "email"))
+                .comNome(recuperaString(rs, "nome"))
+                .comSenha(recuperaString(rs, "senha"))
+                .comEndereco(new EnderecoBuilder().mapear(rs))
+                .build();
     }
 
 }

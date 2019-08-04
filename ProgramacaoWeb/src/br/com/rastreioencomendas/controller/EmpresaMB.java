@@ -10,13 +10,12 @@ import br.com.rastreioencomendas.model.Empresa;
 import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.builder.EmpresaBuilder;
 import br.com.rastreioencomendas.util.PageUtil;
-import br.com.rastreioencomendas.util.ViaCEP;
 import br.com.rastreioencomendas.util.ViaCEPException;
 import br.com.rastreioencomendas.util.ViaCepUtil;
 
 @ViewScoped
 @ManagedBean
-public class EmpresaMB extends AbstractEmpresaMB{
+public class EmpresaMB extends AbstractMB{
 
 	EmpresaDAO empresaDAO = new EmpresaDAO();
 	Empresa empresaCadastrar = new EmpresaBuilder().build();

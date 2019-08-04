@@ -7,15 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.rastreioencomendas.controller.AbstractUsuarioMB;
 import br.com.rastreioencomendas.enums.TipoDeBuscaPorUsuario;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Usuario;
 import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
-import br.com.rastreioencomendas.util.DBUtil;
+import static br.com.rastreioencomendas.util.DBUtil.*;
+import static br.com.rastreioencomendas.util.DateUtil.*;
 
-public class UsuarioDAO extends DBUtil {
+public class UsuarioDAO {
 
     public static final String SIMBOLO_PORCETAGEM = "%";
 
@@ -24,7 +24,7 @@ public class UsuarioDAO extends DBUtil {
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id, nome, senha, email, admin FROM rastreioencomendas.usuario WHERE email = ? AND senha = ?";
+        String sql = "SELECT id as id_usuario, nome, senha, email, admin FROM rastreioencomendas.usuario WHERE email = ? AND senha = ?";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -32,13 +32,7 @@ public class UsuarioDAO extends DBUtil {
             ps.setString(2, usuario.getSenha().toLowerCase());
             rs = ps.executeQuery();
             if (rs.next()) {
-                usuarioLogado = new UsuarioBuilder()
-                        .email(retornaString(rs, "email"))
-                        .nome(retornaString(rs, "nome"))
-                        .admin(retornaBoolean(rs, "admin"))
-                        .id(retornaInteiro(rs, "id"))
-                        .senha(retornaString(rs, "senha"))
-                        .build();
+                usuarioLogado = new UsuarioBuilder().mapear(rs);
             }
             ps.close();
         } catch (SQLException e) {
@@ -66,7 +60,7 @@ public class UsuarioDAO extends DBUtil {
             parametroBusca = "us.email";
         }
 
-        String sql = "SELECT us.id, us.nome, us.email, us.senha, us.admin, " +
+        String sql = "SELECT us.id as id_usuario, us.nome, us.email, us.senha, us.admin, " +
                 "ed.cep, ed.logradouro, ed.cidade, ed.bairro, ed.id as id_endereco, " +
                 "ed.complemento, ed.estado, ed.numero " +
                 "FROM rastreioencomendas.usuario us " +
@@ -82,15 +76,7 @@ public class UsuarioDAO extends DBUtil {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                Usuario usuario = new UsuarioBuilder()
-                        .id(retornaInteiro(rs, "id"))
-                        .nome(retornaString(rs, "nome"))
-                        .email(retornaString(rs, "email"))
-                        .senha(retornaString(rs, "senha"))
-                        .admin(retornaBoolean(rs, "admin"))
-                        .senha(retornaString(rs, "senha"))
-                        .endereco(populaObjEndereco(rs))
-                        .build();
+                Usuario usuario = new UsuarioBuilder().mapear(rs);
                 usuarios.add(usuario);
             }
             ps.close();
@@ -111,7 +97,7 @@ public class UsuarioDAO extends DBUtil {
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT us.id, us.admin, us.email, us.nome, us.senha, " +
+        String sql = "SELECT us.id as id_usuario, us.admin, us.email, us.nome, us.senha, " +
                 "ed.cep, ed.logradouro, ed.cidade, ed.bairro, ed.id as id_endereco, " +
                 "ed.complemento, ed.estado, ed.numero " +
                 "FROM rastreioencomendas.usuario us " +
@@ -122,14 +108,7 @@ public class UsuarioDAO extends DBUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Usuario usuario = new UsuarioBuilder()
-                        .id(retornaInteiro(rs, "id"))
-                        .nome(retornaString(rs, "nome"))
-                        .email(retornaString(rs, "email"))
-                        .senha(retornaString(rs, "senha"))
-                        .admin(retornaBoolean(rs, "admin"))
-                        .endereco(populaObjEndereco(rs))
-                        .build();
+                Usuario usuario = new UsuarioBuilder().mapear(rs);
                 usuarios.add(usuario);
             }
             ps.close();
@@ -240,7 +219,7 @@ public class UsuarioDAO extends DBUtil {
         ps.setString(7, endereco.getComplemento());
         rs = ps.executeQuery();
         if(rs.next()){
-            id = retornaInteiro(rs, "id");
+            id = recuperaInteiro(rs, "id");
         }
         return id;
     }
@@ -288,7 +267,7 @@ public class UsuarioDAO extends DBUtil {
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id FROM rastreioencomendas.usuario WHERE email = ?";
+        String sql = "SELECT id_usuario FROM rastreioencomendas.usuario WHERE email = ?";
 
         try {
             ps = conn.prepareStatement(sql);

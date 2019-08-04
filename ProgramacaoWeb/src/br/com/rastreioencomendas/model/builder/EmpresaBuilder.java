@@ -2,14 +2,13 @@ package br.com.rastreioencomendas.model.builder;
 
 import br.com.rastreioencomendas.model.Empresa;
 import br.com.rastreioencomendas.model.Endereco;
-import br.com.rastreioencomendas.util.DBUtil;
 
 import java.sql.ResultSet;
 
-import static br.com.rastreioencomendas.util.DBUtil.retornaInteiro;
-import static br.com.rastreioencomendas.util.DBUtil.retornaString;
+import static br.com.rastreioencomendas.util.DBUtil.recuperaInteiro;
+import static br.com.rastreioencomendas.util.DBUtil.recuperaString;
 
-public class EmpresaBuilder {
+public class EmpresaBuilder implements Builder{
 
     private Empresa empresa;
 
@@ -48,20 +47,11 @@ public class EmpresaBuilder {
 
     public Empresa mapear(ResultSet rs){
         return this
-                .comId(retornaInteiro(rs, "id"))
-                .comCnpj(retornaString(rs, "cnpj"))
-                .comNomeFantasma(retornaString(rs, "nome_fantasma"))
-                .comRazaoSocial(retornaString(rs, "razao_social"))
-                .comEndereco(new EnderecoBuilder()
-                        .comId(retornaInteiro(rs, "id_endereco"))
-                        .comCep(retornaString(rs, "cep"))
-                        .comLogradouro(retornaString(rs, "logradouro"))
-                        .comBairro(retornaString(rs, "bairro"))
-                        .comCidade(retornaString(rs, "cidade"))
-                        .comComplemento(retornaString(rs, "complemento"))
-                        .comEstado(retornaString(rs, "estado"))
-                        .comNumero(retornaInteiro(rs, "numero"))
-                        .build())
+                .comId(recuperaInteiro(rs, "id_empresa"))
+                .comCnpj(recuperaString(rs, "cnpj"))
+                .comNomeFantasma(recuperaString(rs, "nome_fantasma"))
+                .comRazaoSocial(recuperaString(rs, "razao_social"))
+                .comEndereco(new EnderecoBuilder().mapear(rs))
                 .build();
     }
 

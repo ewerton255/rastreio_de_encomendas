@@ -5,86 +5,92 @@ import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Frete;
 import br.com.rastreioencomendas.model.Pacote;
 
+import java.sql.ResultSet;
 import java.util.Date;
 
-public class PacoteBuilder {
+import static br.com.rastreioencomendas.util.DBUtil.*;
 
-    private Integer id;
-    private String codigoRastreio;
-    private String descricao;
-    private Double peso;
-    private String cpfCnpjDestinatario;
-    private Date dataPostado;
-    private Date dataAtualizacao;
-    private Date previsaoEntrega;
-    private Frete tipoFrete;
-    private Endereco enderecoDestinatario;
-    private Empresa empresaRemetente;
+public class PacoteBuilder implements Builder {
+
+    private Pacote pacote;
 
     public PacoteBuilder() {
-        this.tipoFrete = new FreteBuilder().build();
-        this.enderecoDestinatario = new EnderecoBuilder().build();
-        this.empresaRemetente = new EmpresaBuilder().build();
+        pacote = new Pacote();
     }
 
-    public PacoteBuilder id(Integer id) {
-        this.id = id;
+    public PacoteBuilder comId(Integer id) {
+        pacote.setId(id);
         return this;
     }
 
-    public PacoteBuilder codigoRastreio(String codigoRastreio) {
-        this.codigoRastreio = codigoRastreio;
+    public PacoteBuilder comCodigoRastreio(String codigoRastreio) {
+        pacote.setCodigoRastreio(codigoRastreio);
         return this;
     }
 
-    public PacoteBuilder descricao(String descricao) {
-        this.descricao = descricao;
+    public PacoteBuilder comDescricao(String descricao) {
+        pacote.setDescricao(descricao);
         return this;
     }
 
-    public PacoteBuilder peso(Double peso) {
-        this.peso = peso;
+    public PacoteBuilder comPeso(Double peso) {
+        pacote.setPeso(peso);
         return this;
     }
 
-    public PacoteBuilder cpfCnpjDestinatario(String cpfCnpjDestinatario) {
-        this.cpfCnpjDestinatario = cpfCnpjDestinatario;
+    public PacoteBuilder comCpfCnpjDestinatario(String cpfCnpjDestinatario) {
+        pacote.setCpfCnpjDestinatario(cpfCnpjDestinatario);
         return this;
     }
 
-    public PacoteBuilder dataPostado(Date dataPostado) {
-        this.dataPostado = dataPostado;
+    public PacoteBuilder comDataPostado(Date dataPostado) {
+        pacote.setDataPostado(dataPostado);
         return this;
     }
 
-    public PacoteBuilder dataAtualizacao(Date dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
+    public PacoteBuilder comDataAtualizacao(Date dataAtualizacao) {
+        pacote.setDataAtualizacao(dataAtualizacao);
         return this;
     }
 
-    public PacoteBuilder previsaoEntrega(Date previsaoEntrega) {
-        this.previsaoEntrega = previsaoEntrega;
+    public PacoteBuilder comPrevisaoEntrega(Date previsaoEntrega) {
+        pacote.setPrevisaoEntrega(previsaoEntrega);
         return this;
     }
 
-    public PacoteBuilder tipoFrete(Frete tipoFrete) {
-        this.tipoFrete = tipoFrete;
+    public PacoteBuilder comTipoFrete(Frete tipoFrete) {
+        pacote.setTipoFrete(tipoFrete);
         return this;
     }
 
-    public PacoteBuilder enderecoDestinatario(Endereco enderecoDestinatario) {
-        this.enderecoDestinatario = enderecoDestinatario;
+    public PacoteBuilder comEnderecoDestinatario(Endereco enderecoDestinatario) {
+        pacote.setEnderecoDestinatario(enderecoDestinatario);
         return this;
     }
 
-    public PacoteBuilder empresaRemetente(Empresa empresaRemetente) {
-        this.empresaRemetente = empresaRemetente;
+    public PacoteBuilder comEmpresaRemetente(Empresa empresaRemetente) {
+        pacote.setEmpresaRemetente(empresaRemetente);
         return this;
     }
 
     public Pacote build() {
-        return new Pacote(id, codigoRastreio, descricao, peso, cpfCnpjDestinatario, dataPostado, dataAtualizacao,
-                previsaoEntrega, tipoFrete, enderecoDestinatario, empresaRemetente);
+        return this.pacote;
+    }
+
+    public Pacote mapear(ResultSet rs) {
+        return this
+                .comId(recuperaInteiro(rs, "id_pacote"))
+                .comCodigoRastreio(recuperaString(rs, "codigo_rastreio"))
+                .comDescricao(recuperaString(rs, "descricao"))
+                .comPeso(recuperaDouble(rs, "peso"))
+                .comCpfCnpjDestinatario(recuperaString(rs, "cpf_cnpj_destinatario"))
+                .comDataPostado(recuperaDate(rs, "data_postado"))
+                .comDataAtualizacao(recuperaDate(rs, "data_atualizacao"))
+                .comPrevisaoEntrega(recuperaDate(rs, "previsao_entrega"))
+                .comTipoFrete(new FreteBuilder().mapear(rs))
+                .comEnderecoDestinatario(new EnderecoBuilder().mapear(rs))
+                .comEmpresaRemetente(new EmpresaBuilder().mapear(rs))
+                .build();
     }
 
 }

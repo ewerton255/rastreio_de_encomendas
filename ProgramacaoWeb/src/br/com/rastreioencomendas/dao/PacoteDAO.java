@@ -4,47 +4,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.rastreioencomendas.factory.ConnectionFactory;
-import br.com.rastreioencomendas.model.Frete;
 import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
-import br.com.rastreioencomendas.model.StatusPacote;
-import br.com.rastreioencomendas.model.builder.FreteBuilder;
 import br.com.rastreioencomendas.model.builder.HistoricoPacoteBuilder;
 import br.com.rastreioencomendas.model.builder.PacoteBuilder;
-import br.com.rastreioencomendas.model.builder.StatusPacoteBuilder;
-import br.com.rastreioencomendas.util.DBUtil;
+import static br.com.rastreioencomendas.util.DBUtil.*;
+import static br.com.rastreioencomendas.util.DateUtil.*;
 
-public class PacoteDAO extends DBUtil {
+public class PacoteDAO{
 
     public List<Pacote> retornaListaDePacotes() {
         List<Pacote> lista = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT p.id, p.codigo_rastreio, p.descricao, p.peso, p.cpf_cnpj_destinatario, "
+        String sql = "SELECT p.id as id_pacote, p.codigo_rastreio, p.descricao, p.peso, p.cpf_cnpj_destinatario, "
                 + "p.data_postado, f.tipo as tipo_frete, (p.data_postado::date + f.qtd_dias) as previsao_entrega "
                 + "FROM rastreioencomendas.pacote p " + "JOIN rastreioencomendas.frete f ON p.id_frete = f.id";
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Pacote pacote = new PacoteBuilder()
-                        .id(retornaInteiro(rs, "id"))
-                        .codigoRastreio(retornaString(rs, "codigo_rastreio"))
-                        .dataPostado(retornaDate(rs, "data_postado"))
-                        .cpfCnpjDestinatario(retornaString(rs, "cpf_cnpj_destinatario"))
-                        .descricao(retornaString(rs, "descricao"))
-                        .previsaoEntrega(retornaDate(rs, "previsao_entrega"))
-                        .peso(retornaDouble(rs, "peso"))
-                        .tipoFrete(new FreteBuilder()
-                                .tipo(retornaString(rs, "tipo_frete"))
-                                .build())
-                        .build();
+                Pacote pacote = new PacoteBuilder().mapear(rs);
                 lista.add(pacote);
             }
             ps.close();
@@ -65,7 +50,7 @@ public class PacoteDAO extends DBUtil {
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id FROM rastreioencomendas.pacote WHERE codigo_rastreio = ?";
+        String sql = "SELECT id as id_pacote FROM rastreioencomendas.pacote WHERE codigo_rastreio = ?";
         try {
             ps = conn.prepareStatement(sql);
             ps.setString(1, codigo.toUpperCase());
@@ -177,9 +162,9 @@ public class PacoteDAO extends DBUtil {
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String sql = "SELECT hp.id_pacote, hp.datahora_atualizacao, hp.observacao, st.id as id_status,"
-                + " st.descricao as descricao_status, hp.localizacao " + "FROM rastreioencomendas.historico_pacote hp "
+
+        String sql = "SELECT hp.id as id_historico, hp.datahora_atualizacao, hp.observacao, st.id as id_status,"
+                + " st.descricao, hp.localizacao FROM rastreioencomendas.historico_pacote hp "
                 + "JOIN rastreioencomendas.pacote P ON p.id = hp.id_pacote "
                 + "JOIN rastreioencomendas.status st ON st.id = hp.id_status "
                 + "WHERE p.codigo_rastreio = ? ORDER BY hp.datahora_atualizacao";
@@ -191,15 +176,8 @@ public class PacoteDAO extends DBUtil {
 
             while (rs.next()) {
                 HistoricoPacote historico = new HistoricoPacoteBuilder()
-                        .observacao(retornaString(rs, "observacao"))
-                        .localizacao(retornaString(rs, "localizacao"))
-                        .dataHoraAtualizacao(retornaDate(rs, "datahora_atualizacao"))
-                        .dataHoraAtualizacaoFormatados(sdf.format(retornaDate(rs, "datahora_atualizacao")))
-                        .status(new StatusPacoteBuilder()
-                                .id(retornaInteiro(rs, "id_status"))
-                                .descricao(retornaString(rs, "descricao_status"))
-                                .build())
-                        .build();
+                        .comDataHoraAtualizacaoFormatados(formataDataEhHoraParaString(recuperaTimestamp(rs, "datahora_atualizacao")))
+                        .mapear(rs);
                 lista.add(historico);
             }
             ps.close();
@@ -236,7 +214,7 @@ public class PacoteDAO extends DBUtil {
 
             rs = ps.executeQuery();
             if (rs.next()) {
-                idEndereco = retornaInteiro(rs, "id");
+                idEndereco = recuperaInteiro(rs, "id");
             }
 
             sql = "INSERT INTO rastreioencomendas.pacote(codigo_rastreio, descricao, peso, cpf_cnpj_destinatario, id_frete, data_postado, id_endereco_destino)"
@@ -250,7 +228,7 @@ public class PacoteDAO extends DBUtil {
             ps.setInt(6, idEndereco);
             rs = ps.executeQuery();
             if (rs.next()) {
-                idPacote = retornaInteiro(rs, "id");
+                idPacote = recuperaInteiro(rs, "id");
             }
 
             sql = "INSERT INTO rastreioencomendas.historico_pacote(id_pacote, id_status, datahora_atualizacao) VALUES(?, ?, CURRENT_TIMESTAMP)";

@@ -19,7 +19,7 @@ import br.com.rastreioencomendas.util.ViaCEPException;
 
 @SessionScoped
 @ManagedBean
-public class PacoteMB extends AbstractPacoteMB {
+public class PacoteMB extends AbstractMB{
 
     private PacoteDAO pacoteDAO = new PacoteDAO();
     private Pacote pacoteParaCadastrar = new PacoteBuilder().build();

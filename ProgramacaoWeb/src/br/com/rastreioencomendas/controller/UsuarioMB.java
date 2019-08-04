@@ -9,7 +9,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import br.com.rastreioencomendas.enums.TipoDeBuscaPorUsuario;
-import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
 import br.com.rastreioencomendas.util.*;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -19,7 +18,7 @@ import br.com.rastreioencomendas.model.Usuario;
 
 @SessionScoped
 @ManagedBean
-public class UsuarioMB extends AbstractUsuarioMB {
+public class UsuarioMB extends AbstractMB{
 
     private Usuario usuarioCadastrar = new UsuarioBuilder().build();
     private Usuario usuarioLogado;

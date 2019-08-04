@@ -3,14 +3,13 @@ package br.com.rastreioencomendas.model.builder;
 import br.com.rastreioencomendas.model.HistoricoPacote;
 import br.com.rastreioencomendas.model.Pacote;
 import br.com.rastreioencomendas.model.StatusPacote;
-import br.com.rastreioencomendas.util.DBUtil;
 
 import java.sql.ResultSet;
 import java.util.Date;
 
 import static br.com.rastreioencomendas.util.DBUtil.*;
 
-public class HistoricoPacoteBuilder {
+public class HistoricoPacoteBuilder implements Builder{
 
     private HistoricoPacote historicoPacote;
 
@@ -59,15 +58,11 @@ public class HistoricoPacoteBuilder {
 
     public HistoricoPacote mapear(ResultSet rs){
         return this
-                .comId(retornaInteiro(rs, "id_historico"))
-                .comDataHoraAtualizacao(retornaDate(rs, "datahora_atualizacao"))
-                .comDataHoraAtualizacaoFormatados(retornaString(rs, "datahora_atualizacao_formatados"))
-                .comLocalizacao(retornaString(rs, "localizacao"))
-                .comObservacao(retornaString(rs, "observacao"))
-                .comStatus(new StatusPacoteBuilder()
-                        .comId(retornaInteiro(rs, "id_status_pacote"))
-                        .comDescricao(retornaString(rs, "descricao"))
-                        .build())
+                .comId(recuperaInteiro(rs, "id_historico"))
+                .comDataHoraAtualizacao(recuperaDate(rs, "datahora_atualizacao"))
+                .comLocalizacao(recuperaString(rs, "localizacao"))
+                .comObservacao(recuperaString(rs, "observacao"))
+                .comStatus(new StatusPacoteBuilder().mapear(rs))
                 .build();
     }
 

@@ -1,14 +1,13 @@
 package br.com.rastreioencomendas.model.builder;
 
 import br.com.rastreioencomendas.model.Frete;
-import br.com.rastreioencomendas.util.DBUtil;
 
 import java.sql.ResultSet;
 
-import static br.com.rastreioencomendas.util.DBUtil.retornaInteiro;
-import static br.com.rastreioencomendas.util.DBUtil.retornaString;
+import static br.com.rastreioencomendas.util.DBUtil.recuperaInteiro;
+import static br.com.rastreioencomendas.util.DBUtil.recuperaString;
 
-public class FreteBuilder {
+public class FreteBuilder implements Builder{
 
     private Frete frete;
 
@@ -37,9 +36,9 @@ public class FreteBuilder {
 
     public Frete mapear(ResultSet rs){
         return this
-                .comId(retornaInteiro(rs, "id_frete"))
-                .comTipo(retornaString(rs, "tipo"))
-                .comQtdDias(retornaInteiro(rs, "qtd_dias"))
+                .comId(recuperaInteiro(rs, "id_frete"))
+                .comTipo(recuperaString(rs, "tipo"))
+                .comQtdDias(recuperaInteiro(rs, "qtd_dias"))
                 .build();
     }
 

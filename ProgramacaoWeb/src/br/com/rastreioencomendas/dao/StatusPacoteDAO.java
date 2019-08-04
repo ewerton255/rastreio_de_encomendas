@@ -10,25 +10,23 @@ import java.util.List;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
 import br.com.rastreioencomendas.model.StatusPacote;
 import br.com.rastreioencomendas.model.builder.StatusPacoteBuilder;
-import br.com.rastreioencomendas.util.DBUtil;
+import static br.com.rastreioencomendas.util.DBUtil.*;
+import static br.com.rastreioencomendas.util.DateUtil.*;
 
-public class StatusPacoteDAO extends DBUtil {
+public class StatusPacoteDAO {
 
     public List<StatusPacote> retornaListaDeStatus() {
         List<StatusPacote> lista = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id, descricao FROM rastreioencomendas.status ORDER by id";
+        String sql = "SELECT id as id_status, descricao FROM rastreioencomendas.status ORDER by id";
 
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                StatusPacote status = new StatusPacoteBuilder()
-                        .id(retornaInteiro(rs, "id"))
-                        .descricao(retornaString(rs, "descricao"))
-                        .build();
+                StatusPacote status = new StatusPacoteBuilder().mapear(rs);
                 lista.add(status);
             }
             ps.close();
