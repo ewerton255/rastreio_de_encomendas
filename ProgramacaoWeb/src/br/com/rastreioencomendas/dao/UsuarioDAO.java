@@ -9,47 +9,48 @@ import java.util.List;
 
 import br.com.rastreioencomendas.enums.TipoDeBuscaPorUsuario;
 import br.com.rastreioencomendas.factory.ConnectionFactory;
+import br.com.rastreioencomendas.model.builder.StatementBuilder;
 import br.com.rastreioencomendas.model.Endereco;
 import br.com.rastreioencomendas.model.Usuario;
 import br.com.rastreioencomendas.model.builder.UsuarioBuilder;
+
 import static br.com.rastreioencomendas.util.DBUtil.*;
-import static br.com.rastreioencomendas.util.DateUtil.*;
 
 public class UsuarioDAO {
 
-    public static final String SIMBOLO_PORCETAGEM = "%";
+    private static final String SIMBOLO_PORCETAGEM = "%";
+    private StatementBuilder statementBuilder = new StatementBuilder();
+
+    public UsuarioDAO(){
+
+    }
 
     public Usuario login(Usuario usuario) {
         Usuario usuarioLogado = null;
         Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
         ResultSet rs;
         String sql = "SELECT id as id_usuario, nome, senha, email, admin FROM rastreioencomendas.usuario WHERE email = ? AND senha = ?";
-
         try {
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getEmail().toLowerCase());
-            ps.setString(2, usuario.getSenha().toLowerCase());
-            rs = ps.executeQuery();
+            rs = statementBuilder
+                    .preparar(conn, sql)
+                    .comParametro(usuario.getEmail().toLowerCase())
+                    .comParametro(usuario.getSenha().toLowerCase())
+                    .executarQuery();
             if (rs.next()) {
                 usuarioLogado = new UsuarioBuilder().mapear(rs);
             }
-            ps.close();
+            statementBuilder.fecharStatament();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return usuarioLogado;
     }
 
     public List<Usuario> buscarUsuarios(TipoDeBuscaPorUsuario tipoBusca, Usuario usuarioParaBuscar) {
         List<Usuario> usuarios = new ArrayList<>();
-        Connection con = ConnectionFactory.getConnection();
+        Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rs;
         String parametroBusca = "";
@@ -68,7 +69,7 @@ public class UsuarioDAO {
                 "WHERE " + parametroBusca + " ILIKE ?";
 
         try {
-            ps = con.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             if (tipoBusca.equals(TipoDeBuscaPorUsuario.POR_EMAIL)) {
                 ps.setString(1, usuarioParaBuscar.getEmail() + SIMBOLO_PORCETAGEM);
             } else if (tipoBusca.equals(TipoDeBuscaPorUsuario.POR_NOME)) {
@@ -83,11 +84,7 @@ public class UsuarioDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return usuarios;
     }
@@ -95,7 +92,6 @@ public class UsuarioDAO {
     public List<Usuario> retornaListaDeUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
         ResultSet rs;
         String sql = "SELECT us.id as id_usuario, us.admin, us.email, us.nome, us.senha, " +
                 "ed.cep, ed.logradouro, ed.cidade, ed.bairro, ed.id as id_endereco, " +
@@ -103,23 +99,20 @@ public class UsuarioDAO {
                 "FROM rastreioencomendas.usuario us " +
                 "JOIN rastreioencomendas.endereco ed ON ed.id = us.id_endereco " +
                 "ORDER BY nome";
-
         try {
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
+            rs = statementBuilder
+                    .preparar(conn, sql)
+                    .executarQuery();
+
             while (rs.next()) {
                 Usuario usuario = new UsuarioBuilder().mapear(rs);
                 usuarios.add(usuario);
             }
-            ps.close();
+            statementBuilder.fecharStatament();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return usuarios;
     }
@@ -127,45 +120,44 @@ public class UsuarioDAO {
     public Boolean editarUsuario(Usuario usuario) {
         Boolean editou = false;
         Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
-        String sql = "";
+        String sql;
 
         try {
             sql = "UPDATE rastreioencomendas.usuario SET nome = ?, email = ?, senha =?, admin = ? WHERE id = ?";
 
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getNome().toUpperCase());
-            ps.setString(2, usuario.getEmail().toLowerCase());
-            ps.setString(3, usuario.getSenha().toLowerCase());
-            ps.setBoolean(4, usuario.getAdmin());
-            ps.setInt(5, usuario.getId());
-            ps.executeUpdate();
+            statementBuilder
+                    .preparar(conn, sql)
+                    .comParametro(usuario.getNome().toUpperCase())
+                    .comParametro(usuario.getEmail().toLowerCase())
+                    .comParametro(usuario.getSenha().toLowerCase())
+                    .comParametro(usuario.getAdmin())
+                    .comParametro(usuario.getId())
+                    .executarUpdate();
 
-            sql = "UPDATE rastreioencomendas.endereco SET cep = ?, logradouro = ?, bairro = ?, cidade = ?, estado =?, complemento =?, numero = ?" +
+            sql = "UPDATE rastreioencomendas.endereco SET cep = ?, logradouro = ?," +
+                    " bairro = ?, cidade = ?, estado =?, complemento =?, numero = ?" +
                     " WHERE id = ?";
 
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getEndereco().getCep());
-            ps.setString(2, usuario.getEndereco().getLogradouro());
-            ps.setString(3, usuario.getEndereco().getBairro());
-            ps.setString(4, usuario.getEndereco().getCidade());
-            ps.setString(5, usuario.getEndereco().getEstado());
-            ps.setString(6, usuario.getEndereco().getComplemento());
-            ps.setInt(7, usuario.getEndereco().getNumero());
-            ps.setInt(8, usuario.getEndereco().getId());
-            ps.executeUpdate();
+            statementBuilder
+                    .preparar(conn, sql)
+                    .comParametro(usuario.getEndereco().getCep())
+                    .comParametro(usuario.getEndereco().getLogradouro())
+                    .comParametro(usuario.getEndereco().getBairro())
+                    .comParametro(usuario.getEndereco().getCidade())
+                    .comParametro(usuario.getEndereco().getEstado())
+                    .comParametro(usuario.getEndereco().getComplemento())
+                    .comParametro(usuario.getEndereco().getNumero())
+                    .comParametro(usuario.getEndereco().getId())
+                    .executarUpdate();
+
             conn.commit();
-            ps.close();
+            statementBuilder.fecharStatament();
             editou = true;
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return editou;
     }
@@ -173,52 +165,51 @@ public class UsuarioDAO {
     public Boolean excluirUsuario(Usuario usuario) {
         Boolean excluiu = false;
         Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
-        String sql = "";
-
+        String sql;
 
         try {
             sql = "DELETE FROM rastreioencomendas.usuario WHERE id = ?";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, usuario.getId());
-            ps.executeUpdate();
+
+            statementBuilder.preparar(conn, sql)
+                    .comParametro(usuario.getId())
+                    .executarUpdate();
 
             sql = "DELETE FROM rastreioencomendas.endereco WHERE id = ?";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, usuario.getEndereco().getId());
-            ps.executeUpdate();
+
+            statementBuilder
+                    .preparar(conn, sql)
+                    .comParametro(usuario.getEndereco().getId())
+                    .executarUpdate();
+
             conn.commit();
-            ps.close();
+            statementBuilder.fecharStatament();
             excluiu = true;
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return excluiu;
     }
 
-    public Integer cadastraEnderecoEhRetornaId(Connection conn, PreparedStatement ps, ResultSet rs, Endereco endereco) throws SQLException {
+    public Integer cadastraEnderecoEhRetornaId(Connection conn, ResultSet rs, Endereco endereco) throws SQLException {
+
         String sql = "INSERT INTO rastreioencomendas.endereco(cep, logradouro, cidade, bairro, numero, estado, complemento) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
-
         Integer id = null;
 
-        ps = conn.prepareStatement(sql);
-        ps.setString(1, endereco.getCep());
-        ps.setString(2, endereco.getLogradouro());
-        ps.setString(3, endereco.getCidade());
-        ps.setString(4, endereco.getBairro());
-        ps.setInt(5, endereco.getNumero());
-        ps.setString(6, endereco.getEstado());
-        ps.setString(7, endereco.getComplemento());
-        rs = ps.executeQuery();
-        if(rs.next()){
+        rs = statementBuilder
+                .preparar(conn, sql)
+                .comParametro(endereco.getCep())
+                .comParametro(endereco.getLogradouro())
+                .comParametro(endereco.getCidade())
+                .comParametro(endereco.getBairro())
+                .comParametro(endereco.getNumero())
+                .comParametro(endereco.getEstado())
+                .comParametro(endereco.getComplemento())
+                .executarQuery();
+        if (rs.next()) {
             id = recuperaInteiro(rs, "id");
         }
         return id;
@@ -227,37 +218,31 @@ public class UsuarioDAO {
     public Boolean cadastrarUsuario(Usuario usuario) {
         Boolean cadastrou = false;
         Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps = null;
         ResultSet rs = null;
         Integer idEndereco = null;
-        String sql = "";
+        String sql;
 
         try {
-            idEndereco = cadastraEnderecoEhRetornaId(conn,ps,rs,usuario.getEndereco());
+            idEndereco = cadastraEnderecoEhRetornaId(conn, rs, usuario.getEndereco());
 
-            if (idEndereco != null) {
+            sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
 
-                sql = "INSERT INTO rastreioencomendas.usuario(nome, email, senha, admin, id_endereco) VALUES (?, ?, ?, ?, ?)";
+            statementBuilder
+                    .preparar(conn, sql)
+                    .comParametro(usuario.getNome().toUpperCase())
+                    .comParametro(usuario.getEmail().toLowerCase())
+                    .comParametro(usuario.getSenha().toLowerCase())
+                    .comParametro(usuario.getAdmin())
+                    .comParametro(idEndereco)
+                    .executarUpdate();
 
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, usuario.getNome().toUpperCase());
-                ps.setString(2, usuario.getEmail().toLowerCase());
-                ps.setString(3, usuario.getSenha().toLowerCase());
-                ps.setBoolean(4, usuario.getAdmin());
-                ps.setInt(5, idEndereco);
-                ps.executeUpdate();
-                conn.commit();
-                cadastrou = true;
-            }
-            ps.close();
-        } catch (SQLException e) {
+            conn.commit();
+            statementBuilder.fecharStatament();
+            cadastrou = true;
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return cadastrou;
     }
@@ -265,26 +250,23 @@ public class UsuarioDAO {
     public Boolean verificaSeUsuarioJaExiste(Usuario usuario) {
         Boolean existe = false;
         Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps;
         ResultSet rs;
-        String sql = "SELECT id_usuario FROM rastreioencomendas.usuario WHERE email = ?";
+        String sql = "SELECT id AS id_usuario FROM rastreioencomendas.usuario WHERE email = ?";
 
         try {
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getEmail().toLowerCase());
-            rs = ps.executeQuery();
+            rs = statementBuilder
+                    .preparar(conn, sql)
+                    .comParametro(usuario.getEmail().toLowerCase())
+                    .executarQuery();
+
             if (rs.next()) {
                 existe = true;
             }
-            ps.close();
+            statementBuilder.fecharStatament();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            fecharConexaoComBD(conn);
         }
         return existe;
     }

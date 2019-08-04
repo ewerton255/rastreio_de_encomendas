@@ -52,4 +52,13 @@ public class DBUtil {
             return null;
         }
     }
+
+    public static void fecharConexaoComBD(Connection conexao){
+        try{
+            conexao.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
 }
